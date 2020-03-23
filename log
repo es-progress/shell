@@ -1,0 +1,121 @@
+#!/bin/bash
+##
+## Logger
+##
+## @author Sandor Semsey <semseysandor@gmail.com>
+##
+## @copyright 2020
+## @license MIT https://choosealicense.com/licenses/mit/
+##########################################################################
+
+## Settings
+###################
+
+## Log files
+LOG_GENERAL="${HOME}/general.log"
+LOG_BACKUP="/var/log/backup.log"
+
+## Defaults
+LOG_FILE=$LOG_GENERAL
+PRIO="NOTICE"
+
+## Date format
+DATE_FORMAT="%Y-%m-%d %H:%M:%S"
+
+## Functions
+###################
+
+## Version info
+version() {
+cat <<-"VERSION"
+logger v0.5-beta
+Written by Sandor Semsey, Copyright(C) 2020
+License MIT https://choosealicense.com/licenses/mit/
+VERSION
+exit 0
+}
+
+## Help
+helping() {
+cat <<-"HELP"
+Usage: logger [OPTIONS] MESSAGE
+
+Writes MESSAGE to log
+
+OPTIONS
+-l, --log=[LOG]         writes to given LOG
+
+                        possible values:
+                        general (/var/log/general.log)  <-- default
+                        backup  (/var/log/backup.log)
+
+-p, --priority=[PRIO]   use given priority
+
+                        possible values:
+                        info
+                        notice   <-- default
+                        error
+
+    --debug             print commands as executed
+-v                      print version information
+-h                      display this help
+
+HELP
+exit 0
+}
+
+## Parse options
+###################
+options=$(getopt -n logger -o "l:p:vh" -l "log:,priority:,debug,version,help" -- "$@")
+[ $? -ne 0 ] && { echo "Try 'logger --help' for more information"; exit 1;}
+eval set -- "$options"
+
+while : ; do
+	case "$1" in
+		-l|--log)
+			shift
+			case "$1" in
+			  general)
+					LOG_FILE=$LOG_GENERAL;;
+				backup)
+					LOG_FILE=$LOG_BACKUP;;
+			esac;;
+		-p|--priority)
+			shift
+			case "$1" in
+				info)
+					PRIO="INFO";;
+				notice)
+					PRIO="NOTICE";;
+				error)
+				  PRIO="ERROR";;
+			esac;;
+		--debug)
+		  set -x;;
+		-v|--version)
+			version;;
+		-h|--help)
+			helping;;
+		--)
+			shift; break;;
+	esac
+	shift
+done
+
+## Script start
+###################
+
+## Init
+msg=$1
+now=$(date +"$DATE_FORMAT")
+
+## If message is empty exit
+[ -n "$msg" ] || exit 0
+
+## Check if log file is present if not create
+[ -f "$LOG_FILE" ] || touch $LOG_FILE
+
+## Write to log
+[ -w "$LOG_FILE" ] && echo "${now} [${PRIO}] ${1}" >> $LOG_FILE
+
+exit

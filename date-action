@@ -1,0 +1,140 @@
+#!/bin/bash
+##
+## Check filenames for date (time) tags, and perform some action on a selection
+##
+## @author Sandor Semsey <semseysandor@gmail.com>
+##
+## @copyright 2020
+## @license MIT https://choosealicense.com/licenses/mit/
+###############################################################################
+
+## Settings
+###################
+
+## Formats
+GREP_24H="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+GREP_YMD="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+GREP_FULL="[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}:[0-9]{2}:[0-9]{2}"
+SED_24H="[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}"
+SED_YMD="[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"
+SED_FULL="[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}_[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}"
+DATE_24H="%T"
+DATE_YMD="%F"
+DATE_FULL="%F_%T"
+
+## Defaults
+mode="list"
+older=1
+directory=0
+f_grep=$GREP_YMD
+f_sed=$SED_YMD
+f_date=$DATE_YMD
+
+## Functions
+###################
+
+## Version info
+version() {
+cat <<-"VERSION"
+date-action v0.9-beta
+Written by Sandor Semsey, Copyright(C) 2020
+License MIT https://choosealicense.com/licenses/mit/
+VERSION
+exit 0
+}
+
+## Help
+usage() {
+cat <<-"HELP"
+Usage: date-action [OPTIONS] [FILE...]
+
+Executes an action on files older/newer than a reference based on filenames
+
+Like abc2020_02_19xyz
+
+OPTIONS
+
+-r, --remove            remove files (default is "list")
+-n, --newer             performs actions on files newer than reference (default is older)
+-d, --directory         performs actions on directories too (delete contents recursively)
+
+    --format=[FORMAT]   supported formats:
+                        24H (HH:MM eg. 17:26:14)
+                        YMD (YYYY-mm-dd eg. 2020-02-19)  <-- default
+                        FULL (YYYY-mm-dd_HH:MM:SS)
+
+    --diff=[STRING]     date difference from now to set reference
+                        for acceptable STRINGs see: `man date`
+
+    --debug             print commands as executed
+-v, --version           print version information
+-h, --help              display this help
+
+HELP
+exit 0
+}
+
+## Parse options
+###################
+options=$(getopt -n date-action -o "rndvh" -l "remove,newer,directory,format:,diff:,debug,version,help" -- "$@")
+[ $? -ne 0 ] && { echo "Try 'date-action --help' for more information"; exit 1;}
+eval set -- "$options"
+
+while : ;do
+	case "$1" in
+		-r|--remove)
+			mode="delete";;
+		-n|--newer)
+			older=0;;
+		-d|--directory)
+			directory=1;;
+		--format)
+			shift
+			case "$1" in
+				24H)
+					f_grep=$GREP_24H
+					f_sed=$SED_24H
+					f_date=$DATE_24H;;
+				FULL)
+					f_grep=$GREP_FULL
+					f_sed=$SED_FULL
+					f_date=$DATE_FULL;;
+			esac;;
+		--diff)
+			shift
+			date_diff="-d $1";;
+		--debug)
+		  set -x;;
+		-v|--version)
+			version;;
+		-h|--help)
+			usage;;
+		--)
+			shift; break;;
+	esac
+	shift
+done
+
+## Script start
+###################
+date_ref=$(date +${f_date} ${date_diff})
+
+[ -p /dev/stdin ] && files=$(cat) || files=$@
+
+for file in $files; do
+	if ! egrep -qe $f_grep <<< "$file"; then continue; fi
+
+	file_date=$(sed "s/.*\($f_sed\).*/\1/" <<< "$file")
+
+	[[ $file_date < $date_ref ]] && file_older=1 || file_older=0
+
+	[ $file_older -eq $older ] || continue
+
+  if [[ -d $file ]] && [ $directory -eq 1 ]; then
+    [ $mode = list ] && { echo "$file"; continue;}
+    [ $mode = delete ] && { rm -rf "$file"; continue;}
+  elif [[ -f $file ]]; then
+    [ $mode = list ] && { echo "$file"; continue;}
+    [ $mode = delete ] && { rm -f "$file"; continue;}
+  fi
+done
