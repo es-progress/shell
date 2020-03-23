@@ -86,11 +86,11 @@ exit 0
 
 ## Error function
 error() {
-e_code="$?"
-message="${1}: ${2} [${e_code}]"
-echo "${message}" >&2
-log -l backup -p error "$message"
-exit $3
+  e_code="$?"
+  message="${1}: ${2} [${e_code}]"
+  echo "${message}" >&2
+  log -l backup -p error "$message"
+  exit $3
 }
 
 ## Exclusion builder

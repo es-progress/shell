@@ -26,9 +26,9 @@ E_CHMOD_FAIL=64
 
 ## Error function
 error() {
-e_code=$?
-echo "${1}: ${2} [${e_code}]" >&2
-exit $3
+  e_code=$?
+  echo "${1}: ${2} [${e_code}]" >&2
+  exit $3
 }
 
 ## Version info
@@ -43,7 +43,7 @@ exit 0
 
 ## Usage
 usage() {
-echo "Usage: give USER DIRECTORY"
+  echo "Usage: give USER DIRECTORY"
 }
 
 ## Help
