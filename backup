@@ -257,8 +257,6 @@ if [ "$MODE" = "archive" ]; then
 fi
 
 ## Unmount filesystem
-if ! umount "${MOUNT}/"; then
-  echo "Backup done, but un-mounting failed." >&2
-fi
+umount "${MOUNT}/" || echo "Backup done, but un-mounting failed." >&2
 
 exit 0
