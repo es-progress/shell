@@ -210,7 +210,7 @@ exclude=$(exc_build $EXCL)
 now=$(date "+${DATE_FORMAT}")
 aim="${MOUNT}/${DEST}"
 
-## Backup archive
+## Backup
 if [ "$MODE" = "archive" ] || [ "$MODE" = "quick" ]; then
   target="${aim}/actual"
   opt="--delete --inplace"
