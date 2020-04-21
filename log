@@ -28,7 +28,7 @@ DATE_FORMAT="%Y-%m-%d %H:%M:%S"
 ## Version info
 version() {
 cat <<-"VERSION"
-logger v0.5-beta
+log v0.5-beta
 Written by Sandor Semsey, Copyright(C) 2020
 License MIT https://choosealicense.com/licenses/mit/
 VERSION
@@ -38,7 +38,7 @@ exit 0
 ## Help
 helping() {
 cat <<-"HELP"
-Usage: logger [OPTIONS] MESSAGE
+Usage: log [OPTIONS] MESSAGE
 
 Writes MESSAGE to log
 
@@ -66,8 +66,8 @@ exit 0
 
 ## Parse options
 ###################
-options=$(getopt -n logger -o "l:p:vh" -l "log:,priority:,debug,version,help" -- "$@")
-[ $? -ne 0 ] && { echo "Try 'logger --help' for more information"; exit 1;}
+options=$(getopt -n log -o "l:p:vh" -l "log:,priority:,debug,version,help" -- "$@")
+[ $? -ne 0 ] && { echo "Try 'log --help' for more information"; exit 1;}
 eval set -- "$options"
 
 while : ; do
