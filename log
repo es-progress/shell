@@ -10,7 +10,7 @@
 
 ## Settings
 ###################
-
+#teszt
 ## Log files
 LOG_GENERAL="${HOME}/general.log"
 LOG_BACKUP="/var/log/backup.log"
