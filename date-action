@@ -1,17 +1,23 @@
 #!/bin/bash
-##
-## Check filenames for date (time) tags, and perform some action on a selection
-##
-## @author Sandor Semsey <semseysandor@gmail.com>
-##
-## @copyright 2020
-## @license MIT https://choosealicense.com/licenses/mit/
-###############################################################################
+#################################################
+# Date-action                                   #
+#                                               #
+# Check filenames for date (time) tags          #
+# and perform some action on a selection        #
+#                                               #
+# Copyright 2020                                #
+# Sandor Semsey <semseysandor@gmail.com>        #
+# All rights reserved.                          #
+#                                               #
+# This work is published under the MIT License. #
+# https://choosealicense.com/licenses/mit/      #
+#################################################
 
-## Settings
-###################
+############
+# Settings #
+############
 
-## Formats
+# Formats
 GREP_24H="[0-9]{2}:[0-9]{2}:[0-9]{2}"
 GREP_YMD="[0-9]{4}-[0-9]{2}-[0-9]{2}"
 GREP_FULL="[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}:[0-9]{2}:[0-9]{2}"
@@ -22,7 +28,7 @@ DATE_24H="%T"
 DATE_YMD="%F"
 DATE_FULL="%F_%T"
 
-## Defaults
+# Defaults
 mode="list"
 older=1
 directory=0
@@ -30,10 +36,11 @@ f_grep=$GREP_YMD
 f_sed=$SED_YMD
 f_date=$DATE_YMD
 
-## Functions
-###################
+#############
+# Functions #
+#############
 
-## Version info
+# Version info
 version() {
 cat <<-"VERSION"
 date-action v0.9-beta
@@ -43,7 +50,7 @@ VERSION
 exit 0
 }
 
-## Help
+# Help
 usage() {
 cat <<-"HELP"
 Usage: date-action [OPTIONS] [FILE...]
@@ -74,7 +81,7 @@ HELP
 exit 0
 }
 
-## Parse options
+# Parse options
 ###################
 options=$(getopt -n date-action -o "rndvh" -l "remove,newer,directory,format:,diff:,debug,version,help" -- "$@")
 [ $? -ne 0 ] && { echo "Try 'date-action --help' for more information"; exit 1;}
@@ -115,7 +122,7 @@ while : ;do
 	shift
 done
 
-## Script start
+# Script start
 ###################
 date_ref=$(date +${f_date} ${date_diff})
 

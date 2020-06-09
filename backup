@@ -1,26 +1,26 @@
 #!/bin/bash
-##
-## Back-up
-##
-## Modes:
-## A) archive
-##    1. Backup (rsync)
-##    2. Archive (tar & gzip)
-##    3. Delete old archives (date-action)
-## B) quick (rsync)
-## C) snapshot (rsync snapshot style)
-##
-## @author Sandor Semsey <semseysandor@gmail.com>
-##
-## @copyright 2020
-## @license MIT https://choosealicense.com/licenses/mit/
-##########################################################################
+#################################################
+# Backup utility                                #
+#                                               #
+# Modes:                                        #
+#   A) archive                                  #
+#      1. Backup (rsync)                        #
+#      2. Archive (tar & gzip)                  #
+#      3. Delete old archives (date-action)     #
+#   B) quick (rsync)                            #
+#   C) snapshot (rsync snapshot style)          #
+#                                               #
+# Copyright 2020                                #
+# Sandor Semsey <semseysandor@gmail.com>        #
+# All rights reserved.                          #
+#                                               #
+# This work is published under the MIT License. #
+# https://choosealicense.com/licenses/mit/      #
+#################################################
 
-## Disable shell path expansion
-set -f
-
-## Error codes
-###################
+###############
+# Error codes #
+###############
 
 E_INVALID_OPTIONS=50
 E_MISSING_PARAMETERS=51
@@ -33,10 +33,11 @@ E_DIR_CHANGE=57
 E_COMPRESSION_FAIL=58
 E_UNMOUNT=59
 
-## Functions
-###################
+#############
+# Functions #
+#############
 
-## Version info
+# Version info
 version() {
 cat <<-"VERSION"
 Backup v0.9-beta
@@ -46,7 +47,7 @@ VERSION
 exit 0
 }
 
-## Help
+# Help
 helping() {
 cat <<-"HELP"
 Usage: backup required_OPTIONS [OPTIONS]
@@ -87,7 +88,7 @@ HELP
 exit 0
 }
 
-## Error function
+# Error function
 error() {
   e_code="$?"
   message="${1}: ${2} [${e_code}]"
@@ -96,7 +97,7 @@ error() {
   exit $3
 }
 
-## Exclusion builder
+# Exclusion builder
 exc_build() {
   local exclusion=""
   for ex in $@; do
@@ -105,8 +106,12 @@ exc_build() {
   echo $exclusion
 }
 
-## Parse options
+# Parse options
 ###################
+
+# Disable shell path expansion
+set -f
+
 opt_short="s:d:f:m:a:x:p:vh"
 opt_long="source:,destination:,filesystem:,mount:,archive:,mode:,exclude:,expire:,prefix:,format:,debug,version,help"
 options=$(getopt -n backup -o $opt_short -l $opt_long -- "$@")
@@ -170,16 +175,16 @@ while : ;do
 	shift
 done
 
-## Validate options
+# Validate options
 ###################
 
-## Check required
+# Check required
 [ -n "$FS" ] || error "Filesystem missing" "backup" $E_MISSING_PARAMETERS
 [ -n "$MOUNT" ] || error "Mounting point missing" "backup" $E_MISSING_PARAMETERS
 [ -n "$SOURCE" ] || error  "Source missing" "backup" $E_MISSING_PARAMETERS
 [ -n "$DEST" ] || error "Destination missing" "backup" $E_MISSING_PARAMETERS
 
-## Defaults
+# Defaults
 if [ -z "$DATE_FORMAT" ]; then
  DATE_FORMAT="%F"
  DATE_ACTION_FORMAT="YMD"
@@ -191,28 +196,28 @@ if [ -z "$ARCHIVE" ]; then
   ARCHIVE="archive"
 fi
 
-## Remove trailing slash
+# Remove trailing slash
 [ "${FS:(-1)}" = "/" ] && FS="${FS::-1}"
 [ "${MOUNT:(-1)}" = "/" ] && MOUNT="${MOUNT::-1}"
 [ "${DEST:(-1)}" = "/" ] && DEST="${DEST::-1}"
 
-## Script start
+# Script start
 ###################
 
-## Check if run as root
+# Check if run as root
 [ $(id -u) -ne 0 ] && error "Please run as root" "backup" $E_NOT_RUN_AS_ROOT
 
-## Mount filesystem
+# Mount filesystem
 if ! grep -qs "$MOUNT" /proc/mounts; then
 	mount "$FS" "$MOUNT" || error "Mounting failed" "mount" $E_MOUNT_FAIL
 fi
 
-## Init backup
+# Init backup
 exclude=$(exc_build $EXCL)
 now=$(date "+${DATE_FORMAT}")
 aim="${MOUNT}/${DEST}"
 
-## Backup
+# Backup
 if [ "$MODE" = "archive" ] || [ "$MODE" = "quick" ]; then
   target="${aim}/actual"
   opt="--delete --inplace"
@@ -223,7 +228,7 @@ else
 fi
 rsync -aAXHExh --info=stats1 --info=progress2 $opt $exclude "$SOURCE" "$target" || error "Backup failed" "rsync" $E_BACKUP_FAIL
 
-## Manage links for snapshot
+# Manage links for snapshot
 if [ "$MODE" = "snapshot" ]; then
   # Remove symlink to previous snapshot
   rm -f "$last"
@@ -231,34 +236,34 @@ if [ "$MODE" = "snapshot" ]; then
   # Create new symlink to latest snapshot for the next backup to hardlink
   ln -s "$target" "$last"
 
-  ## Delete expired archives
+  # Delete expired archives
   if [ -n "$EXPIRE" ]; then
    date-action -dr --diff=${EXPIRE} --format=${DATE_ACTION_FORMAT} ${aim}/* || error "Expired archives not deleted" "date-action" $E_DELETE_FAIL
   fi
 fi
 
-## Create archives
+# Create archives
 if [ "$MODE" = "archive" ]; then
-  ## Go to backup dir
+  # Go to backup dir
   cd "${aim}" || error "Backup directory change failed" "cd" $E_DIR_CHANGE
 
-  ## Archive
+  # Archive
   tar_file="${PREFIX}${now}.tar.gz"
   tar -I "pigz -1" --sort=name -cf "${ARCHIVE}/${tar_file}" "actual/" || error "Archiving failed" "tar" $E_ARCHIVE_FAIL
 
-  ## Test compression
+  # Test compression
   pigz -t "${ARCHIVE}/${tar_file}" || error "Compressed files not OK" "pigz" $E_COMPRESSION_FAIL
 
-  ## Delete expired archives
+  # Delete expired archives
   if [ -n "$EXPIRE" ]; then
     date-action -r --diff=${EXPIRE} --format=${DATE_ACTION_FORMAT} "${ARCHIVE}/*" || error "Expired archives not deleted" "date-action" $E_DELETE_FAIL
   fi
 
-  ## Leave backup filesystem
+  # Leave backup filesystem
   cd || error "Leaving backup filesystem failed" "cd" $E_DIR_CHANGE
 fi
 
-## Unmount filesystem
+# Unmount filesystem
 umount "${MOUNT}/" || echo "Backup done, but un-mounting failed." >&2
 
 exit 0

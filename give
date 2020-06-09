@@ -1,18 +1,23 @@
 #!/bin/bash
-##
-## Gives directory (and all sub-directories) to user:
-## 1. set owner
-## 2. set group (same as owner)
-## 3. set permissions (rwx to owner/group, rx to others)
-##
-## @author Sandor Semsey <semseysandor@gmail.com>
-##
-## @copyright 2020
-## @license MIT https://choosealicense.com/licenses/mit/
-##########################################################################
+###########################################################
+# Give                                                    #
+#                                                         #
+# Gives directory (and all sub-directories) to user:      #
+#   1. set owner                                          #
+#   2. set group (same as owner)                          #
+#   3. set permissions (rwx to owner/group, rx to others) #
+#                                                         #
+# Copyright 2020                                          #
+# Sandor Semsey <semseysandor@gmail.com>                  #
+# All rights reserved.                                    #
+#                                                         #
+# This work is published under the MIT License.           #
+# https://choosealicense.com/licenses/mit/                #
+###########################################################
 
-## Error codes
-###################
+###############
+# Error codes #
+###############
 
 E_INVALID_OPTIONS=50
 E_MISSING_PARAMETERS=51
@@ -21,17 +26,18 @@ E_CHOWN_FAIL=62
 E_CHGRP_FAIL=63
 E_CHMOD_FAIL=64
 
-## Functions
-###################
+#############
+# Functions #
+#############
 
-## Error function
+# Error function
 error() {
   e_code=$?
   echo "${1}: ${2} [${e_code}]" >&2
   exit $3
 }
 
-## Version info
+# Version info
 version() {
 cat <<-"VERSION"
 give v0.9-beta
@@ -41,12 +47,12 @@ VERSION
 exit 0
 }
 
-## Usage
+# Usage
 usage() {
   echo "Usage: give USER DIRECTORY"
 }
 
-## Help
+# Help
 helping() {
 cat <<-"HELP"
 Usage: give [OPTIONS] USER [DIRECTORY]
@@ -65,7 +71,7 @@ HELP
 exit 0
 }
 
-## Parse options
+# Parse options
 ###################
 while getopts "dhv" opt; do
 	case ${opt} in
@@ -77,13 +83,13 @@ while getopts "dhv" opt; do
 done
 shift $(($OPTIND -1))
 
-## Script start
+# Script start
 ###################
 
-## Check if run as root
+# Check if run as root
 [ $(id -u) -eq 0 ] || error "Please run as root" "give" $E_NOT_RUN_AS_ROOT
 
-## Validating inputs
+# Validating inputs
 [ -n "$1" ] && user=$1 || { usage; error "User missing" "give" $E_MISSING_PARAMETERS; }
 [ -n "$2" ] && dir=$2 || { usage; error "Directory missing" "give" $E_MISSING_PARAMETERS; }
 

@@ -1,31 +1,35 @@
 #!/bin/bash
-##
-## Logger
-##
-## @author Sandor Semsey <semseysandor@gmail.com>
-##
-## @copyright 2020
-## @license MIT https://choosealicense.com/licenses/mit/
-##########################################################################
+#################################################
+# Logger                                        #
+#                                               #
+# Copyright 2020                                #
+# Sandor Semsey <semseysandor@gmail.com>        #
+# All rights reserved.                          #
+#                                               #
+# This work is published under the MIT License. #
+# https://choosealicense.com/licenses/mit/      #
+#################################################
 
-## Settings
-###################
-#teszt
-## Log files
+############
+# Settings #
+############
+
+# Log files
 LOG_GENERAL="${HOME}/general.log"
 LOG_BACKUP="/var/log/backup.log"
 
-## Defaults
+# Defaults
 LOG_FILE=$LOG_GENERAL
 PRIO="NOTICE"
 
-## Date format
+# Date format
 DATE_FORMAT="%Y-%m-%d %H:%M:%S"
 
-## Functions
-###################
+#############
+# Functions #
+#############
 
-## Version info
+# Version info
 version() {
 cat <<-"VERSION"
 log v0.5-beta
@@ -35,7 +39,7 @@ VERSION
 exit 0
 }
 
-## Help
+# Help
 helping() {
 cat <<-"HELP"
 Usage: log [OPTIONS] MESSAGE
@@ -64,7 +68,7 @@ HELP
 exit 0
 }
 
-## Parse options
+# Parse options
 ###################
 options=$(getopt -n log -o "l:p:vh" -l "log:,priority:,debug,version,help" -- "$@")
 [ $? -ne 0 ] && { echo "Try 'log --help' for more information"; exit 1;}
@@ -102,20 +106,20 @@ while : ; do
 	shift
 done
 
-## Script start
+# Script start
 ###################
 
-## Init
+# Init
 msg=$1
 now=$(date +"$DATE_FORMAT")
 
-## If message is empty exit
+# If message is empty exit
 [ -n "$msg" ] || exit 0
 
-## Check if log file is present if not create
+# Check if log file is present if not create
 [ -f "$LOG_FILE" ] || touch $LOG_FILE
 
-## Write to log
+# Write to log
 [ -w "$LOG_FILE" ] && echo "${now} [${PRIO}] ${1}" >> $LOG_FILE
 
 exit
