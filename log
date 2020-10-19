@@ -1,47 +1,47 @@
-#!/bin/bash
-#################################################
-# Logger                                        #
-#                                               #
-# Copyright 2020                                #
-# Sandor Semsey <semseysandor@gmail.com>        #
-# All rights reserved.                          #
-#                                               #
-# This work is published under the MIT License. #
-# https://choosealicense.com/licenses/mit/      #
-#################################################
+#!/usr/bin/env bash
+###################################################
+## Logger                                        ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
 
 ############
-# Settings #
+# SETTINGS #
 ############
 
 # Log files
-LOG_GENERAL="${HOME}/general.log"
+LOG_GENERAL="~/general.log"
 LOG_BACKUP="/var/log/backup.log"
 
 # Defaults
-LOG_FILE=$LOG_GENERAL
+LOG_FILE="${LOG_GENERAL}"
 PRIO="NOTICE"
 
 # Date format
 DATE_FORMAT="%Y-%m-%d %H:%M:%S"
 
 #############
-# Functions #
+# FUNCTIONS #
 #############
 
 # Version info
 version() {
-cat <<-"VERSION"
-log v0.5-beta
+  cat <<VERSION
+log v0.8
 Written by Sandor Semsey, Copyright(C) 2020
 License MIT https://choosealicense.com/licenses/mit/
 VERSION
-exit 0
+  exit 0
 }
 
 # Help
 helping() {
-cat <<-"HELP"
+  cat <<-HELP
 Usage: log [OPTIONS] MESSAGE
 
 Writes MESSAGE to log
@@ -65,61 +65,82 @@ OPTIONS
 -h                      display this help
 
 HELP
-exit 0
+  exit 0
 }
 
-# Parse options
-###################
-options=$(getopt -n log -o "l:p:vh" -l "log:,priority:,debug,version,help" -- "$@")
-[ $? -ne 0 ] && { echo "Try 'log --help' for more information"; exit 1;}
-eval set -- "$options"
+#################
+# PARSE OPTIONS #
+#################
 
-while : ; do
-	case "$1" in
-		-l|--log)
-			shift
-			case "$1" in
-			  general)
-					LOG_FILE=$LOG_GENERAL;;
-				backup)
-					LOG_FILE=$LOG_BACKUP;;
-			esac;;
-		-p|--priority)
-			shift
-			case "$1" in
-				info)
-					PRIO="INFO";;
-				notice)
-					PRIO="NOTICE";;
-				error)
-				  PRIO="ERROR";;
-			esac;;
-		--debug)
-		  set -x;;
-		-v|--version)
-			version;;
-		-h|--help)
-			helping;;
-		--)
-			shift; break;;
-	esac
-	shift
+options=$(getopt -n log -o "l:p:vh" -l "log:,priority:,debug,version,help" -- "$@")
+[[ $? -ne 0 ]] && {
+  echo "Try 'log --help' for more information"
+  exit 1
+}
+eval set -- "${options}"
+
+while :; do
+  case "${1}" in
+    -l | --log)
+      shift
+      case "${1}" in
+        general)
+          LOG_FILE="${LOG_GENERAL}"
+          ;;
+        backup)
+          LOG_FILE="${LOG_BACKUP}"
+          ;;
+      esac
+      ;;
+    -p | --priority)
+      shift
+      case "${1}" in
+        info)
+          PRIO="INFO"
+          ;;
+        notice)
+          PRIO="NOTICE"
+          ;;
+        error)
+          PRIO="ERROR"
+          ;;
+      esac
+      ;;
+    --debug)
+      set -x
+      ;;
+    -v | --version)
+      version
+      ;;
+    -h | --help)
+      helping
+      ;;
+    --)
+      shift
+      break
+      ;;
+  esac
+  shift
 done
 
-# Script start
-###################
+################
+# SCRIPT START #
+################
+
+# Exit on error
+set -e
 
 # Init
-msg=$1
-now=$(date +"$DATE_FORMAT")
+msg=${*}
+now=$(date "+${DATE_FORMAT}")
 
-# If message is empty exit
-[ -n "$msg" ] || exit 0
+# If message is empty --> exit
+[[ -n "${msg}" ]] || exit 0
 
 # Check if log file is present if not create
-[ -f "$LOG_FILE" ] || touch $LOG_FILE
+[[ -f "${LOG_FILE}" ]] || touch "${LOG_FILE}"
 
 # Write to log
-[ -w "$LOG_FILE" ] && echo "${now} [${PRIO}] ${1}" >> $LOG_FILE
+[[ -w "${LOG_FILE}" ]] && echo "${now} [${PRIO}] ${msg}" >>${LOG_FILE}
 
-exit
+exit 0
