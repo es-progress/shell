@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+###################################################
+## proxy                                         ##
+##                                               ##
+## Manage SOCKS5 proxy                           ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+##########
+# CONFIG #
+##########
+
+# Arguments to SSH
+#
+# -f: go to background
+# -q: quiet mode
+# -N: don't execute commands (only port forwarding)
+ssh_args="-fqN"
+
+#############
+# FUNCTIONS #
+#############
+
+# Usage
+usage() {
+  echo "Usage: proxy ACTION TARGET PORT"
+  exit 1
+}
+
+# Check if tunnel is open
+check_tunnel_open() {
+  if pgrep -f "${ssh_command}" >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+###########
+# OPTIONS #
+###########
+
+# First argument: action
+if [[ -z "${1}" ]]; then
+  echo "Action missing"
+  usage
+fi
+action="${1}"
+
+# 2nd argument: target
+shift
+if [[ -z "${1}" ]]; then
+  echo "Target missing"
+  exit 1
+fi
+target="${1}"
+
+# 3rd argument: port
+shift
+if [[ -z "${1}" ]]; then
+  echo "Port missing"
+  exit 1
+fi
+port="${1}"
+
+# Assemble SSH command
+ssh_command="ssh ${ssh_args} -D ${port} ${target}"
+
+################
+# SCRIPT START #
+################
+
+# Switch action
+case ${action} in
+  open)
+    # Open tunnel
+    #############
+    if check_tunnel_open; then
+      echo "Tunnel already opened."
+    else
+      ${ssh_command}
+      if ! check_tunnel_open; then
+        echo "Tunnel could not be opened."
+        exit 1
+      fi
+    fi
+    ;;
+
+  close)
+    # Close tunnel
+    ##############
+    if check_tunnel_open; then
+      pkill -f "${ssh_command}"
+      if check_tunnel_open; then
+        echo "Tunnel could not be closed."
+        exit 1
+      fi
+    else
+      echo "Tunnel already closed."
+    fi
+    ;;
+
+  status)
+    # Tunnel status
+    ###############
+
+    if check_tunnel_open; then
+      echo "Tunnel is open."
+    else
+      echo "Tunnel is closed."
+    fi
+    ;;
+
+  *)
+    exit 1
+    ;;
+esac
+
+exit 0

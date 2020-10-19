@@ -1,0 +1,629 @@
+#!/usr/bin/env bash
+###################################################
+## Benchmark                                     ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+########################
+# BENCHMARK PARAMETERS #
+########################
+
+# Individual benchmark time limit (seconds)
+RUN_TIME=60
+
+# CPU
+#####
+
+# Run parameters in semicolon limited string
+# Threads
+runs_cpu[0]="1;30000"
+runs_cpu[1]="16;30000"
+
+# CPU application test
+# Test file size in MB
+CPU_TEST_FILE_SIZE=500
+# Test file name (will be created then deleted)
+CPU_TEST_FILE_NAME="test_file.cpu"
+
+# Memory
+########
+
+# Run parameters in semicolon limited string
+# Threads; Memory block size ; Memory total size ; Memory access mode
+runs_memory[0]="1;512;30G;rnd"
+runs_memory[1]="16;4K;50G;rnd"
+runs_memory[2]="1;1M;100G;rnd"
+runs_memory[3]="1;1M;100G;seq"
+
+# Disk
+######
+
+# Run parameters in semicolon limited string
+# Threads ; Number of files ; Block size ; Test mode ; fsync after every request ; Read/write ratio ; Total files size
+runs_disk[0]="1;64;4K;rndrw;on;3;4G"
+runs_disk[1]="16;64;64K;rndrw;off;3;4G"
+runs_disk[2]="1;1;1M;seqrd;off;3;4G"
+runs_disk[3]="1;1;1M;seqwr;off;3;4G"
+
+# Download Bandwidth
+####################
+
+# Run parameters in semicolon limited string
+# Name ; Location ; URL
+runs_download[0]="CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test"
+runs_download[1]="Fibernet;Hungary;http://fibernet-bwt.loom.hu/downfile/mega.down"
+runs_download[2]="Vultr;London;https://lon-gb-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[3]="Vultr;Frankfurt;https://fra-de-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[4]="Vultr;Paris;https://par-fr-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[5]="Vultr;Amsterdam;https://ams-nl-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[6]="Otenet;Athens;http://speedtest.ftp.otenet.gr/files/test1Gb.db"
+runs_download[7]="Vultr;New York;https://nj-us-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[8]="Vultr;Dallas;https://tx-us-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[9]="Vultr;Los Angeles;https://lax-ca-us-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[10]="Vultr;Tokyo;https://hnd-jp-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.bin"
+
+#############
+# FUNCTIONS #
+#############
+
+# Version info
+##############
+version() {
+  cat <<EOF
+Benchmark v0.8
+Written by Sandor Semsey, Copyright(C) 2020
+License MIT https://choosealicense.com/licenses/mit/
+EOF
+  exit 0
+}
+
+# Help
+######
+usage() {
+  cat <<EOF
+Benchmark
+
+This is a thin wrapper for sysbench.
+For additional information see 'man sysbench'
+
+OPTIONS:
+
+-c, --cpu
+-m, --memory
+-d, --disk
+    --down
+                       Run appropriate test. If no test specified, all will run.
+-v, --verbose          Verbose operation
+-r, --report           Save test report to file
+    --report-prefix    Report file prefix
+
+-h, --help             Display this help
+-V, --version          Print version information
+
+EOF
+  exit 0
+}
+
+# Check if command exists
+#########################
+command_exists() {
+  command -v "$@" >/dev/null 2>&1
+}
+
+# Clean up after tests
+######################
+clean_up() {
+  rm -f test_file.*
+  exit
+}
+
+# Test CPU with real use cases
+##############################
+cpu_app_test() {
+
+  local create_test_file time_sha time_bzip time_aes
+
+  [[ -n "${VERBOSE}" ]] && echo "Test file size: ${CPU_TEST_FILE_SIZE} MB"
+
+  # Create test file
+  [[ -n "${VERBOSE}" ]] && echo "Creating test file..."
+  create_test_file=$(dd if=/dev/urandom of="${CPU_TEST_FILE_NAME}" bs=1M count="${CPU_TEST_FILE_SIZE}" 2>&1)
+
+  if [[ -n "${VERBOSE}" ]]; then
+    echo "${create_test_file}"
+    echo "Test file created."
+  fi
+
+  # Run tests
+  # Hashing
+  time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"${CPU_TEST_FILE_NAME}"; } 2>&1)
+  # bzip compressing
+  time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"${CPU_TEST_FILE_NAME}"; } 2>&1)
+  # AES encrypting
+  time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"${CPU_TEST_FILE_NAME}"; } 2>&1)
+
+  # Print results
+  echo "SHA256-hashing:    ${time_sha}"
+  echo "bzip2-compressing: ${time_bzip}"
+  echo "AES-encrypting:    ${time_aes}"
+
+  # Delete test file
+  [[ -n "${VERBOSE}" ]] && echo "Deleting test file..."
+  rm -f "${CPU_TEST_FILE_NAME}"
+  [[ -n "${VERBOSE}" ]] && echo "Test file deleted."
+}
+
+# Benchmark
+###########
+run_benchmark() {
+
+  local params
+
+  # Set parameters
+  params="--time=${RUN_TIME}"
+
+  case "${1}" in
+    cpu)
+      params="${params} --threads=${2} --cpu-max-prime=${3}  cpu"
+      ;;
+    memory)
+      params="${params} --threads=${2} --memory-block-size=${3} --memory-total-size=${4} --memory-access-mode=${5} memory"
+      ;;
+    disk)
+      params="${params} --threads=${2} --file-num=${3} --file-block-size=${4} --file-test-mode=${5} --file-fsync-all=${6} \
+                        --file-rw-ratio=${7} --file-total-size=${8} fileio"
+      ;;
+    download)
+      curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${2}"
+      return
+      ;;
+  esac
+
+  # Run benchmark
+  [[ "${1}" == "disk" ]] && sysbench ${params} prepare
+  sysbench ${params} run
+  [[ "${1}" == "disk" ]] && sysbench ${params} cleanup
+}
+
+# Filter benchmark results for summary
+######################################
+filter_results() {
+
+  local filter
+
+  # Set filter
+  case "${1}" in
+    cpu_app)
+      filter='/^SHA256-hashing/ p; /^bzip2-compressing/ p; /^AES-encrypting/ p;'
+      ;;
+    cpu)
+      filter=' /^CPU speed:/,+1 p; /^Latency/,+3 p'
+      ;;
+    memory)
+      filter='/transferred/ p; /^Latency/,+3 p'
+      ;;
+    disk)
+      filter='/^Throughput/,+2 p; /^Latency/,+3 p'
+      ;;
+    download)
+      awk '{ printf "%d MBit/s\n", $0 * 8 / 1000 / 1000 } END { if (NR == 0) { print "error" } }' <<<"${2}"
+      return
+      ;;
+  esac
+
+  # Apply filter
+  sed -n "${filter}" <<<"${2}"
+}
+
+# Print test header with system info
+####################################
+print_sysinfo() {
+  cat <<EOF
+--------------------------------------------------
+ Benchmark v0.8
+
+ ${hostname}
+--------------------------------------------------
+
+==================================================
+                    SYSTEM INFO
+==================================================
+
+*************************
+           CPU
+*************************
+
+Vendor: ${cpu_vendor}
+Model : ${cpu_model}
+Cores : ${cpu_cores}
+MHz   : ${cpu_freq}
+Cache : ${cpu_cache}
+TLB   : ${cpu_TLB}
+
+*************************
+          Memory
+*************************
+
+Total : ${ram_total}
+Free  : ${ram_free}
+Swap  : ${ram_swap}
+
+*************************
+     Operating System
+*************************
+
+OS     : ${os}
+Kernel : ${kernel}
+Arch   : ${arch}
+
+*************************
+          Disks
+*************************
+
+Device    Capacity    Type
+--------------------------
+${disks}
+
+EOF
+}
+
+# Print summary header
+######################
+print_summary_header() {
+  cat <<EOF
+==================================================
+                   TEST RESULTS
+
+ ${hostname}
+ $(date +"%F %R")
+
+ Total run time: $((SECONDS / 60)) min $((SECONDS % 60)) sec
+==================================================
+EOF
+}
+
+# Print CPU summary
+###################
+print_summary_cpu() {
+  echo
+  echo "*************************"
+  echo "           CPU           "
+  echo "*************************"
+
+  for ((i = 0; i < "${#runs_cpu[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_cpu[$i]}"
+
+    echo
+    echo "Run #$((i + 1))"
+    echo "------"
+    printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
+    printf "%-20s : %8d\n" "Max prime number" "${params[1]}"
+    echo
+    echo "${summary_cpu[$i]}"
+  done
+
+  # Print CPU application test summary
+  if [[ -n "${summary_cpu_app}" ]]; then
+    echo
+    echo "Application test"
+    echo "----------------"
+    echo
+    echo "${summary_cpu_app}"
+  fi
+}
+
+# Print Memory summary
+######################
+print_summary_memory() {
+  echo
+  echo "*************************"
+  echo "          Memory         "
+  echo "*************************"
+
+  for ((i = 0; i < "${#runs_memory[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_memory[$i]}"
+
+    echo
+    echo "Run #$((i + 1))"
+    echo "------"
+    echo
+    printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
+    printf "%-20s : %8s\n" "Memory block size" "${params[1]}"
+    printf "%-20s : %8s\n" "Memory total size" "${params[2]}"
+    printf "%-20s : %8s\n" "Memory access mode" "${params[3]}"
+    echo
+    echo "${summary_memory[$i]}"
+  done
+}
+
+# Print Disk summary
+####################
+print_summary_disk() {
+  echo
+  echo "*************************"
+  echo "          Disks          "
+  echo "*************************"
+
+  for ((i = 0; i < "${#runs_disk[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_disk[$i]}"
+
+    echo
+    echo "Run #$((i + 1))"
+    echo "------"
+    echo
+    printf "%-20s : %8s\n" "Number of threads" "${params[0]}"
+    printf "%-20s : %8s\n" "Number of files" "${params[1]}"
+    printf "%-20s : %8s\n" "File block size" "${params[2]}"
+    printf "%-20s : %8s\n" "Test mode" "${params[3]}"
+    printf "%-20s : %8s\n" "fsync on all" "${params[4]}"
+    printf "%-20s : %8s\n" "Read/write ratio" "${params[5]}"
+    printf "%-20s : %8s\n" "Total file size" "${params[6]}"
+    echo
+    echo "${summary_disk[$i]}"
+  done
+}
+
+# Print Download summary
+########################
+print_summary_download() {
+  echo
+  echo "*************************"
+  echo "        Downloads        "
+  echo "*************************"
+  echo
+
+  for ((i = 0; i < "${#runs_download[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_download[$i]}"
+
+    printf "%-15s [%-10s]  : %10s\n" "${params[1]}" "${params[0]}" "${summary_download[$i]}"
+  done
+}
+
+################
+# SCRIPT START #
+################
+
+# Make sure test files are always deleted, even when the script is interrupted
+trap clean_up EXIT INT TERM
+
+# Parse options
+###############
+
+opt_short="vrcmdVh"
+opt_long="verbose,report,report-prefix:,cpu,memory,disk,down,version,help"
+options=$(getopt -n benchmark -o ${opt_short} -l ${opt_long} -- "$@")
+
+if [[ "${?}" -ne 0 ]]; then
+  echo "Try 'benchmark --help' for more information"
+  exit 1
+fi
+
+eval set -- "${options}"
+
+while :; do
+  case "$1" in
+    -v | --verbose)
+      VERBOSE=1
+      ;;
+    -r | --report)
+      REPORT=1
+      ;;
+    --report-prefix)
+      shift
+      REPORT_FILE_PREFIX="${1}"
+      ;;
+    -c | --cpu)
+      TEST_CPU=1
+      ;;
+    -m | --memory)
+      TEST_MEMORY=1
+      ;;
+    -d | --disk)
+      TEST_DISK=1
+      ;;
+    --down)
+      TEST_DOWNLOAD=1
+      ;;
+    -h | --help)
+      usage
+      ;;
+    -V | --version)
+      version
+      ;;
+    --)
+      shift
+      break
+      ;;
+  esac
+  shift
+done
+
+# Validate options
+##################
+
+# If no test specified --> run all
+if [[ -z "${TEST_CPU}" ]] && [[ -z "${TEST_MEMORY}" ]] && [[ -z "${TEST_DISK}" ]] && [[ -z "${TEST_DOWNLOAD}" ]]; then
+  TEST_CPU=1
+  TEST_MEMORY=1
+  TEST_DISK=1
+  TEST_DOWNLOAD=1
+fi
+
+# Check for required commands
+#############################
+
+required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
+
+for cmd in "${required_commands[@]}"; do
+  if ! command_exists "${cmd}"; then
+    echo "Missing dependency: ${cmd}"
+    exit 1
+  fi
+done
+
+# Get System info
+#################
+
+# CPU info
+cpu_info="$(cat /proc/cpuinfo)"
+cpu_model=$(grep -m 1 "model name" <<<"${cpu_info}" | cut -d ":" -f 2)
+cpu_vendor=$(grep -m 1 "vendor_id" <<<"${cpu_info}" | cut -d ":" -f 2)
+cpu_freq=$(grep -m 1 "cpu MHz" <<<"${cpu_info}" | cut -d ":" -f 2)
+cpu_cache=$(grep -m 1 "cache size" <<<"${cpu_info}" | cut -d ":" -f 2)
+cpu_cores=$(grep -m 1 "cpu cores" <<<"${cpu_info}" | cut -d ":" -f 2)
+cpu_TLB=$(grep -m 1 "TLB size" <<<"${cpu_info}" | cut -d ":" -f 2)
+
+# RAM info
+ram_info="$(free -h)"
+ram_total=$(grep "Mem:" <<<"${ram_info}" | awk '{print $2}')
+ram_free=$(grep "Mem:" <<<"${ram_info}" | awk '{print $4}')
+ram_swap=$(grep "Swap:" <<<"${ram_info}" | awk '{print $2}')
+
+# OS info
+host=$(hostnamectl)
+hostname=$(hostname)
+os=$(grep -m 1 "Operating" <<<"${host}" | cut -d ":" -f 2)
+kernel=$(grep -m 1 "Kernel" <<<"${host}" | cut -d ":" -f 2)
+arch=$(grep -m 1 "Architecture" <<<"${host}" | cut -d ":" -f 2)
+
+# Disks
+disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,11 |
+  sort | sed '/^loop/ d' | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
+
+# Header
+########
+print_sysinfo
+
+echo "Start Benchmarking..."
+
+# Run Benchmarks
+################
+
+# CPU
+#####
+if [[ -n "${TEST_CPU}" ]]; then
+
+  # Run CPU application test
+  echo "Running CPU application test..."
+  results=$(cpu_app_test)
+
+  # Show detailed results
+  [[ -n "${VERBOSE}" ]] && echo "${results}"
+
+  # Filter results
+  summary_cpu_app="$(filter_results cpu_app "${results}")"
+
+  # Perform benchmark runs
+  for ((i = 0; i < "${#runs_cpu[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_cpu[$i]}"
+
+    # Run benchmarks
+    echo "Running CPU benchmark #$((i + 1))..."
+    results=$(run_benchmark cpu "${params[0]}" "${params[1]}")
+
+    # Show detailed results
+    [[ -n "${VERBOSE}" ]] && echo "${results}"
+
+    # Filter results
+    summary_cpu[$i]=$(filter_results cpu "${results}")
+  done
+fi
+
+# Memory
+########
+if [[ -n "${TEST_MEMORY}" ]]; then
+
+  # Perform benchmark runs
+  for ((i = 0; i < "${#runs_memory[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_memory[$i]}"
+
+    # Run benchmarks
+    echo "Running Memory benchmark #$((i + 1))..."
+    results=$(run_benchmark memory "${params[0]}" "${params[1]}" "${params[2]}" "${params[3]}")
+
+    # Show detailed results
+    [[ -n "${VERBOSE}" ]] && echo "${results}"
+
+    # Filter results
+    summary_memory[$i]=$(filter_results memory "${results}")
+  done
+fi
+
+# Disk
+######
+if [[ -n "${TEST_DISK}" ]]; then
+
+  # Perform benchmark runs
+  for ((i = 0; i < "${#runs_disk[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_disk[$i]}"
+
+    # Run benchmarks
+    echo "Running Disk benchmark #$((i + 1))..."
+    results=$(run_benchmark disk "${params[0]}" "${params[1]}" "${params[2]}" "${params[3]}" "${params[4]}" "${params[5]}" "${params[6]}")
+
+    # Show detailed results
+    [[ -n "${VERBOSE}" ]] && echo "${results}"
+
+    # Filter results
+    summary_disk[$i]=$(filter_results disk "${results}")
+  done
+fi
+
+# Download
+##########
+if [[ -n "${TEST_DOWNLOAD}" ]]; then
+
+  # Loop through runs
+  for ((i = 0; i < "${#runs_download[@]}"; i++)); do
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${runs_download[$i]}"
+
+    # Run benchmarks
+    echo "Running Download speed test #$((i + 1))..."
+    results=$(run_benchmark download "${params[2]}")
+
+    # Show detailed results
+    [[ -n "${VERBOSE}" ]] && echo "Download speed: ${results}"
+
+    # Put to summary
+    summary_download[$i]=$(filter_results download "${results}")
+  done
+fi
+
+echo "Benchmarking finished."
+echo
+
+# Summary
+#########
+
+# If we need to save report to file --> set filename
+# else: discard report (only output to terminal)
+if [[ -n "${REPORT}" ]]; then
+  output_file="${REPORT_FILE_PREFIX}${hostname}_$(date +"%F_%H_%M")"
+else
+  output_file=/dev/null
+fi
+
+# Compile summary
+print_summary_header | tee "${output_file}"
+
+[[ -n "${TEST_CPU}" ]] && print_summary_cpu | tee -a "${output_file}"
+[[ -n "${TEST_MEMORY}" ]] && print_summary_memory | tee -a "${output_file}"
+[[ -n "${TEST_DISK}" ]] && print_summary_disk | tee -a "${output_file}"
+[[ -n "${TEST_DOWNLOAD}" ]] && print_summary_download | tee -a "${output_file}"
+
+exit 0
