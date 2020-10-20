@@ -477,7 +477,7 @@ done
 
 # CPU info
 cpu_info="$(cat /proc/cpuinfo)"
-cpu_model=$(grep -m 1 "model name" <<<"${cpu_info}" | cut -d ":" -f 2)
+cpu_model=$(awk -F: '/model name/ {core++} END {print core}' <<<"${cpu_info}")
 cpu_vendor=$(grep -m 1 "vendor_id" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_freq=$(grep -m 1 "cpu MHz" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_cache=$(grep -m 1 "cache size" <<<"${cpu_info}" | cut -d ":" -f 2)
