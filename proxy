@@ -30,7 +30,41 @@ ssh_args="-fqN"
 # Usage
 usage() {
   echo "Usage: proxy ACTION TARGET PORT"
+  echo "Type 'proxy -h' for help"
   exit 1
+}
+
+# Version
+version() {
+  cat <<VERSION
+proxy v0.8
+Written by Sandor Semsey, Copyright(C) 2020
+License MIT https://choosealicense.com/licenses/mit/
+VERSION
+  exit 0
+}
+
+# Help
+show_help() {
+  cat <<HELP
+Usage: proxy ACTION TARGET PORT
+
+Manage SOCKS5 tunnel
+
+ACTIONS
+open               Open tunnel
+close              Close tunnel
+status             Tunnel status
+
+TARGET             Target string as you would give to ssh (USER@HOST)
+PORT               Port number on local
+
+OPTIONS
+-v,--version       Print version information
+-h, --help         Display this help
+
+HELP
+  exit 0
 }
 
 # Check if tunnel is open
@@ -46,35 +80,58 @@ check_tunnel_open() {
 # OPTIONS #
 ###########
 
-# First argument: action
-if [[ -z "${1}" ]]; then
+# Parse options
+###############
+
+action="${1}"
+target="${2}"
+port="${3}"
+
+# Validate options
+##################
+
+# Action
+if [[ -z "${action}" ]]; then
   echo "Action missing"
   usage
 fi
-action="${1}"
 
-# 2nd argument: target
-shift
-if [[ -z "${1}" ]]; then
+case "${action}" in
+  open | close | status) ;;
+  -v | --version)
+    version
+    ;;
+  -h | --help)
+    show_help
+    ;;
+  *)
+    echo "Invalid action"
+    usage
+    ;;
+esac
+
+# Target
+if [[ -z "${target}" ]]; then
   echo "Target missing"
-  exit 1
+  usage
 fi
 target="${1}"
 
-# 3rd argument: port
-shift
-if [[ -z "${1}" ]]; then
+# Port
+if [[ -z "${port}" ]]; then
   echo "Port missing"
-  exit 1
+  usage
 fi
-port="${1}"
-
-# Assemble SSH command
-ssh_command="ssh ${ssh_args} -D ${port} ${target}"
 
 ################
 # SCRIPT START #
 ################
+
+# Exit on error
+set -e
+
+# Assemble SSH command
+ssh_command="ssh ${ssh_args} -D ${port} ${target}"
 
 # Switch action
 case ${action} in
