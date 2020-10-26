@@ -60,7 +60,7 @@ TARGET             Target string as you would give to ssh (USER@HOST)
 PORT               Port number on local
 
 OPTIONS
--v,--version       Print version information
+-v, --version      Print version information
 -h, --help         Display this help
 
 HELP
@@ -97,7 +97,8 @@ if [[ -z "${action}" ]]; then
 fi
 
 case "${action}" in
-  open | close | status) ;;
+  open | close | status)
+    ;;
   -v | --version)
     version
     ;;
@@ -115,7 +116,6 @@ if [[ -z "${target}" ]]; then
   echo "Target missing"
   usage
 fi
-target="${1}"
 
 # Port
 if [[ -z "${port}" ]]; then
