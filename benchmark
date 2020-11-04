@@ -35,7 +35,7 @@ CPU_TEST_FILE_NAME="test_file.cpu"
 ########
 
 # Run parameters in semicolon limited string
-# Threads; Memory block size ; Memory total size ; Memory access mode
+# Threads ; Memory block size ; Memory total size ; Memory access mode
 runs_memory[0]="1;512;30G;rnd"
 runs_memory[1]="16;4K;50G;rnd"
 runs_memory[2]="1;1M;100G;rnd"
@@ -102,7 +102,7 @@ OPTIONS:
                        Run appropriate test. If no test specified, all will run.
 -v, --verbose          Verbose operation
 -r, --report           Save test report to file
-    --report-prefix    Report file prefix
+    --report-prefix    Report file prefix, implies '-r'
 
 -h, --help             Display this help
 -V, --version          Print version information
@@ -181,7 +181,7 @@ run_benchmark() {
                         --file-rw-ratio=${7} --file-total-size=${8} fileio"
       ;;
     download)
-      curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${2}"
+      curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${4}"
       return
       ;;
   esac
@@ -289,105 +289,81 @@ print_summary_header() {
 EOF
 }
 
-# Print CPU summary
-###################
-print_summary_cpu() {
+# Print summary
+###############
+print_summary() {
+
+  # Get run data
+  run_data="runs_${1}[@]"
+
+  # Init iterator
+  i=0
+
+  # Print test type header
   echo
   echo "*************************"
-  echo "           CPU           "
+  echo "       ${1^^}"
   echo "*************************"
 
-  for ((i = 0; i < "${#runs_cpu[@]}"; i++)); do
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_cpu[$i]}"
+  # Loop through runs
+  for run_param in "${!run_data}"; do
 
+    # Set summary selector
+    selector="${type}_${i}"
+
+    # Convert semicolon limited string into array
+    IFS=";" read -r -a params <<<"${run_param}"
+
+    # Print run header
     echo
     echo "Run #$((i + 1))"
     echo "------"
-    printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
-    printf "%-20s : %8d\n" "Max prime number" "${params[1]}"
     echo
-    echo "${summary_cpu[$i]}"
+
+    # Print run parameters
+    case "${1}" in
+      cpu)
+        printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
+        printf "%-20s : %8d\n\n" "Max prime number" "${params[1]}"
+        ;;
+      memory)
+        printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
+        printf "%-20s : %8s\n" "Memory block size" "${params[1]}"
+        printf "%-20s : %8s\n" "Memory total size" "${params[2]}"
+        printf "%-20s : %8s\n\n" "Memory access mode" "${params[3]}"
+        ;;
+      disk)
+        printf "%-20s : %8s\n" "Number of threads" "${params[0]}"
+        printf "%-20s : %8s\n" "Number of files" "${params[1]}"
+        printf "%-20s : %8s\n" "File block size" "${params[2]}"
+        printf "%-20s : %8s\n" "Test mode" "${params[3]}"
+        printf "%-20s : %8s\n" "fsync on all" "${params[4]}"
+        printf "%-20s : %8s\n" "Read/write ratio" "${params[5]}"
+        printf "%-20s : %8s\n\n" "Total file size" "${params[6]}"
+        ;;
+      download)
+        printf "%-15s [%-10s]  : " "${params[1]}" "${params[0]}"
+        ;;
+    esac
+
+    # Print run results
+    echo "${summary[${selector}]}"
+
+    # Bump iterator
+    i=$((i + 1))
   done
 
-  # Print CPU application test summary
-  if [[ -n "${summary_cpu_app}" ]]; then
+  # Print CPU application test results
+  if [[ "${1}" == "cpu" ]]; then
+    # Set selector
+    selector="cpu_app"
+
     echo
     echo "Application test"
     echo "----------------"
     echo
-    echo "${summary_cpu_app}"
+    echo "${summary[${selector}]}"
   fi
-}
-
-# Print Memory summary
-######################
-print_summary_memory() {
-  echo
-  echo "*************************"
-  echo "          Memory         "
-  echo "*************************"
-
-  for ((i = 0; i < "${#runs_memory[@]}"; i++)); do
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_memory[$i]}"
-
-    echo
-    echo "Run #$((i + 1))"
-    echo "------"
-    echo
-    printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
-    printf "%-20s : %8s\n" "Memory block size" "${params[1]}"
-    printf "%-20s : %8s\n" "Memory total size" "${params[2]}"
-    printf "%-20s : %8s\n" "Memory access mode" "${params[3]}"
-    echo
-    echo "${summary_memory[$i]}"
-  done
-}
-
-# Print Disk summary
-####################
-print_summary_disk() {
-  echo
-  echo "*************************"
-  echo "          Disks          "
-  echo "*************************"
-
-  for ((i = 0; i < "${#runs_disk[@]}"; i++)); do
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_disk[$i]}"
-
-    echo
-    echo "Run #$((i + 1))"
-    echo "------"
-    echo
-    printf "%-20s : %8s\n" "Number of threads" "${params[0]}"
-    printf "%-20s : %8s\n" "Number of files" "${params[1]}"
-    printf "%-20s : %8s\n" "File block size" "${params[2]}"
-    printf "%-20s : %8s\n" "Test mode" "${params[3]}"
-    printf "%-20s : %8s\n" "fsync on all" "${params[4]}"
-    printf "%-20s : %8s\n" "Read/write ratio" "${params[5]}"
-    printf "%-20s : %8s\n" "Total file size" "${params[6]}"
-    echo
-    echo "${summary_disk[$i]}"
-  done
-}
-
-# Print Download summary
-########################
-print_summary_download() {
-  echo
-  echo "*************************"
-  echo "        Downloads        "
-  echo "*************************"
-  echo
-
-  for ((i = 0; i < "${#runs_download[@]}"; i++)); do
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_download[$i]}"
-
-    printf "%-15s [%-10s]  : %10s\n" "${params[1]}" "${params[0]}" "${summary_download[$i]}"
-  done
 }
 
 ################
@@ -396,6 +372,15 @@ print_summary_download() {
 
 # Make sure test files are always deleted, even when the script is interrupted
 trap clean_up EXIT INT TERM
+
+# Init vars
+###########
+
+# Array for summary
+declare -A summary
+
+# Tests to perform
+tests=()
 
 # Parse options
 ###############
@@ -422,18 +407,19 @@ while :; do
     --report-prefix)
       shift
       REPORT_FILE_PREFIX="${1}"
+      REPORT=1
       ;;
     -c | --cpu)
-      TEST_CPU=1
+      tests+=("cpu")
       ;;
     -m | --memory)
-      TEST_MEMORY=1
+      tests+=("memory")
       ;;
     -d | --disk)
-      TEST_DISK=1
+      tests+=("disk")
       ;;
     --down)
-      TEST_DOWNLOAD=1
+      tests+=("download")
       ;;
     -h | --help)
       usage
@@ -453,12 +439,7 @@ done
 ##################
 
 # If no test specified --> run all
-if [[ -z "${TEST_CPU}" ]] && [[ -z "${TEST_MEMORY}" ]] && [[ -z "${TEST_DISK}" ]] && [[ -z "${TEST_DOWNLOAD}" ]]; then
-  TEST_CPU=1
-  TEST_MEMORY=1
-  TEST_DISK=1
-  TEST_DOWNLOAD=1
-fi
+[[ -z "${tests[*]}" ]] && tests=(cpu memory disk download)
 
 # Check for required commands
 #############################
@@ -510,99 +491,52 @@ echo "Start Benchmarking..."
 # Run Benchmarks
 ################
 
-# CPU
-#####
-if [[ -n "${TEST_CPU}" ]]; then
+# Loop through tests
+for type in "${tests[@]}"; do
 
   # Run CPU application test
-  echo "Running CPU application test..."
-  results=$(cpu_app_test)
+  if [[ "${type}" == "cpu" ]]; then
 
-  # Show detailed results
-  [[ -n "${VERBOSE}" ]] && echo "${results}"
-
-  # Filter results
-  summary_cpu_app="$(filter_results cpu_app "${results}")"
-
-  # Perform benchmark runs
-  for ((i = 0; i < "${#runs_cpu[@]}"; i++)); do
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_cpu[$i]}"
-
-    # Run benchmarks
-    echo "Running CPU benchmark #$((i + 1))..."
-    results=$(run_benchmark cpu "${params[0]}" "${params[1]}")
+    echo "Running CPU application test..."
+    results=$(cpu_app_test)
 
     # Show detailed results
     [[ -n "${VERBOSE}" ]] && echo "${results}"
 
     # Filter results
-    summary_cpu[$i]=$(filter_results cpu "${results}")
-  done
-fi
+    summary[cpu_app]="$(filter_results cpu_app "${results}")"
+  fi
 
-# Memory
-########
-if [[ -n "${TEST_MEMORY}" ]]; then
+  # Init iterator
+  i=0
 
-  # Perform benchmark runs
-  for ((i = 0; i < "${#runs_memory[@]}"; i++)); do
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_memory[$i]}"
-
-    # Run benchmarks
-    echo "Running Memory benchmark #$((i + 1))..."
-    results=$(run_benchmark memory "${params[0]}" "${params[1]}" "${params[2]}" "${params[3]}")
-
-    # Show detailed results
-    [[ -n "${VERBOSE}" ]] && echo "${results}"
-
-    # Filter results
-    summary_memory[$i]=$(filter_results memory "${results}")
-  done
-fi
-
-# Disk
-######
-if [[ -n "${TEST_DISK}" ]]; then
-
-  # Perform benchmark runs
-  for ((i = 0; i < "${#runs_disk[@]}"; i++)); do
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_disk[$i]}"
-
-    # Run benchmarks
-    echo "Running Disk benchmark #$((i + 1))..."
-    results=$(run_benchmark disk "${params[0]}" "${params[1]}" "${params[2]}" "${params[3]}" "${params[4]}" "${params[5]}" "${params[6]}")
-
-    # Show detailed results
-    [[ -n "${VERBOSE}" ]] && echo "${results}"
-
-    # Filter results
-    summary_disk[$i]=$(filter_results disk "${results}")
-  done
-fi
-
-# Download
-##########
-if [[ -n "${TEST_DOWNLOAD}" ]]; then
+  # Get run data
+  run_data="runs_${type}[@]"
 
   # Loop through runs
-  for ((i = 0; i < "${#runs_download[@]}"; i++)); do
+  for run_param in "${!run_data}"; do
+
     # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${runs_download[$i]}"
+    IFS=";" read -r -a params <<<"${run_param}"
 
     # Run benchmarks
-    echo "Running Download speed test #$((i + 1))..."
-    results=$(run_benchmark download "${params[2]}")
+    echo "Running ${type^^} benchmark #$((i + 1))..."
+    results=$(run_benchmark "${type}" ${params[*]})
 
     # Show detailed results
-    [[ -n "${VERBOSE}" ]] && echo "Download speed: ${results}"
+    [[ -n "${VERBOSE}" ]] && echo "${results}"
 
-    # Put to summary
-    summary_download[$i]=$(filter_results download "${results}")
+    # Set summary data selector
+    selector="${type}_${i}"
+
+    # Filter results & save to summary
+    summary[${selector}]=$(filter_results "${type}" "${results}")
+
+    # Bump iterator
+    i=$((i + 1))
+
   done
-fi
+done
 
 echo "Benchmarking finished."
 echo
@@ -618,12 +552,13 @@ else
   output_file=/dev/null
 fi
 
-# Compile summary
+# Print header
 print_summary_header | tee "${output_file}"
 
-[[ -n "${TEST_CPU}" ]] && print_summary_cpu | tee -a "${output_file}"
-[[ -n "${TEST_MEMORY}" ]] && print_summary_memory | tee -a "${output_file}"
-[[ -n "${TEST_DISK}" ]] && print_summary_disk | tee -a "${output_file}"
-[[ -n "${TEST_DOWNLOAD}" ]] && print_summary_download | tee -a "${output_file}"
+# Loop through tests
+for type in "${tests[@]}"; do
+  # Print test summary
+  print_summary "${type}" | tee -a "${output_file}"
+done
 
 exit 0
