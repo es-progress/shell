@@ -15,7 +15,7 @@
 ########################
 
 # Individual benchmark time limit (seconds)
-RUN_TIME=60
+test_run_time=60
 
 # CPU
 #####
@@ -27,9 +27,9 @@ runs_cpu[1]="16;30000"
 
 # CPU application test
 # Test file size in MB
-CPU_TEST_FILE_SIZE=500
+cpu_test_file_size=500
 # Test file name (will be created then deleted)
-CPU_TEST_FILE_NAME="test_file.cpu"
+cpu_test_file_name="test_file.cpu"
 
 # Memory
 ########
@@ -130,11 +130,11 @@ cpu_app_test() {
 
   local create_test_file time_sha time_bzip time_aes
 
-  [[ -n "${VERBOSE}" ]] && echo "Test file size: ${CPU_TEST_FILE_SIZE} MB"
+  [[ -n "${VERBOSE}" ]] && echo "Test file size: ${cpu_test_file_size} MB"
 
   # Create test file
   [[ -n "${VERBOSE}" ]] && echo "Creating test file..."
-  create_test_file=$(dd if=/dev/urandom of="${CPU_TEST_FILE_NAME}" bs=1M count="${CPU_TEST_FILE_SIZE}" 2>&1)
+  create_test_file=$(dd if=/dev/urandom of="${cpu_test_file_name}" bs=1M count="${cpu_test_file_size}" 2>&1)
 
   if [[ -n "${VERBOSE}" ]]; then
     echo "${create_test_file}"
@@ -143,11 +143,11 @@ cpu_app_test() {
 
   # Run tests
   # Hashing
-  time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"${CPU_TEST_FILE_NAME}"; } 2>&1)
+  time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"${cpu_test_file_name}"; } 2>&1)
   # bzip compressing
-  time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"${CPU_TEST_FILE_NAME}"; } 2>&1)
+  time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
   # AES encrypting
-  time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"${CPU_TEST_FILE_NAME}"; } 2>&1)
+  time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
 
   # Print results
   echo "SHA256-hashing:    ${time_sha}"
@@ -156,7 +156,7 @@ cpu_app_test() {
 
   # Delete test file
   [[ -n "${VERBOSE}" ]] && echo "Deleting test file..."
-  rm -f "${CPU_TEST_FILE_NAME}"
+  rm -f "${cpu_test_file_name}"
   [[ -n "${VERBOSE}" ]] && echo "Test file deleted."
 }
 
@@ -167,7 +167,7 @@ run_benchmark() {
   local params
 
   # Set parameters
-  params="--time=${RUN_TIME}"
+  params="--time=${test_run_time}"
 
   case "${1}" in
     cpu)

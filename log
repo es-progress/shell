@@ -15,15 +15,15 @@
 ############
 
 # Log files
-LOG_GENERAL="~/general.log"
-LOG_BACKUP="/var/log/backup.log"
+log_general="${HOME}/general.log"
+log_backup="/var/log/backup.log"
 
 # Defaults
-LOG_FILE="${LOG_GENERAL}"
-PRIO="NOTICE"
+log_file="${log_general}"
+prio="NOTICE"
 
 # Date format
-DATE_FORMAT="%Y-%m-%d %H:%M:%S"
+date_format="%Y-%m-%d %H:%M:%S"
 
 #############
 # FUNCTIONS #
@@ -53,7 +53,7 @@ OPTIONS
                         general (/var/log/general.log)  <-- default
                         backup  (/var/log/backup.log)
 
--p, --priority=[PRIO]   use given priority
+-p, --priority=[prio]   use given priority
 
                         possible values:
                         info
@@ -85,10 +85,10 @@ while :; do
       shift
       case "${1}" in
         general)
-          LOG_FILE="${LOG_GENERAL}"
+          log_file="${log_general}"
           ;;
         backup)
-          LOG_FILE="${LOG_BACKUP}"
+          log_file="${log_backup}"
           ;;
       esac
       ;;
@@ -96,13 +96,13 @@ while :; do
       shift
       case "${1}" in
         info)
-          PRIO="INFO"
+          prio="INFO"
           ;;
         notice)
-          PRIO="NOTICE"
+          prio="NOTICE"
           ;;
         error)
-          PRIO="ERROR"
+          prio="ERROR"
           ;;
       esac
       ;;
@@ -132,15 +132,15 @@ set -e
 
 # Init
 msg=${*}
-now=$(date "+${DATE_FORMAT}")
+now=$(date "+${date_format}")
 
 # If message is empty --> exit
 [[ -n "${msg}" ]] || exit 0
 
 # Check if log file is present if not create
-[[ -f "${LOG_FILE}" ]] || touch "${LOG_FILE}"
+[[ -f "${log_file}" ]] || touch "${log_file}"
 
 # Write to log
-[[ -w "${LOG_FILE}" ]] && echo "${now} [${PRIO}] ${msg}" >>${LOG_FILE}
+[[ -w "${log_file}" ]] && echo "${now} [${prio}] ${msg}" >>${log_file}
 
 exit 0

@@ -60,12 +60,12 @@ error() {
 
   # Print error & exit
   [[ -n ${msg} ]] && echo -e "${_TXT_ERR}${msg}${_TXT_NORM}" >&2
-  exit ${code}
+  exit "${code}"
 }
 
 # Ask for confirmation
 confirm() {
-  read -p "Are you sure? (y/n) "
+  read -r -p "Are you sure? (y/n) "
   [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]] && error "Aborting." ${_E_ABORT}
   return 0
 }
