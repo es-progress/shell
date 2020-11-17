@@ -95,18 +95,6 @@ finish() {
   echo -e "${_TXT_OK}${msg}${_TXT_NORM}"
 }
 
-# Set permission in a directory
-# group: www-data
-# group read
-set_perm_www() {
-  local set_dir_perm="-type d -not -perm u=rwx,g=rx,o= -exec chmod u=rwx,g=rx,o= {} ;"
-  local set_file_perm="-type f -not -perm u=rw,g=r,o= -exec chmod ug=r {} ;"
-  local change_group="-not -group www-data -exec chgrp www-data {} ;"
-
-  find ${1} ${set_dir_perm} , ${set_file_perm} , ${change_group}
-  return 0
-}
-
 # Echo script running time
 run_time() {
   local sec
