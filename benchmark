@@ -370,6 +370,12 @@ print_summary() {
 # SCRIPT START #
 ################
 
+# Exit on error
+set -e
+
+# Exit pipe on non-zero return value
+set -o pipefail
+
 # Make sure test files are always deleted, even when the script is interrupted
 trap clean_up EXIT INT TERM
 

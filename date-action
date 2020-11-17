@@ -143,6 +143,12 @@ done
 # SCRIPT START #
 ################
 
+# Exit on error
+set -e
+
+# Exit pipe on non-zero return value
+set -o pipefail
+
 # Get reference date
 date_ref=$(date +${f_date} ${date_diff})
 
