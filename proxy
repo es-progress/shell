@@ -97,8 +97,8 @@ if [[ -z "${action}" ]]; then
 fi
 
 case "${action}" in
-  open | close | status)
-    ;;
+  open | close | status) ;;
+
   -v | --version)
     version
     ;;
