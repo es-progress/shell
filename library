@@ -15,7 +15,7 @@
 ##########
 
 # Exit on error
-set -e
+#set -e
 
 # Exit pipe on non-zero return value
 set -o pipefail
@@ -109,4 +109,16 @@ run_time() {
 
   echo "Running time:"
   printf "%d hours %02d mins %02d secs\n" ${hour} ${min} ${sec}
+}
+
+# Join arguments by char
+implode() {
+  if [[ ${#} -lt 2 ]]; then
+    echo "Arguments missing"
+    return
+  fi
+
+  local IFS="${1}"
+  shift
+  echo "${*}"
 }
