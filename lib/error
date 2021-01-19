@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+###################################################
+## Error                                         ##
+## Functions Library                             ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+###############
+# ERROR CODES #
+###############
+
+# Aborted
+_E_ABORT=10
+
+#############
+# FUNCTIONS #
+#############
+
+# Print error message and exit program with error code
+#
+# @param  $1  Error Message
+# @param  $2  Error code (defaults to 1)
+######################################################
+error_exit(){
+  error_msg "${1}"
+  exit "${2:-1}"
+}
+
+# Aborts program
+################
+abort(){
+  error_msg "Aborted."
+  exit ${_E_ABORT}
+}

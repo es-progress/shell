@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+###################################################
+## Sourcer                                       ##
+## Includes other libraries                      ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+# Get sourcer script dir
+base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+lib_dir="${base_dir}/lib"
+
+while read -r file; do
+  source "${lib_dir}/${file}"
+done < <(ls -1 "${lib_dir}")

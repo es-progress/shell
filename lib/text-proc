@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+###################################################
+## Text Processing                               ##
+## Functions Library                             ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+# Join arguments by char
+#
+# @param  $1  Joining character
+# @param  $*  Items to join
+#
+# @return echo
+###############################
+implode() {
+  if [[ -z "${1}" ]]; then
+    error_msg "Missing arguments"
+    echo "Usage: implode FIELD_SEPARATOR [ITEM ...]"
+    return 1
+  fi
+
+  local IFS="${1}"
+  shift
+  echo "${*}"
+}

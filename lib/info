@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+###################################################
+## Info                                          ##
+## Functions Library                             ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+################
+# FORMAT CODES #
+################
+
+_TXT_NORM="\e[0m"
+_TXT_BOLD="\e[1m"
+_TXT_BLUE="\e[34m"
+_TXT_GREEN="\e[32m"
+_TXT_RED="\e[31m"
+_TXT_YELLOW="\e[33m"
+_TXT_STAT="${_TXT_BLUE}${_TXT_BOLD}"
+_TXT_ERR="${_TXT_RED}${_TXT_BOLD}"
+_TXT_OK="${_TXT_GREEN}${_TXT_BOLD}"
+_TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
+
+#############
+# FUNCTIONS #
+#############
+
+# Print status message
+#
+# @param  $*  Message
+######################
+status() {
+  echo -e "${_TXT_HEADER}Status:${_TXT_NORM}"
+  [[ -n "${*}" ]] && echo -e "${_TXT_STAT}${*}${_TXT_NORM}"
+}
+
+# Print OK message
+#
+# @param  $*  Message
+# @default  Done
+#####################
+finish() {
+  echo -e "${_TXT_OK}${*:-"Done."}${_TXT_NORM}"
+}
+
+# Print error message
+#
+# @param  $*  Message
+# @default  Error
+#####################
+error_msg() {
+  echo -e "${_TXT_ERR}${*:-"Error."}${_TXT_NORM}" >&2
+}
+
+# Script running time
+#####################
+run_time() {
+  local sec
+  local min
+  local hour
+
+  sec=${SECONDS}
+  hour=$((sec / 3600))
+  sec=$((sec % 3600))
+  min=$((sec / 60))
+  sec=$((sec % 60))
+
+  echo "Running time:"
+  printf "%d hours %02d mins %02d secs\n" ${hour} ${min} ${sec}
+}
