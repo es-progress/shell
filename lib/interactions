@@ -23,3 +23,9 @@ confirm() {
   fi
   return 0
 }
+
+# Clear console screen
+######################
+cls() {
+  printf "\033c"
+}
