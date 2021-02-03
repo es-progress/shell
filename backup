@@ -210,15 +210,16 @@ done
 ####################
 
 # Check required
-[[ -n "${FS}" ]] || error "Filesystem missing" "backup" ${E_MISSING_PARAMETERS}
-[[ -n "${MOUNT}" ]] || error "Mounting point missing" "backup" ${E_MISSING_PARAMETERS}
-[[ -n "${SOURCE}" ]] || error "Source missing" "backup" ${E_MISSING_PARAMETERS}
-[[ -n "${DEST}" ]] || error "Destination missing" "backup" ${E_MISSING_PARAMETERS}
+: "${FS:?'Filesystem missing'}"
+: "${MOUNT:?'Mounting point missing'}"
+: "${SOURCE:?'Source missing'}"
+: "${DEST:?'Destination missing'}"
 
 # Defaults
-[[ -z "${DATE_FORMAT}" ]] && DATE_FORMAT="%F" && DATE_ACTION_FORMAT="YMD"
-[[ -z "${MODE}" ]] && MODE="archive"
-[[ -z "${ARCHIVE}" ]] && ARCHIVE="archive"
+: "${DATE_FORMAT:=%F}"
+: "${DATE_ACTION_FORMAT:=YMD}"
+: "${MODE:=archive}"
+: "${ARCHIVE:=archive}"
 
 # Remove trailing slash
 FS="${FS%/}"
