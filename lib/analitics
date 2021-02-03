@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+###################################################
+## Analitics                                     ##
+## Functions Library                             ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+#############
+# FUNCTIONS #
+#############
+
+# Analize disk-usage
+#
+# @param  $1  Dir to check
+#
+# @default  Current working dir
+###############################
+anal-disk-usage(){
+  local dir="${1:-"."}"
+  du "${dir}" -hd1 2>/dev/null | sort -h
+}
