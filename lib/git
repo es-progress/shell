@@ -1,0 +1,29 @@
+# shellcheck shell=bash
+###################################################
+## git                                           ##
+## Functions Library                             ##
+##                                               ##
+## Copyright 2020                                ##
+## Sandor Semsey <semseysandor@gmail.com>        ##
+## All rights reserved.                          ##
+##                                               ##
+## This work is published under the MIT License. ##
+## https://choosealicense.com/licenses/mit/      ##
+###################################################
+
+#############
+# FUNCTIONS #
+#############
+
+# Merge source branch into master and push
+#
+# @param  $1  Branch to merge into master
+##########################################
+gitt-merge(){
+  local branch="${1?:"Source branch missing"}"
+
+  git fetch "origin"
+  git checkout "master"
+  git merge --no-ff "${1}"
+  git push "origin" "master"
+}
