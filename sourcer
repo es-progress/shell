@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 ###################################################
 ## Sourcer                                       ##
 ## Includes other libraries                      ##
@@ -15,6 +15,7 @@
 base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 lib_dir="${base_dir}/lib"
 
+# Import lib files
 while read -r file; do
   source "${lib_dir}/${file}"
 done < <(ls -1 "${lib_dir}")
