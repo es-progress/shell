@@ -59,7 +59,7 @@ print_error() {
 
 # Script running time
 #####################
-run_time() {
+print_run_time() {
   local sec
   local min
   local hour
