@@ -34,7 +34,7 @@ _TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
 #
 # @param  $*  Message
 ######################
-status() {
+print_status() {
   echo -e "${_TXT_HEADER}Status:${_TXT_NORM}"
   [[ -n "${*}" ]] && echo -e "${_TXT_STAT}${*}${_TXT_NORM}"
 }
@@ -44,7 +44,7 @@ status() {
 # @param  $*  Message
 # @default  Done
 #####################
-finish() {
+print_finish() {
   echo -e "${_TXT_OK}${*:-"Done."}${_TXT_NORM}"
 }
 
