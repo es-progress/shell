@@ -34,7 +34,7 @@ _TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
 #
 # @param  $*  Message
 ######################
-print_status() {
+print-status() {
   echo -e "${_TXT_HEADER}Status:${_TXT_NORM}"
   [[ -n "${*}" ]] && echo -e "${_TXT_STAT}${*}${_TXT_NORM}"
 }
@@ -44,7 +44,7 @@ print_status() {
 # @param  $*  Message
 # @default  Done
 #####################
-print_finish() {
+print-finish() {
   echo -e "${_TXT_OK}${*:-"Done."}${_TXT_NORM}"
 }
 
@@ -53,13 +53,13 @@ print_finish() {
 # @param  $*  Message
 # @default  Error
 #####################
-print_error() {
+print-error() {
   echo -e "${_TXT_ERR}${*:-"Error."}${_TXT_NORM}" >&2
 }
 
 # Script running time
 #####################
-print_run_time() {
+print-run_time() {
   local sec
   local min
   local hour
