@@ -27,3 +27,16 @@ gitt-merge(){
   git merge --no-ff "${1}"
   git push "origin" "master"
 }
+
+# Check git repo status
+#######################
+gitt-check(){
+  print-header "Git status"
+  git status || return 1
+
+  print-header "Branches"
+  git branch -vv
+
+  print-header "Remotes"
+  git remote -v
+}
