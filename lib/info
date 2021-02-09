@@ -30,13 +30,26 @@ _TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
 # FUNCTIONS #
 #############
 
+# Print header
+#
+# @param  $*  Message
+#####################
+print-header() {
+  if [[ -n "${*}" ]]; then
+    echo
+    echo -e "${_TXT_HEADER}${*}${_TXT_NORM}"
+  fi
+}
+
 # Print status message
 #
 # @param  $*  Message
 ######################
 print-status() {
-  echo -e "${_TXT_HEADER}Status:${_TXT_NORM}"
-  [[ -n "${*}" ]] && echo -e "${_TXT_STAT}${*}${_TXT_NORM}"
+  if [[ -n "${*}" ]]; then
+    echo
+    echo -e "${_TXT_HEADER}Status:${_TXT_NORM} ${_TXT_STAT}${*}${_TXT_NORM}"
+  fi
 }
 
 # Print OK message
