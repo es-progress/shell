@@ -20,7 +20,7 @@
 ###############################
 implode() {
   if [[ -z "${1}" ]]; then
-    error_msg "Missing arguments"
+    print_error "Missing arguments"
     echo "Usage: implode FIELD_SEPARATOR [ITEM ...]"
     return 1
   fi

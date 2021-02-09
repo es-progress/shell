@@ -53,7 +53,7 @@ print_finish() {
 # @param  $*  Message
 # @default  Error
 #####################
-error_msg() {
+print_error() {
   echo -e "${_TXT_ERR}${*:-"Error."}${_TXT_NORM}" >&2
 }
 
