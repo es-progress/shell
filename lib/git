@@ -30,7 +30,7 @@ gitt-merge(){
 
 # Check git repo status
 #######################
-gitt-check(){
+gitt-report(){
   print-header "Git status"
   git status || return 1
 
@@ -39,4 +39,58 @@ gitt-check(){
 
   print-header "Remotes"
   git remote -v
+}
+
+# Statistics
+# Daily commits
+###############
+gitt-stat-daily(){
+  local user=$(git config --get --global user.name)
+
+  echo "Commits | Hour of day"
+  echo "--------+------------"
+  git \
+    --no-pager log \
+    --author="${user}" \
+    --format="%ad" \
+    --date="format:%H" \
+    | sort \
+    | uniq -c \
+    | awk '{printf("%7s | %-12s\n",$1,$2)}'
+}
+
+# Statistics
+# Weekly commits
+################
+gitt-stat-weekly(){
+  local user=$(git config --get --global user.name)
+
+  echo "Commits | Weekday (1=Monday)"
+  echo "--------+-------------------"
+  git \
+    --no-pager log \
+    --author="${user}" \
+    --format="%ad" \
+    --date="format:%u" \
+    | sort \
+    | uniq -c \
+    | awk '{printf("%7s | %-12s\n",$1,$2)}'
+}
+
+# Statistics
+# Monthly commits
+#################
+gitt-stat-monthly(){
+  local user=$(git config --get --global user.name)
+
+  echo "Commits | Day of month"
+  echo "--------+-------------"
+  git \
+    --no-pager log \
+    --author="${user}" \
+    --format="%ad" \
+    --date="format:%d" \
+    | sort \
+    | uniq -c \
+    | awk '{printf("%7s | %-12s\n",$1,$2)}'
 }
