@@ -23,9 +23,9 @@ gitt-merge(){
   local branch="${1?:"Source branch missing"}"
 
   git fetch "origin"
-  git checkout "master"
-  git merge --no-ff "${1}"
-  git push "origin" "master"
+  git checkout "main"
+  git merge --no-ff "${branch}"
+  git push "origin" "main"
 }
 
 # Check git repo status
