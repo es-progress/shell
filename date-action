@@ -42,17 +42,17 @@ f_date="${DATE_YMD}"
 
 # Version info
 version() {
-  cat <<VERSION
+    cat <<VERSION
 date-action v1.0
 Written by Sandor Semsey, Copyright(C) 2020
 License MIT https://choosealicense.com/licenses/mit/
 VERSION
-  exit 0
+    exit 0
 }
 
 # Help
 usage() {
-  cat <<HELP
+    cat <<HELP
 Usage: date-action [OPTIONS] [FILE...]
 
 Executes an action on files older/newer than a reference based on filenames
@@ -78,7 +78,7 @@ OPTIONS
 -h, --help              display this help
 
 HELP
-  exit 0
+    exit 0
 }
 
 #################
@@ -87,56 +87,56 @@ HELP
 
 options=$(getopt -n date-action -o "rndvh" -l "remove,newer,directory,format:,diff:,debug,version,help" -- "$@")
 [[ $? -ne 0 ]] && {
-  echo "Try 'date-action --help' for more information"
-  exit 1
+    echo "Try 'date-action --help' for more information"
+    exit 1
 }
 eval set -- "${options}"
 
 while :; do
-  case "${1}" in
-    -r | --remove)
-      mode="delete"
-      ;;
-    -n | --newer)
-      older=0
-      ;;
-    -d | --directory)
-      directory=1
-      ;;
-    --format)
-      shift
-      case "${1}" in
-        24H)
-          f_grep="${GREP_24H}"
-          f_sed="${SED_24H}"
-          f_date="${DATE_24H}"
-          ;;
-        FULL)
-          f_grep="${GREP_FULL}"
-          f_sed="${SED_FULL}"
-          f_date="${DATE_FULL}"
-          ;;
-      esac
-      ;;
-    --diff)
-      shift
-      date_diff="-d ${1}"
-      ;;
-    --debug)
-      set -x
-      ;;
-    -v | --version)
-      version
-      ;;
-    -h | --help)
-      usage
-      ;;
-    --)
-      shift
-      break
-      ;;
-  esac
-  shift
+    case "${1}" in
+        -r | --remove)
+            mode="delete"
+            ;;
+        -n | --newer)
+            older=0
+            ;;
+        -d | --directory)
+            directory=1
+            ;;
+        --format)
+            shift
+            case "${1}" in
+                24H)
+                    f_grep="${GREP_24H}"
+                    f_sed="${SED_24H}"
+                    f_date="${DATE_24H}"
+                    ;;
+                FULL)
+                    f_grep="${GREP_FULL}"
+                    f_sed="${SED_FULL}"
+                    f_date="${DATE_FULL}"
+                    ;;
+            esac
+            ;;
+        --diff)
+            shift
+            date_diff="-d ${1}"
+            ;;
+        --debug)
+            set -x
+            ;;
+        -v | --version)
+            version
+            ;;
+        -h | --help)
+            usage
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
 done
 
 ################
@@ -158,29 +158,29 @@ date_ref=$(date +${f_date} ${date_diff})
 # Loop through files
 for file in ${files}; do
 
-  # Check if file has date in name
-  if ! grep -Eqe "${f_grep}" <<<"${file}"; then continue; fi
+    # Check if file has date in name
+    if ! grep -Eqe "${f_grep}" <<<"${file}"; then continue; fi
 
-  # Parse date from filename
-  file_date=$(sed "s/.*\($f_sed\).*/\1/" <<<"${file}")
+    # Parse date from filename
+    file_date=$(sed "s/.*\($f_sed\).*/\1/" <<<"${file}")
 
-  # Check if older or newer than reference
-  [[ ${file_date} < ${date_ref} ]] && file_older=1 || file_older=0
+    # Check if older or newer than reference
+    [[ ${file_date} < ${date_ref} ]] && file_older=1 || file_older=0
 
-  # If older (or newer depending on options) skip file
-  [[ ${file_older} -eq ${older} ]] || continue
+    # If older (or newer depending on options) skip file
+    [[ ${file_older} -eq ${older} ]] || continue
 
-  # Listing mode
-  if [[ ${mode} == "list" ]]; then
-    echo "$file"
-    continue
-  fi
+    # Listing mode
+    if [[ ${mode} == "list" ]]; then
+        echo "$file"
+        continue
+    fi
 
-  # Delete mode
-  if [[ ${mode} == "delete" ]]; then
-    rm -rf "$file"
-    continue
-  fi
+    # Delete mode
+    if [[ ${mode} == "delete" ]]; then
+        rm -rf "$file"
+        continue
+    fi
 done
 
 exit 0

@@ -31,17 +31,17 @@ date_format="%Y-%m-%d %H:%M:%S"
 
 # Version info
 version() {
-  cat <<VERSION
+    cat <<VERSION
 log v0.8
 Written by Sandor Semsey, Copyright(C) 2020
 License MIT https://choosealicense.com/licenses/mit/
 VERSION
-  exit 0
+    exit 0
 }
 
 # Help
 helping() {
-  cat <<-HELP
+    cat <<-HELP
 Usage: log [OPTIONS] MESSAGE
 
 Writes MESSAGE to log
@@ -65,7 +65,7 @@ OPTIONS
 -h                      display this help
 
 HELP
-  exit 0
+    exit 0
 }
 
 #################
@@ -74,53 +74,53 @@ HELP
 
 options=$(getopt -n log -o "l:p:vh" -l "log:,priority:,debug,version,help" -- "$@")
 [[ $? -ne 0 ]] && {
-  echo "Try 'log --help' for more information"
-  exit 1
+    echo "Try 'log --help' for more information"
+    exit 1
 }
 eval set -- "${options}"
 
 while :; do
-  case "${1}" in
-    -l | --log)
-      shift
-      case "${1}" in
-        general)
-          log_file="${log_general}"
-          ;;
-        backup)
-          log_file="${log_backup}"
-          ;;
-      esac
-      ;;
-    -p | --priority)
-      shift
-      case "${1}" in
-        info)
-          prio="INFO"
-          ;;
-        notice)
-          prio="NOTICE"
-          ;;
-        error)
-          prio="ERROR"
-          ;;
-      esac
-      ;;
-    --debug)
-      set -x
-      ;;
-    -v | --version)
-      version
-      ;;
-    -h | --help)
-      helping
-      ;;
-    --)
-      shift
-      break
-      ;;
-  esac
-  shift
+    case "${1}" in
+        -l | --log)
+            shift
+            case "${1}" in
+                general)
+                    log_file="${log_general}"
+                    ;;
+                backup)
+                    log_file="${log_backup}"
+                    ;;
+            esac
+            ;;
+        -p | --priority)
+            shift
+            case "${1}" in
+                info)
+                    prio="INFO"
+                    ;;
+                notice)
+                    prio="NOTICE"
+                    ;;
+                error)
+                    prio="ERROR"
+                    ;;
+            esac
+            ;;
+        --debug)
+            set -x
+            ;;
+        -v | --version)
+            version
+            ;;
+        -h | --help)
+            helping
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
 done
 
 ################

@@ -76,18 +76,18 @@ runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.b
 # Version info
 ##############
 version() {
-  cat <<EOF
+    cat <<EOF
 Benchmark v0.8
 Written by Sandor Semsey, Copyright(C) 2020
 License MIT https://choosealicense.com/licenses/mit/
 EOF
-  exit 0
+    exit 0
 }
 
 # Help
 ######
 usage() {
-  cat <<EOF
+    cat <<EOF
 Benchmark
 
 This is a thin wrapper for sysbench.
@@ -108,124 +108,124 @@ OPTIONS:
 -V, --version          Print version information
 
 EOF
-  exit 0
+    exit 0
 }
 
 # Check if command exists
 #########################
 command_exists() {
-  command -v "$@" >/dev/null 2>&1
+    command -v "$@" >/dev/null 2>&1
 }
 
 # Clean up after tests
 ######################
 clean_up() {
-  rm -f test_file.*
-  exit
+    rm -f test_file.*
+    exit
 }
 
 # Test CPU with real use cases
 ##############################
 cpu_app_test() {
 
-  local create_test_file time_sha time_bzip time_aes
+    local create_test_file time_sha time_bzip time_aes
 
-  [[ -n "${VERBOSE}" ]] && echo "Test file size: ${cpu_test_file_size} MB"
+    [[ -n "${VERBOSE}" ]] && echo "Test file size: ${cpu_test_file_size} MB"
 
-  # Create test file
-  [[ -n "${VERBOSE}" ]] && echo "Creating test file..."
-  create_test_file=$(dd if=/dev/urandom of="${cpu_test_file_name}" bs=1M count="${cpu_test_file_size}" 2>&1)
+    # Create test file
+    [[ -n "${VERBOSE}" ]] && echo "Creating test file..."
+    create_test_file=$(dd if=/dev/urandom of="${cpu_test_file_name}" bs=1M count="${cpu_test_file_size}" 2>&1)
 
-  if [[ -n "${VERBOSE}" ]]; then
-    echo "${create_test_file}"
-    echo "Test file created."
-  fi
+    if [[ -n "${VERBOSE}" ]]; then
+        echo "${create_test_file}"
+        echo "Test file created."
+    fi
 
-  # Run tests
-  # Hashing
-  time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"${cpu_test_file_name}"; } 2>&1)
-  # bzip compressing
-  time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
-  # AES encrypting
-  time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
+    # Run tests
+    # Hashing
+    time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"${cpu_test_file_name}"; } 2>&1)
+    # bzip compressing
+    time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
+    # AES encrypting
+    time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
 
-  # Print results
-  echo "SHA256-hashing:    ${time_sha}"
-  echo "bzip2-compressing: ${time_bzip}"
-  echo "AES-encrypting:    ${time_aes}"
+    # Print results
+    echo "SHA256-hashing:    ${time_sha}"
+    echo "bzip2-compressing: ${time_bzip}"
+    echo "AES-encrypting:    ${time_aes}"
 
-  # Delete test file
-  [[ -n "${VERBOSE}" ]] && echo "Deleting test file..."
-  rm -f "${cpu_test_file_name}"
-  [[ -n "${VERBOSE}" ]] && echo "Test file deleted."
+    # Delete test file
+    [[ -n "${VERBOSE}" ]] && echo "Deleting test file..."
+    rm -f "${cpu_test_file_name}"
+    [[ -n "${VERBOSE}" ]] && echo "Test file deleted."
 }
 
 # Benchmark
 ###########
 run_benchmark() {
 
-  local params
+    local params
 
-  # Set parameters
-  params="--time=${test_run_time}"
+    # Set parameters
+    params="--time=${test_run_time}"
 
-  case "${1}" in
-    cpu)
-      params="${params} --threads=${2} --cpu-max-prime=${3}  cpu"
-      ;;
-    memory)
-      params="${params} --threads=${2} --memory-block-size=${3} --memory-total-size=${4} --memory-access-mode=${5} memory"
-      ;;
-    disk)
-      params="${params} --threads=${2} --file-num=${3} --file-block-size=${4} --file-test-mode=${5} --file-fsync-all=${6} \
+    case "${1}" in
+        cpu)
+            params="${params} --threads=${2} --cpu-max-prime=${3}  cpu"
+            ;;
+        memory)
+            params="${params} --threads=${2} --memory-block-size=${3} --memory-total-size=${4} --memory-access-mode=${5} memory"
+            ;;
+        disk)
+            params="${params} --threads=${2} --file-num=${3} --file-block-size=${4} --file-test-mode=${5} --file-fsync-all=${6} \
                         --file-rw-ratio=${7} --file-total-size=${8} fileio"
-      ;;
-    download)
-      curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${4}"
-      return
-      ;;
-  esac
+            ;;
+        download)
+            curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${4}"
+            return
+            ;;
+    esac
 
-  # Run benchmark
-  [[ "${1}" == "disk" ]] && sysbench ${params} prepare
-  sysbench ${params} run
-  [[ "${1}" == "disk" ]] && sysbench ${params} cleanup
+    # Run benchmark
+    [[ "${1}" == "disk" ]] && sysbench ${params} prepare
+    sysbench ${params} run
+    [[ "${1}" == "disk" ]] && sysbench ${params} cleanup
 }
 
 # Filter benchmark results for summary
 ######################################
 filter_results() {
 
-  local filter
+    local filter
 
-  # Set filter
-  case "${1}" in
-    cpu_app)
-      filter='/^SHA256-hashing/ p; /^bzip2-compressing/ p; /^AES-encrypting/ p;'
-      ;;
-    cpu)
-      filter=' /^CPU speed:/,+1 p; /^Latency/,+3 p'
-      ;;
-    memory)
-      filter='/transferred/ p; /^Latency/,+3 p'
-      ;;
-    disk)
-      filter='/^Throughput/,+2 p; /^Latency/,+3 p'
-      ;;
-    download)
-      awk '{ printf "%d MBit/s\n", $0 * 8 / 1000 / 1000 } END { if (NR == 0) { print "error" } }' <<<"${2}"
-      return
-      ;;
-  esac
+    # Set filter
+    case "${1}" in
+        cpu_app)
+            filter='/^SHA256-hashing/ p; /^bzip2-compressing/ p; /^AES-encrypting/ p;'
+            ;;
+        cpu)
+            filter=' /^CPU speed:/,+1 p; /^Latency/,+3 p'
+            ;;
+        memory)
+            filter='/transferred/ p; /^Latency/,+3 p'
+            ;;
+        disk)
+            filter='/^Throughput/,+2 p; /^Latency/,+3 p'
+            ;;
+        download)
+            awk '{ printf "%d MBit/s\n", $0 * 8 / 1000 / 1000 } END { if (NR == 0) { print "error" } }' <<<"${2}"
+            return
+            ;;
+    esac
 
-  # Apply filter
-  sed -n "${filter}" <<<"${2}"
+    # Apply filter
+    sed -n "${filter}" <<<"${2}"
 }
 
 # Print test header with system info
 ####################################
 print_sysinfo() {
-  cat <<EOF
+    cat <<EOF
 --------------------------------------------------
  Benchmark v0.8
 
@@ -277,7 +277,7 @@ EOF
 # Print summary header
 ######################
 print_summary_header() {
-  cat <<EOF
+    cat <<EOF
 ==================================================
                    TEST RESULTS
 
@@ -293,77 +293,77 @@ EOF
 ###############
 print_summary() {
 
-  # Get run data
-  run_data="runs_${1}[@]"
+    # Get run data
+    run_data="runs_${1}[@]"
 
-  # Init iterator
-  i=0
+    # Init iterator
+    i=0
 
-  # Print test type header
-  echo
-  echo "*************************"
-  echo "       ${1^^}"
-  echo "*************************"
-
-  # Loop through runs
-  for run_param in "${!run_data}"; do
-
-    # Set summary selector
-    selector="${type}_${i}"
-
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${run_param}"
-
-    # Print run header
+    # Print test type header
     echo
-    echo "Run #$((i + 1))"
-    echo "------"
-    echo
+    echo "*************************"
+    echo "       ${1^^}"
+    echo "*************************"
 
-    # Print run parameters
-    case "${1}" in
-      cpu)
-        printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
-        printf "%-20s : %8d\n\n" "Max prime number" "${params[1]}"
-        ;;
-      memory)
-        printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
-        printf "%-20s : %8s\n" "Memory block size" "${params[1]}"
-        printf "%-20s : %8s\n" "Memory total size" "${params[2]}"
-        printf "%-20s : %8s\n\n" "Memory access mode" "${params[3]}"
-        ;;
-      disk)
-        printf "%-20s : %8s\n" "Number of threads" "${params[0]}"
-        printf "%-20s : %8s\n" "Number of files" "${params[1]}"
-        printf "%-20s : %8s\n" "File block size" "${params[2]}"
-        printf "%-20s : %8s\n" "Test mode" "${params[3]}"
-        printf "%-20s : %8s\n" "fsync on all" "${params[4]}"
-        printf "%-20s : %8s\n" "Read/write ratio" "${params[5]}"
-        printf "%-20s : %8s\n\n" "Total file size" "${params[6]}"
-        ;;
-      download)
-        printf "%-15s [%-10s]  : " "${params[1]}" "${params[0]}"
-        ;;
-    esac
+    # Loop through runs
+    for run_param in "${!run_data}"; do
 
-    # Print run results
-    echo "${summary[${selector}]}"
+        # Set summary selector
+        selector="${type}_${i}"
 
-    # Bump iterator
-    i=$((i + 1))
-  done
+        # Convert semicolon limited string into array
+        IFS=";" read -r -a params <<<"${run_param}"
 
-  # Print CPU application test results
-  if [[ "${1}" == "cpu" ]]; then
-    # Set selector
-    selector="cpu_app"
+        # Print run header
+        echo
+        echo "Run #$((i + 1))"
+        echo "------"
+        echo
 
-    echo
-    echo "Application test"
-    echo "----------------"
-    echo
-    echo "${summary[${selector}]}"
-  fi
+        # Print run parameters
+        case "${1}" in
+            cpu)
+                printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
+                printf "%-20s : %8d\n\n" "Max prime number" "${params[1]}"
+                ;;
+            memory)
+                printf "%-20s : %8d\n" "Number of threads" "${params[0]}"
+                printf "%-20s : %8s\n" "Memory block size" "${params[1]}"
+                printf "%-20s : %8s\n" "Memory total size" "${params[2]}"
+                printf "%-20s : %8s\n\n" "Memory access mode" "${params[3]}"
+                ;;
+            disk)
+                printf "%-20s : %8s\n" "Number of threads" "${params[0]}"
+                printf "%-20s : %8s\n" "Number of files" "${params[1]}"
+                printf "%-20s : %8s\n" "File block size" "${params[2]}"
+                printf "%-20s : %8s\n" "Test mode" "${params[3]}"
+                printf "%-20s : %8s\n" "fsync on all" "${params[4]}"
+                printf "%-20s : %8s\n" "Read/write ratio" "${params[5]}"
+                printf "%-20s : %8s\n\n" "Total file size" "${params[6]}"
+                ;;
+            download)
+                printf "%-15s [%-10s]  : " "${params[1]}" "${params[0]}"
+                ;;
+        esac
+
+        # Print run results
+        echo "${summary[${selector}]}"
+
+        # Bump iterator
+        i=$((i + 1))
+    done
+
+    # Print CPU application test results
+    if [[ "${1}" == "cpu" ]]; then
+        # Set selector
+        selector="cpu_app"
+
+        echo
+        echo "Application test"
+        echo "----------------"
+        echo
+        echo "${summary[${selector}]}"
+    fi
 }
 
 ################
@@ -396,49 +396,49 @@ opt_long="verbose,report,report-prefix:,cpu,memory,disk,down,version,help"
 options=$(getopt -n benchmark -o ${opt_short} -l ${opt_long} -- "$@")
 
 if [[ "${?}" -ne 0 ]]; then
-  echo "Try 'benchmark --help' for more information"
-  exit 1
+    echo "Try 'benchmark --help' for more information"
+    exit 1
 fi
 
 eval set -- "${options}"
 
 while :; do
-  case "$1" in
-    -v | --verbose)
-      VERBOSE=1
-      ;;
-    -r | --report)
-      REPORT=1
-      ;;
-    --report-prefix)
-      shift
-      REPORT_FILE_PREFIX="${1}"
-      REPORT=1
-      ;;
-    -c | --cpu)
-      tests+=("cpu")
-      ;;
-    -m | --memory)
-      tests+=("memory")
-      ;;
-    -d | --disk)
-      tests+=("disk")
-      ;;
-    --down)
-      tests+=("download")
-      ;;
-    -h | --help)
-      usage
-      ;;
-    -V | --version)
-      version
-      ;;
-    --)
-      shift
-      break
-      ;;
-  esac
-  shift
+    case "$1" in
+        -v | --verbose)
+            VERBOSE=1
+            ;;
+        -r | --report)
+            REPORT=1
+            ;;
+        --report-prefix)
+            shift
+            REPORT_FILE_PREFIX="${1}"
+            REPORT=1
+            ;;
+        -c | --cpu)
+            tests+=("cpu")
+            ;;
+        -m | --memory)
+            tests+=("memory")
+            ;;
+        -d | --disk)
+            tests+=("disk")
+            ;;
+        --down)
+            tests+=("download")
+            ;;
+        -h | --help)
+            usage
+            ;;
+        -V | --version)
+            version
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
 done
 
 # Validate options
@@ -453,10 +453,10 @@ done
 required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
 
 for cmd in "${required_commands[@]}"; do
-  if ! command_exists "${cmd}"; then
-    echo "Missing dependency: ${cmd}"
-    exit 1
-  fi
+    if ! command_exists "${cmd}"; then
+        echo "Missing dependency: ${cmd}"
+        exit 1
+    fi
 done
 
 # Get System info
@@ -486,7 +486,7 @@ arch=$(grep -m 1 "Architecture" <<<"${host}" | cut -d ":" -f 2)
 
 # Disks
 disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,11 |
-  sort | sed '/^loop/ d' | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
+sort | sed '/^loop/ d' | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
 
 # Header
 ########
@@ -500,48 +500,48 @@ echo "Start Benchmarking..."
 # Loop through tests
 for type in "${tests[@]}"; do
 
-  # Run CPU application test
-  if [[ "${type}" == "cpu" ]]; then
+    # Run CPU application test
+    if [[ "${type}" == "cpu" ]]; then
 
-    echo "Running CPU application test..."
-    results=$(cpu_app_test)
+        echo "Running CPU application test..."
+        results=$(cpu_app_test)
 
-    # Show detailed results
-    [[ -n "${VERBOSE}" ]] && echo "${results}"
+        # Show detailed results
+        [[ -n "${VERBOSE}" ]] && echo "${results}"
 
-    # Filter results
-    summary[cpu_app]="$(filter_results cpu_app "${results}")"
-  fi
+        # Filter results
+        summary[cpu_app]="$(filter_results cpu_app "${results}")"
+    fi
 
-  # Init iterator
-  i=0
+    # Init iterator
+    i=0
 
-  # Get run data
-  run_data="runs_${type}[@]"
+    # Get run data
+    run_data="runs_${type}[@]"
 
-  # Loop through runs
-  for run_param in "${!run_data}"; do
+    # Loop through runs
+    for run_param in "${!run_data}"; do
 
-    # Convert semicolon limited string into array
-    IFS=";" read -r -a params <<<"${run_param}"
+        # Convert semicolon limited string into array
+        IFS=";" read -r -a params <<<"${run_param}"
 
-    # Run benchmarks
-    echo "Running ${type^^} benchmark #$((i + 1))..."
-    results=$(run_benchmark "${type}" ${params[*]})
+        # Run benchmarks
+        echo "Running ${type^^} benchmark #$((i + 1))..."
+        results=$(run_benchmark "${type}" ${params[*]})
 
-    # Show detailed results
-    [[ -n "${VERBOSE}" ]] && echo "${results}"
+        # Show detailed results
+        [[ -n "${VERBOSE}" ]] && echo "${results}"
 
-    # Set summary data selector
-    selector="${type}_${i}"
+        # Set summary data selector
+        selector="${type}_${i}"
 
-    # Filter results & save to summary
-    summary[${selector}]=$(filter_results "${type}" "${results}")
+        # Filter results & save to summary
+        summary[${selector}]=$(filter_results "${type}" "${results}")
 
-    # Bump iterator
-    i=$((i + 1))
+        # Bump iterator
+        i=$((i + 1))
 
-  done
+    done
 done
 
 echo "Benchmarking finished."
@@ -553,9 +553,9 @@ echo
 # If we need to save report to file --> set filename
 # else: discard report (only output to terminal)
 if [[ -n "${REPORT}" ]]; then
-  output_file="${REPORT_FILE_PREFIX}${hostname}_$(date +"%F_%H_%M")"
+    output_file="${REPORT_FILE_PREFIX}${hostname}_$(date +"%F_%H_%M")"
 else
-  output_file=/dev/null
+    output_file=/dev/null
 fi
 
 # Print header
@@ -563,8 +563,8 @@ print_summary_header | tee "${output_file}"
 
 # Loop through tests
 for type in "${tests[@]}"; do
-  # Print test summary
-  print_summary "${type}" | tee -a "${output_file}"
+    # Print test summary
+    print_summary "${type}" | tee -a "${output_file}"
 done
 
 exit 0

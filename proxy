@@ -29,24 +29,24 @@ ssh_args="-fqN"
 
 # Usage
 usage() {
-  echo "Usage: proxy ACTION TARGET PORT"
-  echo "Type 'proxy -h' for help"
-  exit 1
+    echo "Usage: proxy ACTION TARGET PORT"
+    echo "Type 'proxy -h' for help"
+    exit 1
 }
 
 # Version
 version() {
-  cat <<VERSION
+    cat <<VERSION
 proxy v0.8
 Written by Sandor Semsey, Copyright(C) 2020
 License MIT https://choosealicense.com/licenses/mit/
 VERSION
-  exit 0
+    exit 0
 }
 
 # Help
 show_help() {
-  cat <<HELP
+    cat <<HELP
 Usage: proxy ACTION TARGET PORT
 
 Manage SOCKS5 tunnel
@@ -64,16 +64,16 @@ OPTIONS
 -h, --help         Display this help
 
 HELP
-  exit 0
+    exit 0
 }
 
 # Check if tunnel is open
 check_tunnel_open() {
-  if pgrep -f "${ssh_command}" >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
+    if pgrep -f "${ssh_command}" >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 ###########
@@ -92,35 +92,35 @@ port="${3}"
 
 # Action
 if [[ -z "${action}" ]]; then
-  echo "Action missing"
-  usage
+    echo "Action missing"
+    usage
 fi
 
 case "${action}" in
-  open | close | status) ;;
+    open | close | status) ;;
 
-  -v | --version)
-    version
-    ;;
-  -h | --help)
-    show_help
-    ;;
-  *)
-    echo "Invalid action"
-    usage
-    ;;
+    -v | --version)
+        version
+        ;;
+    -h | --help)
+        show_help
+        ;;
+    *)
+        echo "Invalid action"
+        usage
+        ;;
 esac
 
 # Target
 if [[ -z "${target}" ]]; then
-  echo "Target missing"
-  usage
+    echo "Target missing"
+    usage
 fi
 
 # Port
 if [[ -z "${port}" ]]; then
-  echo "Port missing"
-  usage
+    echo "Port missing"
+    usage
 fi
 
 ################
@@ -135,48 +135,48 @@ ssh_command="ssh ${ssh_args} -D ${port} ${target}"
 
 # Switch action
 case ${action} in
-  open)
-    # Open tunnel
-    #############
-    if check_tunnel_open; then
-      echo "Tunnel already opened."
-    else
-      ${ssh_command}
-      if ! check_tunnel_open; then
-        echo "Tunnel could not be opened."
+    open)
+        # Open tunnel
+        #############
+        if check_tunnel_open; then
+            echo "Tunnel already opened."
+        else
+            ${ssh_command}
+            if ! check_tunnel_open; then
+                echo "Tunnel could not be opened."
+                exit 1
+            fi
+        fi
+        ;;
+
+    close)
+        # Close tunnel
+        ##############
+        if check_tunnel_open; then
+            pkill -f "${ssh_command}"
+            if check_tunnel_open; then
+                echo "Tunnel could not be closed."
+                exit 1
+            fi
+        else
+            echo "Tunnel already closed."
+        fi
+        ;;
+
+    status)
+        # Tunnel status
+        ###############
+
+        if check_tunnel_open; then
+            echo "Tunnel is open."
+        else
+            echo "Tunnel is closed."
+        fi
+        ;;
+
+    *)
         exit 1
-      fi
-    fi
-    ;;
-
-  close)
-    # Close tunnel
-    ##############
-    if check_tunnel_open; then
-      pkill -f "${ssh_command}"
-      if check_tunnel_open; then
-        echo "Tunnel could not be closed."
-        exit 1
-      fi
-    else
-      echo "Tunnel already closed."
-    fi
-    ;;
-
-  status)
-    # Tunnel status
-    ###############
-
-    if check_tunnel_open; then
-      echo "Tunnel is open."
-    else
-      echo "Tunnel is closed."
-    fi
-    ;;
-
-  *)
-    exit 1
-    ;;
+        ;;
 esac
 
 exit 0

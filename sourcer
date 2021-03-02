@@ -17,5 +17,5 @@ lib_dir="${base_dir}/lib"
 
 # Import lib files
 while read -r file; do
-  source "${lib_dir}/${file}"
+    source "${lib_dir}/${file}"
 done < <(ls -1 "${lib_dir}")
