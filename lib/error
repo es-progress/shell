@@ -28,13 +28,13 @@ _E_ABORT=10
 # @param  $2  Error code (defaults to 1)
 ######################################################
 error_exit(){
-  print-error "${1}"
-  exit "${2:-1}"
+    print-error "${1}"
+    exit "${2:-1}"
 }
 
 # Aborts program
 ################
 abort(){
-  print-error "Aborted."
-  exit ${_E_ABORT}
+    print-error "Aborted."
+    exit ${_E_ABORT}
 }

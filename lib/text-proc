@@ -19,13 +19,13 @@
 # @return echo
 ###############################
 implode() {
-  if [[ -z "${1}" ]]; then
-    print-error "Missing arguments"
-    echo "Usage: implode FIELD_SEPARATOR [ITEM ...]"
-    return 1
-  fi
+    if [[ -z "${1}" ]]; then
+        print-error "Missing arguments"
+        echo "Usage: implode FIELD_SEPARATOR [ITEM ...]"
+        return 1
+    fi
 
-  local IFS="${1}"
-  shift
-  echo "${*}"
+    local IFS="${1}"
+    shift
+    echo "${*}"
 }

@@ -16,16 +16,16 @@
 # @param  $1  If there is any argument won't exit just return 1
 ###############################################################
 confirm() {
-  read -r -p "Are you sure? (y/n) "
-  if [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]]; then
-    [[ -z "${1}" ]] && abort
-    return 1
-  fi
-  return 0
+    read -r -p "Are you sure? (y/n) "
+    if [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]]; then
+        [[ -z "${1}" ]] && abort
+        return 1
+    fi
+    return 0
 }
 
 # Clear console screen
 ######################
 cls() {
-  printf "\033c"
+    printf "\033c"
 }

@@ -20,77 +20,77 @@
 # @param  $1  Branch to merge into master
 ##########################################
 gitt-merge(){
-  local branch="${1?:"Source branch missing"}"
+    local branch="${1?:"Source branch missing"}"
 
-  git fetch "origin"
-  git checkout "main"
-  git merge --no-ff "${branch}"
-  git push "origin" "main"
+    git fetch "origin"
+    git checkout "main"
+    git merge --no-ff "${branch}"
+    git push "origin" "main"
 }
 
 # Check git repo status
 #######################
 gitt-report(){
-  print-header "Git status"
-  git status || return 1
+    print-header "Git status"
+    git status || return 1
 
-  print-header "Branches"
-  git branch -vv
+    print-header "Branches"
+    git branch -vv
 
-  print-header "Remotes"
-  git remote -v
+    print-header "Remotes"
+    git remote -v
 }
 
 # Statistics
 # Daily commits
 ###############
 gitt-stat-daily(){
-  local user=$(git config --get --global user.name)
+    local user=$(git config --get --global user.name)
 
-  echo "Commits | Hour of day"
-  echo "--------+------------"
-  git \
-    --no-pager log \
-    --author="${user}" \
-    --format="%ad" \
-    --date="format:%H" \
-    | sort \
-    | uniq -c \
-    | awk '{printf("%7s | %-12s\n",$1,$2)}'
+    echo "Commits | Hour of day"
+    echo "--------+------------"
+    git \
+        --no-pager log \
+        --author="${user}" \
+        --format="%ad" \
+        --date="format:%H" \
+        | sort \
+        | uniq -c \
+        | awk '{printf("%7s | %-12s\n",$1,$2)}'
 }
 
 # Statistics
 # Weekly commits
 ################
 gitt-stat-weekly(){
-  local user=$(git config --get --global user.name)
+    local user=$(git config --get --global user.name)
 
-  echo "Commits | Weekday (1=Monday)"
-  echo "--------+-------------------"
-  git \
-    --no-pager log \
-    --author="${user}" \
-    --format="%ad" \
-    --date="format:%u" \
-    | sort \
-    | uniq -c \
-    | awk '{printf("%7s | %-12s\n",$1,$2)}'
+    echo "Commits | Weekday (1=Monday)"
+    echo "--------+-------------------"
+    git \
+        --no-pager log \
+        --author="${user}" \
+        --format="%ad" \
+        --date="format:%u" \
+        | sort \
+        | uniq -c \
+        | awk '{printf("%7s | %-12s\n",$1,$2)}'
 }
 
 # Statistics
 # Monthly commits
 #################
 gitt-stat-monthly(){
-  local user=$(git config --get --global user.name)
+    local user=$(git config --get --global user.name)
 
-  echo "Commits | Day of month"
-  echo "--------+-------------"
-  git \
-    --no-pager log \
-    --author="${user}" \
-    --format="%ad" \
-    --date="format:%d" \
-    | sort \
-    | uniq -c \
-    | awk '{printf("%7s | %-12s\n",$1,$2)}'
+    echo "Commits | Day of month"
+    echo "--------+-------------"
+    git \
+        --no-pager log \
+        --author="${user}" \
+        --format="%ad" \
+        --date="format:%d" \
+        | sort \
+        | uniq -c \
+        | awk '{printf("%7s | %-12s\n",$1,$2)}'
 }

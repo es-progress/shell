@@ -35,10 +35,10 @@ _TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
 # @param  $*  Message
 #####################
 print-header() {
-  if [[ -n "${*}" ]]; then
-    echo
-    echo -e "${_TXT_HEADER}${*}${_TXT_NORM}"
-  fi
+    if [[ -n "${*}" ]]; then
+        echo
+        echo -e "${_TXT_HEADER}${*}${_TXT_NORM}"
+    fi
 }
 
 # Print status message
@@ -46,10 +46,10 @@ print-header() {
 # @param  $*  Message
 ######################
 print-status() {
-  if [[ -n "${*}" ]]; then
-    echo
-    echo -e "${_TXT_HEADER}Status:${_TXT_NORM} ${_TXT_STAT}${*}${_TXT_NORM}"
-  fi
+    if [[ -n "${*}" ]]; then
+        echo
+        echo -e "${_TXT_HEADER}Status:${_TXT_NORM} ${_TXT_STAT}${*}${_TXT_NORM}"
+    fi
 }
 
 # Print OK message
@@ -58,7 +58,7 @@ print-status() {
 # @default  Done
 #####################
 print-finish() {
-  echo -e "${_TXT_OK}${*:-"Done."}${_TXT_NORM}"
+    echo -e "${_TXT_OK}${*:-"Done."}${_TXT_NORM}"
 }
 
 # Print error message
@@ -67,22 +67,22 @@ print-finish() {
 # @default  Error
 #####################
 print-error() {
-  echo -e "${_TXT_ERR}${*:-"Error."}${_TXT_NORM}" >&2
+    echo -e "${_TXT_ERR}${*:-"Error."}${_TXT_NORM}" >&2
 }
 
 # Script running time
 #####################
 print-run_time() {
-  local sec
-  local min
-  local hour
+    local sec
+    local min
+    local hour
 
-  sec=${SECONDS}
-  hour=$((sec / 3600))
-  sec=$((sec % 3600))
-  min=$((sec / 60))
-  sec=$((sec % 60))
+    sec=${SECONDS}
+    hour=$((sec / 3600))
+    sec=$((sec % 3600))
+    min=$((sec / 60))
+    sec=$((sec % 60))
 
-  echo "Running time:"
-  printf "%d hours %02d mins %02d secs\n" ${hour} ${min} ${sec}
+    echo "Running time:"
+    printf "%d hours %02d mins %02d secs\n" ${hour} ${min} ${sec}
 }

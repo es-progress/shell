@@ -20,24 +20,24 @@
 # @param  $1  File
 #########################
 dir-file(){
-  local file="${1:?'File missing'}"
+    local file="${1:?'File missing'}"
 
-  if [[ ! -f "${file}" ]]; then
-    print-error "Not a file"
-    return 1
-  fi
+    if [[ ! -f "${file}" ]]; then
+        print-error "Not a file"
+        return 1
+    fi
 
-  base_dir="$(builtin cd "$(dirname "${file}")" >/dev/null 2>&1 && pwd)"
+    base_dir="$(builtin cd "$(dirname "${file}")" >/dev/null 2>&1 && pwd)"
 
-  echo "${base_dir}"
+    echo "${base_dir}"
 }
 
 # Get directory of running script
 #################################
 dir-script(){
-  base_dir="$(dir-file "${BASH_SOURCE[0]}")"
+    base_dir="$(dir-file "${BASH_SOURCE[0]}")"
 
-  echo "${base_dir}"
+    echo "${base_dir}"
 }
 
 # Get all parent directory of a dir
@@ -45,23 +45,23 @@ dir-script(){
 # @param  $1  Directory
 ###################################
 dir-parents() {
-  local dir="${1:?'Directory missing'}"
-  local parents=()
+    local dir="${1:?'Directory missing'}"
+    local parents=()
 
-  # Convert to absolute path
-  dir="$(realpath "${dir}")"
+    # Convert to absolute path
+    dir="$(realpath "${dir}")"
 
-  if [[ ! -d "${dir}" ]]; then
-    print-error "Not a directory"
-    return 1
-  fi
+    if [[ ! -d "${dir}" ]]; then
+        print-error "Not a directory"
+        return 1
+    fi
 
-  while :; do
-    dir=${dir%/*}
-    parents+=("${dir}")
+    while :; do
+        dir=${dir%/*}
+        parents+=("${dir}")
 
-    [[ -z "${dir}" ]] && break
-  done
+        [[ -z "${dir}" ]] && break
+    done
 
-  echo "${parents[*]}"
+    echo "${parents[*]}"
 }
