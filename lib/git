@@ -35,7 +35,7 @@ gitt-report(){
     git status || return 1
 
     print-header "Branches"
-    git branch -vv
+    git branch -a -vv -l
 
     print-header "Remotes"
     git remote -v
