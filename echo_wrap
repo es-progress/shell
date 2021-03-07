@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
-##################
-## OLYMPUS      ##
-##              ##
-## URANOS       ##
-## echo wrapper ##
-##################
+#################################################
+## ESubuntu                                    ##
+##                                             ##
+## echo wrapper                                ##
+##                                             ##
+## A wrapper for `echo`.                       ##
+## Useful if you need to send a string to some ##
+## application, but it can receive that        ##
+## only from a script.                         ##
+##                                             ##
+## Example:                                    ##
+##                                             ##
+## export ECHO_WRAP=password                   ##
+## export SSH_ASKPASS=/path/to/ECHO_WRAP       ##
+## ssh-add SSH_KEY </dev/null                  ##
+#################################################
 
 # Echo special env variable
 echo "${ECHO_WRAP}"

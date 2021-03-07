@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
-###################################################
-## Logger                                        ##
-##                                               ##
-## Copyright 2020                                ##
-## Sandor Semsey <semseysandor@gmail.com>        ##
-## All rights reserved.                          ##
-##                                               ##
-## This work is published under the MIT License. ##
-## https://choosealicense.com/licenses/mit/      ##
-###################################################
+####################
+## ESubuntu       ##
+##                ##
+## Logger         ##
+##                ##
+## Generic logger ##
+####################
 
 ############
 # SETTINGS #
