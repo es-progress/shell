@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-############################################
-## ESubuntu                               ##
-##                                        ##
-## Date-action                            ##
-##                                        ##
-## Check filenames for date (time) tags   ##
-## and perform some action on a selection ##
-############################################
+#############################################
+## ESubuntu                                ##
+##                                         ##
+## Date-action                             ##
+##                                         ##
+## Check filenames for date (time) tags    ##
+## and perform some action on a selection. ##
+#############################################
 
 ############
 # SETTINGS #

@@ -4,6 +4,7 @@
 ##                                           ##
 ## Backup utility                            ##
 ##                                           ##
+## A wrapper for `rsync`.                    ##
 ## Modes:                                    ##
 ##   A) archive                              ##
 ##      1. Backup (rsync)                    ##

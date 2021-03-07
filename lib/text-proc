@@ -4,7 +4,7 @@
 ##                                    ##
 ## Text-processsing Functions Library ##
 ##                                    ##
-## Bash functions for textsermissions ##
+## Bash functions for texts & strings ##
 ########################################
 
 # Join arguments by char
