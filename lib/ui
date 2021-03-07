@@ -1,15 +1,11 @@
 # shellcheck shell=bash
-###################################################
-## Info                                          ##
-## Functions Library                             ##
-##                                               ##
-## Copyright 2020                                ##
-## Sandor Semsey <semseysandor@gmail.com>        ##
-## All rights reserved.                          ##
-##                                               ##
-## This work is published under the MIT License. ##
-## https://choosealicense.com/licenses/mit/      ##
-###################################################
+##########################################
+## ESubuntu                             ##
+##                                      ##
+## UI Functions Library                 ##
+##                                      ##
+## Bash functions to interact with user ##
+##########################################
 
 ################
 # FORMAT CODES #
@@ -25,10 +21,6 @@ _TXT_STAT="${_TXT_BLUE}${_TXT_BOLD}"
 _TXT_ERR="${_TXT_RED}${_TXT_BOLD}"
 _TXT_OK="${_TXT_GREEN}${_TXT_BOLD}"
 _TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
-
-#############
-# FUNCTIONS #
-#############
 
 # Print header
 #
@@ -85,4 +77,23 @@ print-run_time() {
 
     echo "Running time:"
     printf "%d hours %02d mins %02d secs\n" ${hour} ${min} ${sec}
+}
+
+# Ask for confirmation
+#
+# @param  $1  If there is any argument won't exit just return 1
+###############################################################
+confirm() {
+    read -r -p "Are you sure? (y/n) "
+    if [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]]; then
+        [[ -z "${1}" ]] && abort
+        return 1
+    fi
+    return 0
+}
+
+# Clear console screen
+######################
+cls() {
+    printf "\033c"
 }
