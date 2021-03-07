@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
-###################################################
-## Benchmark                                     ##
-##                                               ##
-## Copyright 2020                                ##
-## Sandor Semsey <semseysandor@gmail.com>        ##
-## All rights reserved.                          ##
-##                                               ##
-## This work is published under the MIT License. ##
-## https://choosealicense.com/licenses/mit/      ##
-###################################################
+##########################################
+## ESubuntu                             ##
+##                                      ##
+## Benchmark                            ##
+##                                      ##
+## A wrapper and runner for `sysbench`. ##
+## You can desing multiple test runs    ##
+## with different test parameters,      ##
+## so you can benchmark the system for: ##
+##   - CPU                              ##
+##   - Memory                           ##
+##   - Disks                            ##
+##   - Download speed                   ##
+## in a single script.                  ##
+##########################################
 
 ########################
 # BENCHMARK PARAMETERS #

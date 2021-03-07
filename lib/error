@@ -1,15 +1,11 @@
 # shellcheck shell=bash
-###################################################
-## Error                                         ##
-## Functions Library                             ##
-##                                               ##
-## Copyright 2020                                ##
-## Sandor Semsey <semseysandor@gmail.com>        ##
-## All rights reserved.                          ##
-##                                               ##
-## This work is published under the MIT License. ##
-## https://choosealicense.com/licenses/mit/      ##
-###################################################
+#######################################
+## ESubuntu                          ##
+##                                   ##
+## Error Functions Library           ##
+##                                   ##
+## Bash functions for error handling ##
+#######################################
 
 ###############
 # ERROR CODES #

@@ -1,19 +1,15 @@
 # shellcheck shell=bash
-###################################################
-## Permissions                                   ##
-## Functions Library                             ##
-##                                               ##
-## Copyright 2020                                ##
-## Sandor Semsey <semseysandor@gmail.com>        ##
-## All rights reserved.                          ##
-##                                               ##
-## This work is published under the MIT License. ##
-## https://choosealicense.com/licenses/mit/      ##
-###################################################
+##########################################
+## ESubuntu                             ##
+##                                      ##
+## Permissions Functions Library        ##
+##                                      ##
+## Bash functions regarding permissions ##
+##########################################
 
 # Check if run as root
 ######################
-check_root() {
+check-root() {
     if [[ $(id -u) -ne 0 ]]; then
         print-error "Run as root!"
         exit 1
@@ -23,7 +19,7 @@ check_root() {
 
 # Check if not run as root
 ##########################
-check_not_root() {
+check-not-root() {
     if [[ $(id -u) -eq 0 ]]; then
         print-error "Don't run as root!"
         exit 1
