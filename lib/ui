@@ -64,7 +64,7 @@ print-error() {
 
 # Script running time
 #####################
-print-run_time() {
+print-run-time() {
     local sec
     local min
     local hour
