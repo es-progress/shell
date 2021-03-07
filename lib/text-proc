@@ -1,15 +1,11 @@
 # shellcheck shell=bash
-###################################################
-## Text Processing                               ##
-## Functions Library                             ##
-##                                               ##
-## Copyright 2020                                ##
-## Sandor Semsey <semseysandor@gmail.com>        ##
-## All rights reserved.                          ##
-##                                               ##
-## This work is published under the MIT License. ##
-## https://choosealicense.com/licenses/mit/      ##
-###################################################
+########################################
+## ESubuntu                           ##
+##                                    ##
+## Text-processsing Functions Library ##
+##                                    ##
+## Bash functions for textsermissions ##
+########################################
 
 # Join arguments by char
 #
