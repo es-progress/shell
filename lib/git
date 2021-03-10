@@ -14,15 +14,18 @@
 # Merge source branch into main and push
 # Then delete local and remote tracking branch
 #
-# @param  $1  Branch to merge into main
+# @param  $1  Branch to be merged
+# @param  $2  Branch to merge into
+#               Defaults to main
 ##############################################
 gitt-merge(){
     local branch="${1?:"Source branch missing"}"
+    local into="${2:-"main"}"
 
     git fetch "origin"
-    git checkout "main"
+    git checkout "${into}"
     git merge --no-ff "${branch}" || return 1
-    git push "origin" "main" || return 1
+    git push "origin" "${into}" || return 1
     git branch -d "${branch}"
     git branch -d -r "origin/${branch}"
 }
