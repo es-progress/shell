@@ -11,17 +11,20 @@
 # FUNCTIONS #
 #############
 
-# Merge source branch into master and push
+# Merge source branch into main and push
+# Then delete local and remote tracking branch
 #
-# @param  $1  Branch to merge into master
-##########################################
+# @param  $1  Branch to merge into main
+##############################################
 gitt-merge(){
     local branch="${1?:"Source branch missing"}"
 
     git fetch "origin"
     git checkout "main"
-    git merge --no-ff "${branch}"
-    git push "origin" "main"
+    git merge --no-ff "${branch}" || return 1
+    git push "origin" "main" || return 1
+    git branch -d "${branch}"
+    git branch -d -r "origin/${branch}"
 }
 
 # Check git repo status
