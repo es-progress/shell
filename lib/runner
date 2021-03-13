@@ -10,9 +10,10 @@
 # Run command in each sub directory
 #
 # @param    $1  Command to run
+# @default      `ls`
 # @param    $2  Parent directory
-#               Defaults to current dir
-#######################################
+# @default      Current dir
+###################################
 foreach-subdir(){
     local command="${1:-ls}"
     local subdirs=$(ls -1 -d  -- ${2}*/)

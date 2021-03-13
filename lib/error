@@ -20,8 +20,9 @@ _E_ABORT=10
 
 # Print error message and exit program with error code
 #
-# @param  $1  Error Message
-# @param  $2  Error code (defaults to 1)
+# @param    $1  Error Message
+# @param    $2  Error code
+# @default      1
 ######################################################
 error_exit(){
     print-error "${1}"

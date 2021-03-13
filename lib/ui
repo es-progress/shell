@@ -24,8 +24,8 @@ _TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
 
 # Print header
 #
-# @param  $*  Message
-#####################
+# @param    $*  Message
+#######################
 print-header() {
     if [[ -n "${*}" ]]; then
         echo
@@ -35,8 +35,8 @@ print-header() {
 
 # Print status message
 #
-# @param  $*  Message
-######################
+# @param    $*  Message
+#######################
 print-status() {
     if [[ -n "${*}" ]]; then
         echo
@@ -46,18 +46,18 @@ print-status() {
 
 # Print OK message
 #
-# @param  $*  Message
-# @default  Done
-#####################
+# @param    $*  Message
+# @default      Done
+#######################
 print-finish() {
     echo -e "${_TXT_OK}${*:-"Done."}${_TXT_NORM}"
 }
 
 # Print error message
 #
-# @param  $*  Message
-# @default  Error
-#####################
+# @param    $*  Message
+# @default      Error
+#######################
 print-error() {
     echo -e "${_TXT_ERR}${*:-"Error."}${_TXT_NORM}" >&2
 }
@@ -81,8 +81,8 @@ print-run-time() {
 
 # Ask for confirmation
 #
-# @param  $1  If there is any argument won't exit just return 1
-###############################################################
+# @param    $1  If not null don't exit just return 1
+####################################################
 confirm() {
     read -r -p "Are you sure? (y/n) "
     if [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]]; then

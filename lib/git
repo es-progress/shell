@@ -14,9 +14,9 @@
 # Merge source branch into main and push
 # Then delete local and remote tracking branch
 #
-# @param  $1  Branch to be merged
-# @param  $2  Branch to merge into
-#               Defaults to main
+# @param    $1  Branch to be merged
+# @param    $2  Branch to merge into
+# @default      main
 ##############################################
 gitt-merge(){
     local branch="${1?:"Source branch missing"}"

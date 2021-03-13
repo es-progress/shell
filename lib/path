@@ -13,7 +13,7 @@
 
 # Get directory of a file
 #
-# @param  $1  File
+# @param    $1  File
 #########################
 dir-file(){
     local file="${1:?'File missing'}"
@@ -38,7 +38,7 @@ dir-script(){
 
 # Get all parent directory of a dir
 #
-# @param  $1  Directory
+# @param    $1  Directory
 ###################################
 dir-parents() {
     local dir="${1:?'Directory missing'}"

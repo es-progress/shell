@@ -9,19 +9,13 @@
 
 # Join arguments by char
 #
-# @param  $1  Joining character
-# @param  $*  Items to join
+# @param    $1  Joining character
+# @param    $*  Items to join
 #
-# @return echo
-###############################
+# @return   echo
+#################################
 implode() {
-    if [[ -z "${1}" ]]; then
-        print-error "Missing arguments"
-        echo "Usage: implode FIELD_SEPARATOR [ITEM ...]"
-        return 1
-    fi
-
-    local IFS="${1}"
+    local IFS="${1:?'Missing field separator'}"
     shift
     echo "${*}"
 }
