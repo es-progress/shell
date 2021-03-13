@@ -1,0 +1,27 @@
+# shellcheck shell=bash
+##########################################
+## ESubuntu                             ##
+##                                      ##
+## UI Functions Library                 ##
+##                                      ##
+## Bash functions to interact with user ##
+##########################################
+
+# Run command in each sub directory
+#
+# @param    $1  Command to run
+# @param    $2  Parent directory
+#               Defaults to current dir
+#######################################
+foreach-subdir(){
+    local command="${1:-ls}"
+    local subdirs=$(ls -1 -d  -- ${2}*/)
+
+    for dir in ${subdirs[*]}; do
+        print-header "${dir}"
+        (
+            cd "${dir}" || return 1
+            $command
+        )
+    done
+}
