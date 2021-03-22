@@ -7,10 +7,6 @@
 ## Bash functions for statistics and analysis ##
 ################################################
 
-#############
-# FUNCTIONS #
-#############
-
 # Analize disk-usage
 #
 # @param    $1  Dir to check

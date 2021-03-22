@@ -22,6 +22,10 @@ _TXT_ERR="${_TXT_RED}${_TXT_BOLD}"
 _TXT_OK="${_TXT_GREEN}${_TXT_BOLD}"
 _TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
 
+#############
+# FUNCTIONS #
+#############
+
 # Print header
 #
 # @param    $*  Message

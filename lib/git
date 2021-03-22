@@ -7,10 +7,6 @@
 ## Bash helper functions for git  ##
 ####################################
 
-#############
-# FUNCTIONS #
-#############
-
 # Merge source branch into main and push
 # Then delete local and remote tracking branch
 #

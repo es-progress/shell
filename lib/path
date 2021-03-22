@@ -7,10 +7,6 @@
 ## Bash functions involving paths ##
 ####################################
 
-#############
-# FUNCTIONS #
-#############
-
 # Get directory of a file
 #
 # @param    $1  File
