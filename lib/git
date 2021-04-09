@@ -39,6 +39,14 @@ gitt-report(){
     git remote -v
 }
 
+# Interactive rebase
+# @param    $1  How many commits from HEAD
+##########################################
+gitt-base(){
+    local commits="${1?:"Commits missing"}"
+    git rebase -i "HEAD~${commits}"
+}
+
 # Statistics
 # Daily commits
 ###############
