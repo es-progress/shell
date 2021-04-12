@@ -1,0 +1,25 @@
+# shellcheck shell=bash
+####################################
+## ESubuntu                       ##
+##                                ##
+## Debug Functions Library        ##
+##                                ##
+## Helper functions for debugging ##
+####################################
+
+# Retrieve Email related DNS records
+#
+# @param    $1  Domain
+# @param    $2  DKIM selector
+####################################
+debug-dns-mail(){
+    local domain="${1?:"Missing domain"}"
+    local selector="${2?:"Missing DKIM selector"}"
+
+    print-header "SPF"
+    dig TXT "${domain}"
+    print-header "DMARC"
+    dig TXT "_dmarc.${domain}"
+    print-header "DKIM"
+    dig TXT "${selector}._domainkey.${domain}"
+}
