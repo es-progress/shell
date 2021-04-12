@@ -14,7 +14,7 @@
 # @param    $2  Branch to merge into
 # @default      main
 ##############################################
-gitt-merge(){
+esgit-merge(){
     local branch="${1?:"Source branch missing"}"
     local into="${2:-"main"}"
 
@@ -28,7 +28,7 @@ gitt-merge(){
 
 # Check git repo status
 #######################
-gitt-report(){
+esgit-report(){
     print-header "Git status"
     git status || return 1
 
@@ -42,7 +42,7 @@ gitt-report(){
 # Interactive rebase
 # @param    $1  How many commits from HEAD
 ##########################################
-gitt-base(){
+esgit-base(){
     local commits="${1?:"Commits missing"}"
     git rebase -i "HEAD~${commits}"
 }
@@ -50,7 +50,7 @@ gitt-base(){
 # Statistics
 # Daily commits
 ###############
-gitt-stat-daily(){
+esgit-stat-daily(){
     local user=$(git config --get --global user.name)
 
     echo "Commits | Hour of day"
@@ -68,7 +68,7 @@ gitt-stat-daily(){
 # Statistics
 # Weekly commits
 ################
-gitt-stat-weekly(){
+esgit-stat-weekly(){
     local user=$(git config --get --global user.name)
 
     echo "Commits | Weekday (1=Monday)"
@@ -86,7 +86,7 @@ gitt-stat-weekly(){
 # Statistics
 # Monthly commits
 #################
-gitt-stat-monthly(){
+esgit-stat-monthly(){
     local user=$(git config --get --global user.name)
 
     echo "Commits | Day of month"
