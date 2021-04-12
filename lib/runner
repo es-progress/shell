@@ -1,11 +1,11 @@
 # shellcheck shell=bash
-##########################################
-## ESubuntu                             ##
-##                                      ##
-## UI Functions Library                 ##
-##                                      ##
-## Bash functions to interact with user ##
-##########################################
+###################################
+## ESubuntu                      ##
+##                               ##
+## Processes & running           ##
+##                               ##
+## Functions regarding processes ##
+###################################
 
 # Run command in each sub directory
 #
@@ -25,4 +25,16 @@ foreach-subdir(){
             $command
         )
     done
+}
+
+# Check if a command is running
+#
+# @param    $1  Command name
+###############################
+proc-is-running(){
+    if [[ $# -lt 1 ]]; then
+        echo "Missing command"
+        return 2
+    fi
+    pgrep -f "${*}" >/dev/null 2>&1
 }
