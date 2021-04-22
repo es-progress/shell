@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+#####################################
+## ES-Ubuntu                       ##
+##                                 ##
+## Vault                           ##
+## Manages a 'pass' password-store ##
+#####################################
+
+##########
+# CONFIG #
+##########
+
+# Timer to close tomb automatically
+timer=6h
+
+#############
+# FUNCTIONS #
+#############
+
+# Usage
+#######
+usage() {
+    cat <<HELP
+Vault v0.9.0
+Written by Sandor Semsey, Copyright(C) 2020, License MIT
+
+Usage: vault ACTION [TARGET] [OPTIONS]
+
+ACTION:     open, close, generate, retrieve
+TARGET:     Path to password (mandatory for 'retrieve' action)
+OPTIONS:    Extra arguments to 'pass'
+HELP
+  exit 1
+}
+
+# Check if tomb is opened
+#########################
+check_tomb_open() {
+  if tomb list >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Open vault
+############
+vault_open() {
+  # Check if already opened
+  if ! check_tomb_open; then
+
+    # Open vault
+    pass open -f --timer=${timer}
+
+    # Check if open was successful
+    if ! check_tomb_open; then
+      echo "Tomb could not be opened." >&2
+      exit 1
+    fi
+  fi
+}
+
+# Close vault
+#############
+vault_close() {
+  # Check if already closed
+  if check_tomb_open; then
+
+    # Close vault
+    pass close
+
+    # Check if close was successful
+    if check_tomb_open; then
+      echo "Tomb could not be closed." >&2
+      exit 1
+    fi
+  fi
+}
+
+# Generate new password
+#######################
+vault_generate() {
+  # Open tomb if necessary
+  vault_open
+
+  # Generate temp password
+  pass generate -f a_temp
+}
+
+# Get pass from vault
+#
+# @param    $1  Path to password
+# @param    $2  Extra arguments to 'pass'
+#########################################
+vault_retrieve() {
+    local path="${1?:"Path to password missing"}"
+    local args="${2:-}"
+
+    # Open tomb if necessary
+    vault_open
+
+    # Get pass
+    pass ${args} "${path}"
+}
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Parse options
+###############
+action="${1?:"Action missing"}"
+pass_path=""
+args=""
+
+if [[ "${action}" == "retrieve" ]]; then
+    shift
+    pass_path="${1?:"Path to password missing"}"
+    shift
+    args="${1:-}"
+fi
+
+# Switch action
+case "${action}" in
+open)
+  vault_open
+  ;;
+close)
+  vault_close
+  ;;
+generate)
+  vault_generate
+  ;;
+retrieve)
+  vault_retrieve "${pass_path}" "${args}"
+  ;;
+*)
+  usage
+  ;;
+esac
+
+exit 0
