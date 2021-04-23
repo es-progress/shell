@@ -72,3 +72,15 @@ socks5-tunnel-close(){
     local port="${2?:"Local port missing"}"
     ssh-tunnel-close "-fqN -D ${port} ${remote}"
 }
+
+# Create SSH key
+#
+# @param    $1  Name of key
+# @param    $2  Comment for key
+###############################
+ssh-create-key(){
+    local key_name="${1?:"Key name missing"}"
+    local comment="${2?:"Key comment missing"}"
+
+    ssh-keygen -t ed25519 -a 96 -C "${comment}" -f "${key_name}.key"
+}
