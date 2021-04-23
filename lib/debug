@@ -30,25 +30,7 @@ debug-dns-mail(){
 ##################################
 debug-tunnel-open(){
     local remote="${1?:"Missing remote"}"
-    local ssh_command="ssh -fqN -R 9003:localhost:9003 ${remote}"
-
-    # Check if already opened
-    if proc-is-running ${ssh_command}; then
-        echo "Tunnel already opened"
-        return 0
-    fi
-
-    # Open tunnel
-    ${ssh_command}
-
-    # Check if successful
-    if proc-is-running ${ssh_command}; then
-        echo "Tunnel opened"
-        return 0
-    else
-        echo "Failed to open tunnel"
-        return 1
-    fi
+    ssh-tunnel-open "-fqN -R 9003:localhost:9003 ${remote}"
 }
 
 # Close SSH tunnel to remote XDebug
@@ -57,23 +39,5 @@ debug-tunnel-open(){
 ###################################
 debug-tunnel-close(){
     local remote="${1?:"Missing remote"}"
-    local ssh_command="ssh -fqN -R 9003:localhost:9003 ${remote}"
-
-    # Check if already closed
-    if ! proc-is-running ${ssh_command}; then
-        echo "Tunnel already closed"
-        return 0
-    fi
-
-    # Close tunnel
-    pkill -f "${ssh_command}"
-
-    # Check if successful
-    if proc-is-running ${ssh_command}; then
-        echo "Failed to close tunnel"
-        return 1
-    else
-        echo "Tunnel closed"
-        return 0
-    fi
+    ssh-tunnel-close "-fqN -R 9003:localhost:9003 ${remote}"
 }

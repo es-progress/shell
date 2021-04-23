@@ -1,0 +1,74 @@
+# shellcheck shell=bash
+##############################
+## ESubuntu                 ##
+##                          ##
+## SSH Functions Library    ##
+##                          ##
+## Helper functions for SSH ##
+##############################
+
+# Open SSH tunnel
+#
+# @param    $1  Args to SSH
+###########################
+ssh-tunnel-open(){
+    local args="${1?:"Arguments to SSH missing"}"
+
+    # Check if already opened
+    if proc-is-running "ssh ${args}"; then
+        return 0
+    fi
+
+    # Open tunnel
+    ssh ${args}
+
+    # Check if successful
+    if ! proc-is-running "ssh ${args}"; then
+        echo "Failed to open tunnel"
+        return 1
+    fi
+}
+
+# Close SSH tunnel
+#
+# @param    $1  Args to SSH
+###########################
+ssh-tunnel-close(){
+    local args="${1?:"Arguments to SSH missing"}"
+
+    # Check if already closed
+    if ! proc-is-running "ssh ${args}"; then
+        return 0
+    fi
+
+    # Close tunnel
+    pkill -f "ssh ${args}"
+
+    # Check if successful
+    if proc-is-running "ssh ${args}"; then
+        echo "Failed to close tunnel"
+        return 1
+    fi
+}
+
+# Open socks5 tunnel
+#
+# @param    $1  Remote host
+# @param    $2  Local port
+###########################
+socks5-tunnel-open(){
+    local remote="${1?:"Remote missing"}"
+    local port="${2?:"Local port missing"}"
+    ssh-tunnel-open "-fqN -D ${port} ${remote}"
+}
+
+# Close socks5 tunnel
+#
+# @param    $1  Remote host
+# @param    $2  Local port
+###########################
+socks5-tunnel-close(){
+    local remote="${1?:"Remote missing"}"
+    local port="${2?:"Local port missing"}"
+    ssh-tunnel-close "-fqN -D ${port} ${remote}"
+}
