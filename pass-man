@@ -138,8 +138,7 @@ retrieve)
   vault_retrieve "${pass_path}" "${args}"
   ;;
 *)
-  echo "Invalid action"
-  usage
+  echo "Invalid action" && usage
   ;;
 esac
 
