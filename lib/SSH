@@ -84,3 +84,39 @@ ssh-create-key(){
 
     ssh-keygen -t ed25519 -a 96 -C "${comment}" -f "${key_name}.key"
 }
+
+# Sign a user key
+#
+# @param    $1  Certificate validity
+# @param    $2  Path to User CA key
+# @param    $3  Key identity
+#   usually USER@HOST - this will be logged later
+# @param    $4  Principals: user for this cert is valid
+# @param    $5  Certificate serial number
+# @param    $6  Path to user public key - this will be signed
+#############################################################
+ssh-sign-user(){
+    local validity="${1?:"Validity interval missing"}"
+    local ca_key_path="${2?:"Path to CA key missing"}"
+    local identity="${3?:"Key identity missing"}"
+    local principals="${4?:"Principals missing"}"
+    local serial="${5?:"Serial number missing"}"
+    local pubkey_path="${6?:"User public key path missing"}"
+
+    ssh-keygen \
+        -V "${validity}" \
+        -s "${ca_key_path}" \
+        -I "${identity}" \
+        -n "${principals}" \
+        -z "${serial}" \
+        -- "${pubkey_path}"
+}
+
+# View a certificate
+#
+# @param    $1  Path to certificate
+###################################
+ssh-view-cert(){
+    local cert="${1?:"Certificate path missing"}"
+    ssh-keygen -L -f "${cert}"
+}
