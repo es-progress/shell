@@ -37,7 +37,7 @@ unlock() {
   local pass_path="${2?:"Path to password missing"}"
 
   # Passphrase
-  password=$(vault retrieve "${pass_path}")
+  password=$(pass-man retrieve "${pass_path}")
   [[ "${?}" -gt 0 ]] && return 1
 
   # Add key to ssh-agent
