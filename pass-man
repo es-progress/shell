@@ -2,8 +2,10 @@
 #####################################
 ## ES-Ubuntu                       ##
 ##                                 ##
-## Vault                           ##
+## pass-man                        ##
+##                                 ##
 ## Manages a 'pass' password-store ##
+## which is inside a tomb.         ##
 #####################################
 
 ##########
@@ -21,7 +23,7 @@ timer=6h
 #######
 usage() {
     cat <<HELP
-Vault v0.9.0
+pass-man v0.9.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
 Usage: vault ACTION [TARGET] [OPTIONS]
