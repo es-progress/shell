@@ -1,15 +1,21 @@
-# shellcheck shell=bash
-##############################
-## ESubuntu                 ##
-##                          ##
-## Sourcer                  ##
-##                          ##
-## Includes other libraries ##
-##############################
+#!/usr/bin/env bash
+########################
+## ESubuntu           ##
+##                    ##
+## sourcer            ##
+##                    ##
+## Includes libraries ##
+########################
 
-# Get sourcer script dir
-base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-lib_dir="${base_dir}/../lib"
+# Read from environment
+lib_dir="${DIR_SHELL_LIB}"
+
+# No env var --> fall back to default
+if [[ -z "${lib_dir}" ]]; then
+    # Get sourcer script dir
+    base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+    lib_dir="${base_dir}/../lib"
+fi
 
 # Import lib files
 while read -r file; do
