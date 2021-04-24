@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+################################
+## ES-Ubuntu                  ##
+##                            ##
+## test_dd-write              ##
+##                            ##
+## Test 'dd' write speed      ##
+## with different block sizes ##
+################################
+
+##########
+# CONFIG #
+##########
+
+test_file_name="dd_test"
+block_sizes_small=(1k 2k 4k 8k 16k 32k)
+block_sizes_medium=(64k 128k 256k 512k)
+block_sizes_large=(1M 2M 4M 8M)
+block_count_small=262144
+block_count_medium=16384
+block_count_large=1024
+
+#############
+# FUNCTIONS #
+#############
+
+# Clean up after tests
+######################
+clean_up() {
+    rm -f "${test_file_name}"
+    exit
+}
+
+# Test 'dd' write speed
+#
+# @param    $1  Block size
+# @param    $2  Number of blocks to write
+#########################################
+test_block_size(){
+    local bs="${1?:"Block size missing"}"
+    local count="${2?:"Number of blocks missing"}"
+
+    echo "Testing block size  = ${bs}"
+    dd if=/dev/urandom of="${test_file_name}" bs="${bs}" count="${count}" iflag=fullblock
+    echo
+}
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Make sure test files are always deleted, even when the script is interrupted
+trap clean_up EXIT INT TERM
+
+# Small block
+for bs in "${block_sizes_small[@]}"; do
+    test_block_size "${bs}" "${block_count_small}"
+done
+
+# Medium block
+for bs in "${block_sizes_medium[@]}"; do
+    test_block_size "${bs}" "${block_count_medium}"
+done
+
+# Large blocks
+for bs in "${block_sizes_large[@]}"; do
+    test_block_size "${bs}" "${block_count_large}"
+done
+
+# Clean up
+clean_up
+
+exit 0
