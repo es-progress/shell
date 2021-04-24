@@ -8,7 +8,7 @@
 ########################
 
 # Read from environment
-lib_dir="${DIR_SHELL_LIB}"
+lib_dir="${DIR_SHELL_LIB:-}"
 
 # No env var --> fall back to default
 if [[ -z "${lib_dir}" ]]; then
