@@ -32,7 +32,7 @@ check-not-root() {
 # @param    $1  Path to SSH key
 # @param    $2  Path to password
 ################################
-unlock() {
+unlock-key() {
   local key="${1?:"Path to SSH key missing"}"
   local pass_path="${2?:"Path to password missing"}"
 
