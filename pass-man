@@ -33,61 +33,61 @@ ACTION:     open, close, generate, retrieve
 TARGET:     Path to password (mandatory for 'retrieve' action)
 OPTIONS:    Extra arguments to 'pass'
 HELP
-  exit 1
+    exit 1
 }
 
 # Check if tomb is opened
 #########################
 check_tomb_open() {
-  if tomb list >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
+    if tomb list >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 # Open vault
 ############
 vault_open() {
-  # Check if already opened
-  if ! check_tomb_open; then
-
-    # Open vault
-    pass open -f --timer=${timer}
-
-    # Check if open was successful
+    # Check if already opened
     if ! check_tomb_open; then
-      echo "Tomb could not be opened." >&2
-      exit 1
+
+        # Open vault
+        pass open -f --timer=${timer}
+
+        # Check if open was successful
+        if ! check_tomb_open; then
+            echo "Tomb could not be opened." >&2
+            exit 1
+        fi
     fi
-  fi
 }
 
 # Close vault
 #############
 vault_close() {
-  # Check if already closed
-  if check_tomb_open; then
-
-    # Close vault
-    pass close
-
-    # Check if close was successful
+    # Check if already closed
     if check_tomb_open; then
-      echo "Tomb could not be closed." >&2
-      exit 1
+
+        # Close vault
+        pass close
+
+        # Check if close was successful
+        if check_tomb_open; then
+            echo "Tomb could not be closed." >&2
+            exit 1
+        fi
     fi
-  fi
 }
 
 # Generate new password
 #######################
 vault_generate() {
-  # Open tomb if necessary
-  vault_open
+    # Open tomb if necessary
+    vault_open
 
-  # Generate temp password
-  pass generate -f a_temp
+    # Generate temp password
+    pass generate -f a_temp
 }
 
 # Get pass from vault
@@ -124,22 +124,22 @@ args="${3:-}"
 
 # Switch action
 case "${action}" in
-open)
-  vault_open
-  ;;
-close)
-  vault_close
-  ;;
-generate)
-  vault_generate
-  ;;
-retrieve)
-    [[ -z "${pass_path}" ]] && echo "Path to password missing" && usage
-  vault_retrieve "${pass_path}" "${args}"
-  ;;
-*)
-  echo "Invalid action" && usage
-  ;;
+    open)
+        vault_open
+        ;;
+    close)
+        vault_close
+        ;;
+    generate)
+        vault_generate
+        ;;
+    retrieve)
+        [[ -z "${pass_path}" ]] && echo "Path to password missing" && usage
+        vault_retrieve "${pass_path}" "${args}"
+        ;;
+    *)
+        echo "Invalid action" && usage
+        ;;
 esac
 
 exit 0
