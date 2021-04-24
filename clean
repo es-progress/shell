@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+###################
+## ES-Ubuntu     ##
+##               ##
+## clean         ##
+##               ##
+## Clean-up      ##
+## Delete caches ##
+###################
+
+# Strict mode minus IFS
+set -euo pipefail
+
+# Import environment variables
+source "${PATH_ENV_VARS}"
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if run as root
+check-root
+
+# Apt auto-remove
+print-status "APT auto-remove"
+apt autoremove --purge --yes
+print-finish
+
+# Apt auto-clean
+print-status "APT auto-clean"
+apt autoclean --yes
+print-finish
+
+# Apt clean
+print-status "APT clean"
+apt clean --yes
+print-finish
+
+# Removing old snaps
+print-status "Deleting old snaps"
+while read -r snapname revision; do
+    snap remove "$snapname" --revision="$revision"
+done < <(snap list --all | awk '/disabled/{print $1, $3}')
+print-finish
+
+# Delete cache
+print-status "Deleting caches"
+rm -rf /var/cache/*
+rm -rf /var/lib/snapd/cache/*
+rm -rf ${HOME}/.cache/*
+rm -rf ${HOME}/.config/google-chrome/*
+print-finish
+
+exit 0
