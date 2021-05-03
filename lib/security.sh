@@ -12,7 +12,7 @@
 check-root() {
     if [[ $(id -u) -ne 0 ]]; then
         print-error "Run as root!"
-        exit 1
+        return 1
     fi
     return 0
 }
@@ -22,7 +22,7 @@ check-root() {
 check-not-root() {
     if [[ $(id -u) -eq 0 ]]; then
         print-error "Don't run as root!"
-        exit 1
+        return 1
     fi
     return 0
 }

@@ -69,9 +69,7 @@ print-error() {
 # Script running time
 #####################
 print-run-time() {
-    local sec
-    local min
-    local hour
+    local sec min hour
 
     sec=${SECONDS}
     hour=$((sec / 3600))
@@ -84,16 +82,10 @@ print-run-time() {
 }
 
 # Ask for confirmation
-#
-# @param    $1  If not null don't exit just return 1
-####################################################
+######################
 confirm() {
     read -r -p "Are you sure? (y/n) "
-    if [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]]; then
-        [[ -z "${1}" ]] && abort
-        return 1
-    fi
-    return 0
+    [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && return 0 || return 1
 }
 
 # Clear console screen

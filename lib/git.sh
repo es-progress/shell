@@ -33,7 +33,7 @@ esgit-report(){
     git status || return 1
 
     print-header "Branches"
-    git branch -a -vv -l
+    git branch -a -l -vv
 
     print-header "Remotes"
     git remote -v

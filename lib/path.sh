@@ -19,17 +19,15 @@ dir-file(){
         return 1
     fi
 
+    # cd in subshell
     base_dir="$(builtin cd "$(dirname "${file}")" >/dev/null 2>&1 && pwd)"
-
     echo "${base_dir}"
 }
 
 # Get directory of running script
 #################################
 dir-script(){
-    base_dir="$(dir-file "${BASH_SOURCE[0]}")"
-
-    echo "${base_dir}"
+    dir-file "${BASH_SOURCE[0]}"
 }
 
 # Get all parent directory of a dir

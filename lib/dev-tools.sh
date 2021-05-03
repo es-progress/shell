@@ -13,8 +13,8 @@
 # @param    $2  DKIM selector
 ####################################
 debug-dns-mail(){
-    local domain="${1?:"Missing domain"}"
-    local selector="${2?:"Missing DKIM selector"}"
+    local domain="${1?:"Domain missing"}"
+    local selector="${2?:"DKIM selector missing"}"
 
     print-header "SPF"
     dig TXT "${domain}"
@@ -29,7 +29,7 @@ debug-dns-mail(){
 # @param    $1  Remote host
 ##################################
 debug-tunnel-open(){
-    local remote="${1?:"Missing remote"}"
+    local remote="${1?:"Remote missing"}"
     ssh-tunnel-open "-fqN -R 9003:localhost:9003 ${remote}"
 }
 
@@ -38,7 +38,7 @@ debug-tunnel-open(){
 # @param    $1  Remote host
 ###################################
 debug-tunnel-close(){
-    local remote="${1?:"Missing remote"}"
+    local remote="${1?:"Remote missing"}"
     ssh-tunnel-close "-fqN -R 9003:localhost:9003 ${remote}"
 }
 

@@ -11,11 +11,9 @@
 #
 # @param    $1  Joining character
 # @param    $*  Items to join
-#
-# @return   echo
 #################################
 implode() {
-    local IFS="${1:?'Missing field separator'}"
+    local IFS="${1:?"Field separator missing"}"
     shift
     echo "${*}"
 }

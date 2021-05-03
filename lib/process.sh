@@ -16,7 +16,7 @@
 ###################################
 foreach-subdir(){
     local command="${1:-ls}"
-    local subdirs=$(ls -1 -d  -- ${2}*/)
+    local subdirs=$(ls -1 -d  -- ${2:-}*/)
 
     for dir in ${subdirs[*]}; do
         print-header "${dir}"
