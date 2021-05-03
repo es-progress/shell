@@ -17,6 +17,6 @@
 #################################################
 
 # Echo special env variable
-echo "${ECHO_WRAP}"
+echo "${ECHO_WRAP:-}"
 
 exit 0

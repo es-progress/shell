@@ -18,7 +18,7 @@ source "${PATH_ENV_VARS}"
 source "${PATH_SOURCER}"
 
 # Check if run as root
-check-root
+check-root || exit 1
 
 # Apt auto-remove
 print-status "APT auto-remove"

@@ -2,7 +2,7 @@
 ##########################################
 ## ESubuntu                             ##
 ##                                      ##
-## Benchmark                            ##
+## benchmark                            ##
 ##                                      ##
 ## A wrapper and runner for `sysbench`. ##
 ## You can desing multiple test runs    ##
@@ -26,15 +26,12 @@ test_run_time=60
 #####
 
 # Run parameters in semicolon limited string
-# Threads
+# Threads ; Max prime number
 runs_cpu[0]="1;30000"
 runs_cpu[1]="16;30000"
 
-# CPU application test
-# Test file size in MB
-cpu_test_file_size=500
-# Test file name (will be created then deleted)
-cpu_test_file_name="test_file.cpu"
+# CPU test file size in MB
+cpu_test_file_size=50
 
 # Memory
 ########
@@ -78,25 +75,15 @@ runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.b
 # FUNCTIONS #
 #############
 
-# Version info
-##############
-version() {
-    cat <<EOF
-Benchmark v0.8
-Written by Sandor Semsey, Copyright(C) 2020
-License MIT https://choosealicense.com/licenses/mit/
-EOF
-    exit 0
-}
-
-# Help
-######
+# Usage
+#######
 usage() {
     cat <<EOF
-Benchmark
 
-This is a thin wrapper for sysbench.
-For additional information see 'man sysbench'
+Benchmark v1.0.0
+Written by Sandor Semsey, Copyright(C) 2020, License MIT
+
+Usage: benchmark [OPTIONS]...
 
 OPTIONS:
 
@@ -105,12 +92,11 @@ OPTIONS:
 -d, --disk
     --down
                        Run appropriate test. If no test specified, all will run.
--v, --verbose          Verbose operation
+-v, --verbose          Verbose mode
 -r, --report           Save test report to file
     --report-prefix    Report file prefix, implies '-r'
 
 -h, --help             Display this help
--V, --version          Print version information
 
 EOF
     exit 0
@@ -135,24 +121,24 @@ cpu_app_test() {
 
     local create_test_file time_sha time_bzip time_aes
 
-    [[ -n "${VERBOSE}" ]] && echo "Test file size: ${cpu_test_file_size} MB"
+    [[ -n "${verbose_mode}" ]] && echo "Test file size: ${cpu_test_file_size} MB"
 
     # Create test file
-    [[ -n "${VERBOSE}" ]] && echo "Creating test file..."
-    create_test_file=$(dd if=/dev/urandom of="${cpu_test_file_name}" bs=1M count="${cpu_test_file_size}" 2>&1)
+    [[ -n "${verbose_mode}" ]] && echo "Creating test file..."
+    create_test_file=$(dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" 2>&1)
 
-    if [[ -n "${VERBOSE}" ]]; then
+    if [[ -n "${verbose_mode}" ]]; then
         echo "${create_test_file}"
         echo "Test file created."
     fi
 
     # Run tests
     # Hashing
-    time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"${cpu_test_file_name}"; } 2>&1)
+    time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"test_file.cpu"; } 2>&1)
     # bzip compressing
-    time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
+    time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"test_file.cpu"; } 2>&1)
     # AES encrypting
-    time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"${cpu_test_file_name}"; } 2>&1)
+    time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"test_file.cpu"; } 2>&1)
 
     # Print results
     echo "SHA256-hashing:    ${time_sha}"
@@ -160,9 +146,10 @@ cpu_app_test() {
     echo "AES-encrypting:    ${time_aes}"
 
     # Delete test file
-    [[ -n "${VERBOSE}" ]] && echo "Deleting test file..."
-    rm -f "${cpu_test_file_name}"
-    [[ -n "${VERBOSE}" ]] && echo "Test file deleted."
+    [[ -n "${verbose_mode}" ]] && echo "Deleting test file..."
+    rm -f "test_file.cpu"
+    [[ -n "${verbose_mode}" ]] && echo "Test file deleted."
+    echo
 }
 
 # Benchmark
@@ -176,7 +163,7 @@ run_benchmark() {
 
     case "${1}" in
         cpu)
-            params="${params} --threads=${2} --cpu-max-prime=${3}  cpu"
+            params="${params} --threads=${2} --cpu-max-prime=${3} cpu"
             ;;
         memory)
             params="${params} --threads=${2} --memory-block-size=${3} --memory-total-size=${4} --memory-access-mode=${5} memory"
@@ -195,6 +182,7 @@ run_benchmark() {
     [[ "${1}" == "disk" ]] && sysbench ${params} prepare
     sysbench ${params} run
     [[ "${1}" == "disk" ]] && sysbench ${params} cleanup
+    echo
 }
 
 # Filter benchmark results for summary
@@ -375,11 +363,8 @@ print_summary() {
 # SCRIPT START #
 ################
 
-# Exit on error
-set -e
-
-# Exit pipe on non-zero return value
-set -o pipefail
+# Strict mode minus IFS
+set -euo pipefail
 
 # Make sure test files are always deleted, even when the script is interrupted
 trap clean_up EXIT INT TERM
@@ -396,29 +381,21 @@ tests=()
 # Parse options
 ###############
 
-opt_short="vrcmdVh"
-opt_long="verbose,report,report-prefix:,cpu,memory,disk,down,version,help"
-options=$(getopt -n benchmark -o ${opt_short} -l ${opt_long} -- "$@")
-
-if [[ "${?}" -ne 0 ]]; then
-    echo "Try 'benchmark --help' for more information"
-    exit 1
-fi
-
-eval set -- "${options}"
-
+verbose_mode=""
+create_report=""
+report_file_prefix=""
 while :; do
-    case "$1" in
+    case "${1:-}" in
         -v | --verbose)
-            VERBOSE=1
+            verbose_mode=1
             ;;
         -r | --report)
-            REPORT=1
+            create_report=1
             ;;
         --report-prefix)
             shift
-            REPORT_FILE_PREFIX="${1}"
-            REPORT=1
+            report_file_prefix="${1}"
+            create_report=1
             ;;
         -c | --cpu)
             tests+=("cpu")
@@ -435,11 +412,7 @@ while :; do
         -h | --help)
             usage
             ;;
-        -V | --version)
-            version
-            ;;
-        --)
-            shift
+        *)
             break
             ;;
     esac
@@ -512,7 +485,7 @@ for type in "${tests[@]}"; do
         results=$(cpu_app_test)
 
         # Show detailed results
-        [[ -n "${VERBOSE}" ]] && echo "${results}"
+        [[ -n "${verbose_mode}" ]] && echo "${results}"
 
         # Filter results
         summary[cpu_app]="$(filter_results cpu_app "${results}")"
@@ -535,7 +508,7 @@ for type in "${tests[@]}"; do
         results=$(run_benchmark "${type}" ${params[*]})
 
         # Show detailed results
-        [[ -n "${VERBOSE}" ]] && echo "${results}"
+        [[ -n "${verbose_mode}" ]] && echo "${results}"
 
         # Set summary data selector
         selector="${type}_${i}"
@@ -557,8 +530,8 @@ echo
 
 # If we need to save report to file --> set filename
 # else: discard report (only output to terminal)
-if [[ -n "${REPORT}" ]]; then
-    output_file="${REPORT_FILE_PREFIX}${hostname}_$(date +"%F_%H_%M")"
+if [[ -n "${create_report}" ]]; then
+    output_file="${report_file_prefix}${hostname}_$(date +"%F_%H_%M")"
 else
     output_file=/dev/null
 fi
