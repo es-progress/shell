@@ -2,7 +2,7 @@
 ###############################################
 ## ESubuntu                                  ##
 ##                                           ##
-## Backup utility                            ##
+## backup                                    ##
 ##                                           ##
 ## A wrapper for `rsync`.                    ##
 ## Modes:                                    ##
@@ -14,38 +14,19 @@
 ##   C) snapshot (rsync snapshot style)      ##
 ###############################################
 
-###############
-# ERROR CODES #
-###############
-
-E_INVALID_OPTIONS=50
-E_MISSING_PARAMETERS=51
-E_NOT_RUN_AS_ROOT=52
-E_MOUNT_FAIL=53
-E_BACKUP_FAIL=54
-E_DELETE_FAIL=55
-E_ARCHIVE_FAIL=56
-E_DIR_CHANGE=57
-E_COMPRESSION_FAIL=58
-
 #############
 # FUNCTIONS #
 #############
 
-# Version info
-version() {
-    cat <<VERSION
-Backup v1.0
-Written by Sandor Semsey, Copyright(C) 2020
-License MIT https://choosealicense.com/licenses/mit/
-VERSION
-    exit 0
-}
-
-# Help
+# Usage
+#######
 usage() {
     cat <<HELP
-Usage: backup required_OPTIONS [OPTIONS]
+
+Backup v1.0.0
+Written by Sandor Semsey, Copyright(C) 2020, License MIT
+
+Usage: backup REQUIRED_OPTIONS... [OPTIONS...]
 
 Backs up a source directory to a different filesystem
 This is basically a wrapper for rsync
@@ -53,47 +34,39 @@ This is basically a wrapper for rsync
 OPTIONS
 
 REQUIRED
--s, --source=[DIR]             source DIRECTORY to backup
--d, --destination=[DIR]        destination DIRECTORY to put backup (relative to mounting point)
--f, --filesystem=[FILESYSTEM]  target FILESYSTEM to backup to (eg. /dev/sda3)
--m, --mount=[DIR]              mounting point for given filesystem
+-s, --source [DIR]             source DIRECTORY to backup
+-d, --destination [DIR]        destination DIRECTORY to put backup (relative to mounting point)
+-f, --filesystem [FILESYSTEM]  target FILESYSTEM to backup to (eg. /dev/sda3)
+-m, --mount [DIR]              mounting point for given filesystem
 
 OPTIONAL
--a, --archive=[DIR]            put archives in DIR
-    --expire=[STRING]          deletes archives older than this date (eg. -2days) for STRING see $(man date)
+-a, --archive [DIR]            put archives in DIR
+    --expire [STRING]          deletes archives older than this date (eg. -2days) for STRING see $(man date)
 
-    --format=[FORMAT]          appends current date to archive filename
+    --format [FORMAT]          appends current date to archive filename
                                supported FORMATS:
                                24H (HH:MM:SS eg. 17:26:14)
                                YMD (YYYY-mm-dd eg. 2020-02-19)       <--default
                                FULL (YYYY-mm-dd_HH:MM:SS)
 
-    --mode=[MODE]              select MODE:
+    --mode [MODE]              select MODE:
                                ARCHIVE:  backup and create archives  <--default
                                SNAPSHOT: snapshot backup
                                QUICK:    backup only
 
-    --exclude=[PATTERN]        exclude files matching PATTERN
-    --prefix=[STRING]          optional prefix on archive files
+    --exclude [PATTERN]        exclude files matching PATTERN
+    --prefix [STRING]          optional prefix on archive files
 
     --debug                    print commands as executed
--v, --version                  print version information
 -h, --help                     display this help
 
 HELP
     exit 0
 }
 
-# Error function
-error() {
-    local e_code="$?"
-    local message="${1}: ${2} [${e_code}]"
-    echo "${message}" >&2
-    log -l backup -p error "${message}"
-    exit "${3}"
-}
-
 # Exclusion builder
+# @param    $*  Files to exclude
+################################
 exc_build() {
     local exclusion=""
     for ex in "$@"; do
@@ -102,25 +75,37 @@ exc_build() {
     echo ${exclusion}
 }
 
-#################
-# PARSE OPTIONS #
-#################
+################
+# SCRIPT START #
+################
+
+# Strict mode minus IFS
+set -euo pipefail
 
 # Disable shell path expansion
 set -f
 
-opt_short="s:d:f:m:a:x:p:vh"
-opt_long="source:,destination:,filesystem:,mount:,archive:,mode:,exclude:,expire:,prefix:,format:,debug,version,help"
-options=$(getopt -n backup -o ${opt_short} -l ${opt_long} -- "$@")
+# Import environment variables
+source "${PATH_ENV_VARS}"
 
-if [[ $? -ne 0 ]]; then
-    echo "Try 'backup --help' for more information"
-    exit ${E_INVALID_OPTIONS}
-fi
+# Import library
+source "${PATH_SOURCER}"
 
-eval set -- "${options}"
+# Check if run as root
+check-root || exit 1
+
+# Parse options
+###############
+DATE_FORMAT="%F"
+DATE_ACTION_FORMAT="YMD"
+MODE="archive"
+ARCHIVE="archive"
+EXCL=""
+EXPIRE=""
+PREFIX=""
+
 while :; do
-    case "$1" in
+    case "${1:-}" in
         -s | --source)
             shift
             SOURCE="${1}"
@@ -187,23 +172,18 @@ while :; do
         --debug)
             set -x
             ;;
-        -v | --version)
-            version
-            ;;
         -h | --help)
             usage
             ;;
-        --)
-            shift
+        *)
             break
             ;;
     esac
     shift
 done
 
-####################
-# VALIDATE OPTIONS #
-####################
+# Validate options
+##################
 
 # Check required
 : "${FS:?'Filesystem missing'}"
@@ -211,39 +191,23 @@ done
 : "${SOURCE:?'Source missing'}"
 : "${DEST:?'Destination missing'}"
 
-# Defaults
-: "${DATE_FORMAT:=%F}"
-: "${DATE_ACTION_FORMAT:=YMD}"
-: "${MODE:=archive}"
-: "${ARCHIVE:=archive}"
-
 # Remove trailing slash
 FS="${FS%/}"
 MOUNT="${MOUNT%/}"
 DEST="${DEST%/}"
 
-################
-# SCRIPT START #
-################
-
 # Prepare
 #########
 
-# Check if run as root
-[[ "$(id -u)" -ne 0 ]] && error "Please run as root" "backup" ${E_NOT_RUN_AS_ROOT}
-
 # Mount filesystem
 if ! grep -qs "${MOUNT}" /proc/mounts; then
-    mount "${FS}" "${MOUNT}" || error "Mounting failed" "mount" ${E_MOUNT_FAIL}
+    mount "${FS}" "${MOUNT}"
 fi
 
 # Init backup
 exclude=$(exc_build ${EXCL})
 now=$(date "+${DATE_FORMAT}")
 aim="${MOUNT}/${DEST}"
-
-# Backup
-########
 
 # Set targets, options
 if [[ "${MODE}" == "archive" ]] || [[ "$MODE" == "quick" ]]; then
@@ -256,7 +220,8 @@ else
 fi
 
 # Backup
-rsync -aAXHEh --info=stats1 --info=progress2 ${opt} ${exclude} "${SOURCE}" "${target}" || error "Backup failed" "rsync" ${E_BACKUP_FAIL}
+########
+rsync -aAXHEh --info=stats1 --info=progress2 ${opt} ${exclude} "${SOURCE}" "${target}"
 
 # Post backup steps
 ###################
@@ -271,32 +236,32 @@ if [[ "${MODE}" == "snapshot" ]]; then
 
     # Delete expired archives
     if [[ -n "${EXPIRE}" ]]; then
-        date-action -dr --diff="${EXPIRE}" --format=${DATE_ACTION_FORMAT} ${aim}/* || error "Expired archives not deleted" "date-action" ${E_DELETE_FAIL}
+        date-action -dr --diff="${EXPIRE}" --format=${DATE_ACTION_FORMAT} ${aim}/*
     fi
 fi
 
 # Create archives
 if [[ "${MODE}" == "archive" ]]; then
     # Go to backup dir
-    cd "${aim}" || error "Backup directory change failed" "cd" ${E_DIR_CHANGE}
+    cd "${aim}"
 
     # Archive
     tar_file="${PREFIX}${now}.tar.gz"
-    tar -I "pigz -1" --sort=name -cf "${ARCHIVE}/${tar_file}" "actual/" || error "Archiving failed" "tar" ${E_ARCHIVE_FAIL}
+    tar -I "pigz -1" --sort=name -cf "${ARCHIVE}/${tar_file}" "actual/"
 
     # Test compression
-    pigz -t "${ARCHIVE}/${tar_file}" || error "Compressed files not OK" "pigz" ${E_COMPRESSION_FAIL}
+    pigz -t "${ARCHIVE}/${tar_file}"
 
     # Delete expired archives
     if [[ -n "${EXPIRE}" ]]; then
-        date-action -r --diff="${EXPIRE}" --format=${DATE_ACTION_FORMAT} "${ARCHIVE}/*" || error "Expired archives not deleted" "date-action" ${E_DELETE_FAIL}
+        date-action -r --diff="${EXPIRE}" --format=${DATE_ACTION_FORMAT} "${ARCHIVE}/*"
     fi
 
     # Leave backup filesystem
-    cd || error "Leaving backup filesystem failed" "cd" ${E_DIR_CHANGE}
+    cd
 fi
 
 # Unmount filesystem
-umount "${MOUNT}/" || echo "Backup done, but un-mounting failed." >&2
+umount "${MOUNT}/" || exit 0
 
 exit 0
