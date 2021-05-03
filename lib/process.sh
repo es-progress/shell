@@ -38,3 +38,10 @@ proc-is-running(){
     fi
     pgrep -f "${*}" >/dev/null 2>&1
 }
+
+# Check if command exists
+# @param    $*  Command
+#########################
+command-exists() {
+    command -v "$@" >/dev/null 2>&1
+}
