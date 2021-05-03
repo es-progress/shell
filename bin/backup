@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###############################################
-## ESubuntu                                  ##
+## ES-Ubuntu                                 ##
 ##                                           ##
 ## backup                                    ##
 ##                                           ##
@@ -200,9 +200,11 @@ dest_dir="${dest_dir%/}"
 #########
 
 # Mount filesystem
+echo -n "Mounting backup filesystem..."
 if ! grep -qs "${mount_point}" /proc/mounts; then
     mount "${file_system}" "${mount_point}"
 fi
+print-finish
 
 # Init backup
 exclude=$(exc_build ${exclusion})
@@ -221,40 +223,52 @@ fi
 
 # Backup
 ########
+echo "Backing up files..."
 rsync -aAXHEh --info=stats1 --info=progress2 ${opt} ${exclude} "${source_dir}" "${target}"
+print-finish
 
 # Post backup steps
 ###################
 
-# Manage links for snapshot
+# Snapshot
 if [[ "${backup_mode}" == "snapshot" ]]; then
+
+    echo -n "Managing links for snapshots..."
     # Remove symlink to previous snapshot
     rm -f "${last}"
-
     # Create new symlink to latest snapshot for the next backup to hardlink
     ln -s "${target}" "${last}"
+    print-finish
 
-    # Delete expired archives
+    # Delete expired snapshots
     if [[ -n "${expire_date}" ]]; then
+        echo -n "Deleting expired snapshots..."
         date-action -dr --diff="${expire_date}" --format=${date_action_format} ${aim}/*
+        print-finish
     fi
 fi
 
-# Create archives
+# Archive
 if [[ "${backup_mode}" == "archive" ]]; then
     # Go to backup dir
     cd "${aim}"
 
     # Archive
+    echo -n "Compressing files..."
     tar_file="${archive_prefix}${now}.tar.gz"
     tar -I "pigz -1" --sort=name -cf "${archive_dir}/${tar_file}" "actual/"
+    print-finish
 
     # Test compression
+    echo -n "Testing compression..."
     pigz -t "${archive_dir}/${tar_file}"
+    print-finish
 
     # Delete expired archives
     if [[ -n "${expire_date}" ]]; then
+        echo -n "Deleting expired archives..."
         date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
+        print-finish
     fi
 
     # Leave backup filesystem
