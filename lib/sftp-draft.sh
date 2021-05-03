@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###############################
-## ESubuntu                  ##
+## ES-Ubuntu                 ##
 ##                           ##
 ## SFTP Functions Library    ##
 ##                           ##

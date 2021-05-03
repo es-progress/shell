@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #############################################
-## ESubuntu                                ##
+## ES-Ubuntu                               ##
 ##                                         ##
-## Date-action                             ##
+## date-action                             ##
 ##                                         ##
 ## Check filenames for date (time) tags    ##
 ## and perform some action on a selection. ##

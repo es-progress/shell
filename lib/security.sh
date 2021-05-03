@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 #######################################
-## ESubuntu                          ##
+## ES-Ubuntu                         ##
 ##                                   ##
 ## Security Functions Library        ##
 ##                                   ##
