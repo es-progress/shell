@@ -13,41 +13,32 @@
 ############
 
 # Formats
-GREP_24H="[0-9]{2}:[0-9]{2}:[0-9]{2}"
-GREP_YMD="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-GREP_FULL="[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}:[0-9]{2}:[0-9]{2}"
-SED_24H="[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}"
-SED_YMD="[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"
-SED_FULL="[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}_[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}"
-DATE_24H="%T"
-DATE_YMD="%F"
-DATE_FULL="%F_%T"
+regex_24H="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+regex_YMD="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+regex_FULL="[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}:[0-9]{2}:[0-9]{2}"
+date_format_24H="%T"
+date_format_YMD="%F"
+date_format_FULL="%F_%T"
 
 # Defaults
 mode="list"
 older=1
 directory=0
-f_grep="${GREP_YMD}"
-f_sed="${SED_YMD}"
-f_date="${DATE_YMD}"
+regex="${regex_YMD}"
+date_format="${date_format_YMD}"
 
 #############
 # FUNCTIONS #
 #############
 
-# Version info
-version() {
-    cat <<VERSION
-date-action v1.0
-Written by Sandor Semsey, Copyright(C) 2020
-License MIT https://choosealicense.com/licenses/mit/
-VERSION
-    exit 0
-}
-
-# Help
+# Usage
+#######
 usage() {
     cat <<HELP
+
+date-action v1.0.0
+Written by Sandor Semsey, Copyright(C) 2020, License MIT
+
 Usage: date-action [OPTIONS] [FILE...]
 
 Executes an action on files older/newer than a reference based on filenames
@@ -69,7 +60,6 @@ OPTIONS
                         for acceptable STRINGs see: 'man date'
 
     --debug             print commands as executed
--v, --version           print version information
 -h, --help              display this help
 
 HELP
@@ -80,7 +70,7 @@ HELP
 # PARSE OPTIONS #
 #################
 
-options=$(getopt -n date-action -o "rndvh" -l "remove,newer,directory,format:,diff:,debug,version,help" -- "$@")
+options=$(getopt -n date-action -o "rndh" -l "remove,newer,directory,format:,diff:,debug,help" -- "$@")
 [[ $? -ne 0 ]] && {
     echo "Try 'date-action --help' for more information"
     exit 1
@@ -102,14 +92,12 @@ while :; do
             shift
             case "${1}" in
                 24H)
-                    f_grep="${GREP_24H}"
-                    f_sed="${SED_24H}"
-                    f_date="${DATE_24H}"
+                    regex="${regex_24H}"
+                    date_format="${date_format_24H}"
                     ;;
                 FULL)
-                    f_grep="${GREP_FULL}"
-                    f_sed="${SED_FULL}"
-                    f_date="${DATE_FULL}"
+                    regex="${regex_FULL}"
+                    date_format="${date_format_FULL}"
                     ;;
             esac
             ;;
@@ -119,9 +107,6 @@ while :; do
             ;;
         --debug)
             set -x
-            ;;
-        -v | --version)
-            version
             ;;
         -h | --help)
             usage
@@ -138,14 +123,11 @@ done
 # SCRIPT START #
 ################
 
-# Exit on error
-set -e
-
-# Exit pipe on non-zero return value
-set -o pipefail
+# Strict mode minus IFS
+set -euo pipefail
 
 # Get reference date
-date_ref=$(date +${f_date} ${date_diff})
+date_ref=$(date +${date_format} ${date_diff})
 
 # Check if piped, get files from args or pipe
 [[ -p /dev/stdin ]] && files=$(cat) || files=${*}
@@ -154,10 +136,10 @@ date_ref=$(date +${f_date} ${date_diff})
 for file in ${files}; do
 
     # Check if file has date in name
-    if ! grep -Eqe "${f_grep}" <<<"${file}"; then continue; fi
+    if ! egrep -qe "${regex}" <<<"${file}"; then continue; fi
 
     # Parse date from filename
-    file_date=$(sed "s/.*\($f_sed\).*/\1/" <<<"${file}")
+    file_date=$(sed -r "s/.*($regex).*/\1/" <<<"${file}")
 
     # Check if older or newer than reference
     [[ ${file_date} < ${date_ref} ]] && file_older=1 || file_older=0
