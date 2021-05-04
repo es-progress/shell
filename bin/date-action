@@ -136,7 +136,7 @@ date_ref=$(date +${date_format} ${date_diff})
 for file in ${files}; do
 
     # Check if file has date in name
-    if ! egrep -qe "${regex}" <<<"${file}"; then continue; fi
+    if ! egrep -sq "${regex}" <<<"${file}"; then continue; fi
 
     # Parse date from filename
     file_date=$(sed -r "s/.*($regex).*/\1/" <<<"${file}")
