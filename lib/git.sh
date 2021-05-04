@@ -47,6 +47,12 @@ esgit-base(){
     git rebase -i "HEAD~${commits}"
 }
 
+# Show commits
+##############
+esgit-log(){
+    git --no-pager log --format="oneline"
+}
+
 # Statistics
 # Daily commits
 ###############
