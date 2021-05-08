@@ -18,11 +18,31 @@ implode() {
     echo "${*}"
 }
 
-# Read JSON from file
+# Read JSON file
 #
 # @param    $1  JSON File
 #########################
-json-read-file(){
+read-file-json(){
     local file="${1:?"File missing"}"
     jq -rcM '.[]' "${file}"
+}
+
+# Read config file
+#
+# @param    $1  Config File
+# @param    $2  Section (read only this section)
+################################################
+read-file-cfg(){
+    local file="${1:?"File missing"}"
+    local section="${2:-}"
+    local contents
+
+    # Remove blank lines, comments
+    contents=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${file}")
+
+    # If a section is supplied return just that
+    [[ -n "${section}" ]] && contents=$(sed -nr -e "/^\s*\[${section}\]/ , /^\s*\[.*\]/ p" <<<"${contents}")
+
+    # Delete section headers
+    sed -r -e '/^\s*\[/ d' <<<"${contents}"
 }

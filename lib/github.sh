@@ -106,7 +106,7 @@ gh-labels-add-multiple(){
     local repo="${2:?"Repo missing"}"
     local labels_file="${3:?"Labels file missing"}"
 
-    labels=$(json-read-file "${labels_file}")
+    labels=$(read-file-json "${labels_file}")
 
     local IFS=$'\n\t'
     for row in $labels; do
