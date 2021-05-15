@@ -23,7 +23,7 @@
 usage() {
     cat <<HELP
 
-Backup v1.0.0
+Backup v1.1.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
 Usage: backup REQUIRED_OPTIONS... [OPTIONS...]
@@ -58,6 +58,7 @@ OPTIONAL
     --prefix [STRING]          optional prefix on archive files
 
     --debug                    print commands as executed
+-v, --verbose                  verbose mode
 -h, --help                     display this help
 
 HELP
@@ -85,9 +86,6 @@ set -euo pipefail
 # Disable shell path expansion
 set -f
 
-# Import environment variables
-source "${PATH_ENV_VARS}"
-
 # Import library
 source "${PATH_SOURCER}"
 
@@ -103,6 +101,7 @@ archive_dir="archive"
 exclusion=""
 expire_date=""
 archive_prefix=""
+verbose=""
 
 while :; do
     case "${1:-}" in
@@ -172,6 +171,9 @@ while :; do
         --debug)
             set -x
             ;;
+        -v | --verbose)
+            verbose=1
+            ;;
         -h | --help)
             usage
             ;;
@@ -200,11 +202,11 @@ dest_dir="${dest_dir%/}"
 #########
 
 # Mount filesystem
-echo -n "Mounting backup filesystem..."
+[[ -n "${verbose}" ]] && echo -n "Mounting backup filesystem..."
 if ! grep -qs "${mount_point}" /proc/mounts; then
     mount "${file_system}" "${mount_point}"
 fi
-print-finish
+[[ -n "${verbose}" ]] && print-finish
 
 # Init backup
 exclude=$(exc_build ${exclusion})
@@ -221,11 +223,17 @@ else
     opt="--link-dest=${last}"
 fi
 
+# rsync report level
+if [[ -n "${verbose}" ]]; then
+    progress="--info=stats1 --info=progress2"
+else
+    progress="--quiet"
+fi
+
 # Backup
 ########
-echo "Backing up files..."
-rsync -aAXHEh --info=stats1 --info=progress2 ${opt} ${exclude} "${source_dir}" "${target}"
-print-finish
+[[ -n "${verbose}" ]] && echo "Backing up files..."
+rsync -aAXHEh ${progress} ${opt} ${exclude} "${source_dir}" "${target}"
 
 # Post backup steps
 ###################
@@ -233,18 +241,18 @@ print-finish
 # Snapshot
 if [[ "${backup_mode}" == "snapshot" ]]; then
 
-    echo -n "Managing links for snapshots..."
+    [[ -n "${verbose}" ]] && echo -n "Managing links for snapshots..."
     # Remove symlink to previous snapshot
     rm -f "${last}"
     # Create new symlink to latest snapshot for the next backup to hardlink
     ln -s "${target}" "${last}"
-    print-finish
+    [[ -n "${verbose}" ]] && print-finish
 
     # Delete expired snapshots
     if [[ -n "${expire_date}" ]]; then
-        echo -n "Deleting expired snapshots..."
+        [[ -n "${verbose}" ]] && echo -n "Deleting expired snapshots..."
         date-action -dr --diff="${expire_date}" --format=${date_action_format} ${aim}/*
-        print-finish
+        [[ -n "${verbose}" ]] && print-finish
     fi
 fi
 
@@ -254,26 +262,28 @@ if [[ "${backup_mode}" == "archive" ]]; then
     cd "${aim}"
 
     # Archive
-    echo -n "Compressing files..."
+    [[ -n "${verbose}" ]] && echo -n "Compressing files..."
     tar_file="${archive_prefix}${now}.tar.gz"
     tar -I "pigz -1" --sort=name -cf "${archive_dir}/${tar_file}" "actual/"
-    print-finish
+    [[ -n "${verbose}" ]] && print-finish
 
     # Test compression
-    echo -n "Testing compression..."
+    [[ -n "${verbose}" ]] && echo -n "Testing compression..."
     pigz -t "${archive_dir}/${tar_file}"
-    print-finish
+    [[ -n "${verbose}" ]] && print-finish
 
     # Delete expired archives
     if [[ -n "${expire_date}" ]]; then
-        echo -n "Deleting expired archives..."
+        [[ -n "${verbose}" ]] && echo -n "Deleting expired archives..."
         date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
-        print-finish
+        [[ -n "${verbose}" ]] && print-finish
     fi
 
     # Leave backup filesystem
     cd
 fi
+
+[[ -n "${verbose}" ]] && print-finish "Backup finished"
 
 # Unmount filesystem
 umount "${mount_point}/" || exit 0
