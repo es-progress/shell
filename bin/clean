@@ -1,53 +1,64 @@
 #!/usr/bin/env bash
-###################
-## ES-Ubuntu     ##
-##               ##
-## clean         ##
-##               ##
-## Clean-up      ##
-## Delete caches ##
-###################
+##############################
+## ES-Ubuntu                ##
+##                          ##
+## clean                    ##
+##                          ##
+## Remove unneeded packages ##
+## Remove old snaps         ##
+## Delete caches            ##
+##############################
 
 # Strict mode minus IFS
 set -euo pipefail
 
-# Import environment variables
-source "${PATH_ENV_VARS}"
-
 # Import library
 source "${PATH_SOURCER}"
 
-# Check if run as root
-check-root || exit 1
+# Parse options
+###############
 
-# Apt auto-remove
-print-status "APT auto-remove"
-apt autoremove --purge --yes
-print-finish
+# Verbose mode
+verbose=""
+# apt report level
+apt_report="-qq"
 
-# Apt auto-clean
-print-status "APT auto-clean"
-apt autoclean --yes
-print-finish
+if [[ "${1:-}" = "-v" ]] || [[ "${1:-}" = "--verbose" ]]; then
+    verbose=1
+    apt_report=""
+fi
+
+# apt
+#####
+
+# auto-remove
+[[ -n "${verbose}" ]] && print-status "APT auto-remove"
+sudo apt-get autoremove --purge --yes "${apt_report}"
+[[ -n "${verbose}" ]] && print-finish
 
 # Apt clean
-print-status "APT clean"
-apt clean --yes
-print-finish
+[[ -n "${verbose}" ]] && echo -n "APT clean..."
+sudo apt-get clean --yes "${apt_report}"
+[[ -n "${verbose}" ]] && print-finish
 
-# Removing old snaps
-print-status "Deleting old snaps"
+# snap
+######
+
+[[ -n "${verbose}" ]] && echo "Deleting old snaps..."
 while read -r snapname revision; do
-    snap remove "$snapname" --revision="$revision"
+    snaps=$(sudo snap remove "$snapname" --revision="$revision")
+    [[ -n "${verbose}" ]] && echo "${snaps}"
 done < <(snap list --all | awk '/disabled/{print $1, $3}')
-print-finish
+[[ -n "${verbose}" ]] && print-finish
 
-# Delete cache
-print-status "Deleting caches"
-rm -rf /var/cache/*
-rm -rf /var/lib/snapd/cache/*
-rm -rf ${HOME}/.cache/*
-rm -rf ${HOME}/.config/google-chrome/*
-print-finish
+# cache
+#######
+
+[[ -n "${verbose}" ]] && echo -n "Deleting caches..."
+sudo rm -rf /var/cache/*
+sudo rm -rf /var/lib/snapd/cache/*
+sudo rm -rf ~/.cache/*
+sudo rm -rf ~/.config/google-chrome/*
+[[ -n "${verbose}" ]] && print-finish
 
 exit 0
