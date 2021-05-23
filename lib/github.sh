@@ -147,3 +147,51 @@ gh-labels-delete-all(){
         gh-labels-delete "${owner}" "${repo}" "${label}"
     done
 }
+
+# List public SSH keys for user
+###############################
+gh-sshkeys-list(){
+    curl \
+        --silent -u "${GH_USER}:${GH_TOKEN}" \
+        --url https://api.github.com/user/keys | jq .[]
+}
+
+# Get public SSH key
+#
+# @param    $1  Title of key
+# @param    $2  Filter field (optional)
+#
+# @return   Value of filter field or all fields
+###############################################
+gh-sshkeys-get(){
+    local title="${1?:"Title missing"}"
+    local filter="${2:-}"
+    gh-sshkeys-list "${title}" | jq -r "select(.title == \"${title}\") | .${filter}"
+}
+
+# Delete public SSH key
+#
+# @param    $1  Key ID
+#######################
+gh-sshkeys-delete() {
+    local key_id="${1?:"Key ID missing"}"
+    curl \
+        --silent -u "${GH_USER}:${GH_TOKEN}" \
+        -X DELETE \
+        --url "https://api.github.com/user/keys/${key_id}"
+}
+
+# Create public SSH key
+#
+# @param    $1  Title of key
+# @param    $2  Public key
+############################
+gh-sshkeys-create() {
+    local title="${1?:"Title missing"}"
+    local key="${2?:"Key missing"}"
+    curl \
+        --silent -u "${GH_USER}:${GH_TOKEN}" \
+        -X POST \
+        -d "$(printf '{"title":"%s","key":"%s"}' "${title}" "${key}")" \
+        --url https://api.github.com/user/keys
+}
