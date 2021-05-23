@@ -33,8 +33,8 @@ gh-labels-get(){
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
-
-    curl --silent -u "${GH_USER}:${GH_TOKEN}" \
+    curl \
+        --silent -u "${GH_USER}:${GH_TOKEN}" \
         --url "https://api.github.com/repos/${owner}/${repo}/labels/${label}"
 }
 
@@ -61,7 +61,8 @@ gh-labels-list(){
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
 
-    curl --silent -u "${GH_USER}:${GH_TOKEN}" \
+    curl \
+        --silent -u "${GH_USER}:${GH_TOKEN}" \
         --url "https://api.github.com/repos/${owner}/${repo}/labels" | jq .
 }
 
@@ -82,16 +83,18 @@ gh-labels-add(){
 
     if gh-labels-exists "${owner}" "${repo}" "${name}"; then
         echo "Update ${name}"
-        curl --silent -u "${GH_USER}:${GH_TOKEN}" \
-          -X PATCH \
-          -d "${labels}" \
-          --url "https://api.github.com/repos/${owner}/${repo}/labels/${name}"
+        curl \
+            --silent -u "${GH_USER}:${GH_TOKEN}" \
+            -X PATCH \
+            -d "${labels}" \
+            --url "https://api.github.com/repos/${owner}/${repo}/labels/${name}"
     else
         echo "Create ${name}"
-        curl --silent -u "${GH_USER}:${GH_TOKEN}" \
-          -X POST \
-          -d "${labels}" \
-          --url "https://api.github.com/repos/${owner}/${repo}/labels"
+        curl \
+            --silent -u "${GH_USER}:${GH_TOKEN}" \
+            -X POST \
+            -d "${labels}" \
+            --url "https://api.github.com/repos/${owner}/${repo}/labels"
     fi
 }
 
@@ -107,7 +110,6 @@ gh-labels-add-multiple(){
     local labels_file="${3:?"Labels file missing"}"
 
     labels=$(read-file-json "${labels_file}")
-
     local IFS=$'\n\t'
     for row in $labels; do
         gh-labels-add "${owner}" "${repo}" "${row}"
@@ -124,8 +126,8 @@ gh-labels-delete(){
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
-    
-    curl --silent -u "${GH_USER}:${GH_TOKEN}" \
+    curl \
+        --silent -u "${GH_USER}:${GH_TOKEN}" \
         -X DELETE \
         --url "https://api.github.com/repos/${owner}/${repo}/labels/${label}"
 }
