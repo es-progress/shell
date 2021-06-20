@@ -17,24 +17,35 @@ _TXT_BLUE="\e[34m"
 _TXT_GREEN="\e[32m"
 _TXT_RED="\e[31m"
 _TXT_YELLOW="\e[33m"
-_TXT_STAT="${_TXT_BLUE}${_TXT_BOLD}"
-_TXT_ERR="${_TXT_RED}${_TXT_BOLD}"
-_TXT_OK="${_TXT_GREEN}${_TXT_BOLD}"
-_TXT_HEADER="${_TXT_YELLOW}${_TXT_BOLD}"
 
 #############
 # FUNCTIONS #
 #############
+
+# Print error message
+#
+# @param    $*  Message
+#######################
+print-error() {
+    echo -e "${_TXT_RED}${_TXT_BOLD}${*}${_TXT_NORM}"
+}
+
+# Print section header
+#
+# @param    $*  Message
+#######################
+print-section() {
+    echo
+    echo -e "${_TXT_BLUE}${_TXT_BOLD}${*}${_TXT_NORM}"
+}
 
 # Print header
 #
 # @param    $*  Message
 #######################
 print-header() {
-    if [[ -n "${*}" ]]; then
-        echo
-        echo -e "${_TXT_HEADER}${*}${_TXT_NORM}"
-    fi
+    echo
+    echo -e "${_TXT_YELLOW}${*}${_TXT_NORM}"
 }
 
 # Print status message
@@ -42,10 +53,7 @@ print-header() {
 # @param    $*  Message
 #######################
 print-status() {
-    if [[ -n "${*}" ]]; then
-        echo
-        echo -e "${_TXT_HEADER}Status:${_TXT_NORM} ${_TXT_STAT}${*}${_TXT_NORM}"
-    fi
+    echo -n -e "${_TXT_YELLOW}${*}${_TXT_NORM}"
 }
 
 # Print OK message
@@ -54,16 +62,7 @@ print-status() {
 # @default      Done
 #######################
 print-finish() {
-    echo -e "${_TXT_OK}${*:-"Done."}${_TXT_NORM}"
-}
-
-# Print error message
-#
-# @param    $*  Message
-# @default      Error
-#######################
-print-error() {
-    echo -e "${_TXT_ERR}${*:-"Error."}${_TXT_NORM}" >&2
+    echo -e "${_TXT_GREEN}${_TXT_BOLD}${*:-"Done."}${_TXT_NORM}"
 }
 
 # Script running time
