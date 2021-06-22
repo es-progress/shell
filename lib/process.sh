@@ -9,20 +9,34 @@
 
 # Run command in each sub directory
 #
-# @param    $1  Command to run
-# @default      `ls`
-# @param    $2  Parent directory
-# @default      Current dir
+# @param    $*  Command to run
+# @default  ls
 ###################################
 foreach-subdir(){
-    local command="${1:-ls}"
-    local subdirs=$(ls -1 -d  -- ${2:-}*/)
-
-    for dir in ${subdirs[*]}; do
+    for dir in *; do
+        [[ -d "${dir}" ]] || continue
         print-header "${dir}"
         (
             cd "${dir}" || return 1
-            $command
+            ${*:-ls}
+        )
+    done
+}
+
+# Run command in each sub directory
+#
+# @param    $1  Command to run
+# @param    $2  Command to pipe to
+###################################
+foreach-subdir-pipe(){
+    local command="${1?:"Command missing"}"
+    local pipe="${2?:"Pipe command missing"}"
+    for dir in *; do
+        [[ -d "${dir}" ]] || continue
+        print-header "${dir}"
+        (
+            cd "${dir}" || return 1
+            ${command} | ${pipe}
         )
     done
 }
