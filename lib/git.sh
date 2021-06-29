@@ -47,6 +47,13 @@ esgit-base(){
     git rebase -i "HEAD~${commits}"
 }
 
+# Pull main branch
+##################
+esgit-pull(){
+    git checkout main
+    git pull origin main
+}
+
 # Show commits
 ##############
 esgit-log(){
