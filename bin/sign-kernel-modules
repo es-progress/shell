@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#####################################################################
+## ES-Ubuntu                                                       ##
+##                                                                 ##
+## Sign kernel modules                                             ##
+##                                                                 ##
+## This needs a MOK key and ceertificate                           ##
+## And this key needs to be enrolled in EFI                        ##
+## $ mokutil --import <PRIVATE_KEY>                                ##
+##                                                                 ##
+## @see                                                            ##
+## https://stegard.net/2016/10/virtualbox-secure-boot-ubuntu-fail/ ##
+#####################################################################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Import library
+source "${PATH_SOURCER}"
+
+module="${1?:"Kernel module missing"}"
+priv_key="${2?:"MOK private key missing"}"
+cert_key="${3?:"MOK certificate missing"}"
+
+for modfile in $(dirname $(modinfo -n "${module}"))/*.ko; do
+    echo "Signing ${modfile}"
+    sudo "/usr/src/linux-headers-$(uname -r)/scripts/sign-file" sha256 "${priv_key}" "${cert_key}" "${modfile}"
+done
+
+exit 0
