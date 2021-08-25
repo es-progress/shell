@@ -49,13 +49,9 @@ check_tomb_open() {
 # Open vault
 ############
 vault_open() {
-    # Check if already opened
     if ! check_tomb_open; then
-
-        # Open vault
         pass open -f --timer=${timer}
 
-        # Check if open was successful
         if ! check_tomb_open; then
             echo "Tomb could not be opened." >&2
             exit 1
@@ -66,13 +62,9 @@ vault_open() {
 # Close vault
 #############
 vault_close() {
-    # Check if already closed
     if check_tomb_open; then
-
-        # Close vault
         pass close
 
-        # Check if close was successful
         if check_tomb_open; then
             echo "Tomb could not be closed." >&2
             exit 1
@@ -83,10 +75,7 @@ vault_close() {
 # Generate new password
 #######################
 vault_generate() {
-    # Open tomb if necessary
     vault_open
-
-    # Generate temp password
     pass generate -f a_temp
 }
 
@@ -99,10 +88,7 @@ vault_retrieve() {
     local path="${1?:"Path to password missing"}"
     local args="${2:-}"
 
-    # Open tomb if necessary
     vault_open
-
-    # Get pass
     pass ${args} "${path}"
 }
 
@@ -115,11 +101,9 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Parse options
-###############
 action="${1:-}"
 pass_path="${2:-}"
 args="${3:-}"
-
 [[ -z "${action}" ]] && echo "Action missing" && usage
 
 # Switch action
