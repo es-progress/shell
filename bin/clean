@@ -12,53 +12,22 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Import library
-source "${PATH_SOURCER}"
-
-# Parse options
-###############
-
-# Verbose mode
-verbose=""
-# apt report level
-apt_report="-qq"
-
-if [[ "${1:-}" = "-v" ]] || [[ "${1:-}" = "--verbose" ]]; then
-    verbose=1
-    apt_report=""
+if [[ $(id -u) -ne 0 ]]; then
+    echo "Run as root!"
+    exit 1
 fi
 
 # apt
-#####
-
-# auto-remove
-[[ -n "${verbose}" ]] && print-status "APT auto-remove"
-sudo apt-get autoremove --purge --yes "${apt_report}"
-[[ -n "${verbose}" ]] && print-finish
-
-# Apt clean
-[[ -n "${verbose}" ]] && echo -n "APT clean..."
-sudo apt-get clean --yes "${apt_report}"
-[[ -n "${verbose}" ]] && print-finish
+apt-get autoremove --purge --yes
+apt-get clean --yes
 
 # snap
-######
-
-[[ -n "${verbose}" ]] && echo "Deleting old snaps..."
 while read -r snapname revision; do
-    snaps=$(sudo snap remove "$snapname" --revision="$revision")
-    [[ -n "${verbose}" ]] && echo "${snaps}"
+    snap remove "$snapname" --revision="$revision"
 done < <(snap list --all | awk '/disabled/{print $1, $3}')
-[[ -n "${verbose}" ]] && print-finish
 
 # cache
-#######
-
-[[ -n "${verbose}" ]] && echo -n "Deleting caches..."
-sudo rm -rf /var/cache/*
-sudo rm -rf /var/lib/snapd/cache/*
-sudo rm -rf ~/.cache/*
-sudo rm -rf ~/.config/google-chrome/*
-[[ -n "${verbose}" ]] && print-finish
+rm -rf /var/cache/*
+rm -rf /var/lib/snapd/cache/*
 
 exit 0
