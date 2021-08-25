@@ -98,6 +98,7 @@ OPTIONS:
 -d, --disk
     --download
                        Run appropriate test. If no test specified, all will run.
+-s, --system           Run only a system check
 -r, --report           Save test report to file
     --report-prefix    Report file prefix, implies '-r'
 
@@ -340,6 +341,7 @@ tests=()
 # Parse options
 create_report=""
 report_file_prefix=""
+sys_check=""
 while :; do
     case "${1:-}" in
         -r | --report)
@@ -361,6 +363,9 @@ while :; do
             ;;
         --download)
             tests+=("download")
+            ;;
+        -s | --system)
+            sys_check=1
             ;;
         -h | --help)
             version
@@ -387,13 +392,15 @@ done
 [[ -z "${tests[*]}" ]] && tests=(cpu memory disk download)
 
 # Check for required commands
-required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
-for cmd in "${required_commands[@]}"; do
-    if ! command_exists "${cmd}"; then
-        echo "Missing dependency: ${cmd}"
-        exit 1
-    fi
-done
+if [[ -z "${sys_check}" ]]; then
+    required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
+    for cmd in "${required_commands[@]}"; do
+        if ! command_exists "${cmd}"; then
+            echo "Missing dependency: ${cmd}"
+            exit 1
+        fi
+    done
+fi
 
 # Get System info
 #################
@@ -424,6 +431,8 @@ disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,11 |
 sort | sed '/^loop/ d' | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
 
 print_sysinfo
+[[ -n "${sys_check}" ]] && exit 0
+
 echo "Start Benchmarking..."
 
 # Run Benchmarks
