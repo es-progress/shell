@@ -18,13 +18,19 @@
 # FUNCTIONS #
 #############
 
+# Version
+#########
+version(){
+    cat <<"VERSION"
+Backup v1.2.0
+Written by Sandor Semsey, Copyright(C) 2020, License MIT
+VERSION
+}
+
 # Usage
 #######
 usage() {
-    cat <<HELP
-
-Backup v1.1.0
-Written by Sandor Semsey, Copyright(C) 2020, License MIT
+    cat <<"HELP"
 
 Usage: backup REQUIRED_OPTIONS... [OPTIONS...]
 
@@ -41,7 +47,7 @@ REQUIRED
 
 OPTIONAL
 -a, --archive [DIR]            put archives in DIR
-    --expire [STRING]          deletes archives older than this date (eg. -2days) for STRING see $(man date)
+    --expire [STRING]          deletes archives older than this date (eg. -2days) for STRING see `man date`
 
     --format [FORMAT]          appends current date to archive filename
                                supported FORMATS:
@@ -58,11 +64,9 @@ OPTIONAL
     --prefix [STRING]          optional prefix on archive files
 
     --debug                    print commands as executed
--v, --verbose                  verbose mode
 -h, --help                     display this help
-
+-v, --version                  print version info
 HELP
-    exit 0
 }
 
 # Exclusion builder
@@ -86,10 +90,7 @@ set -euo pipefail
 # Disable shell path expansion
 set -f
 
-# Import library
 source "${PATH_SOURCER}"
-
-# Check if run as root
 check-root || exit 1
 
 # Parse options
@@ -101,7 +102,6 @@ archive_dir="archive"
 exclusion=""
 expire_date=""
 archive_prefix=""
-verbose=""
 
 while :; do
     case "${1:-}" in
@@ -171,23 +171,28 @@ while :; do
         --debug)
             set -x
             ;;
-        -v | --verbose)
-            verbose=1
-            ;;
         -h | --help)
+            version
             usage
+            exit 0
+            ;;
+        -v | --version)
+            version
+            exit 0
+            ;;
+        "")
+            break
             ;;
         *)
-            break
+            echo "Not supported option: ${1}"
+            usage
+            exit 1
             ;;
     esac
     shift
 done
 
-# Validate options
-##################
-
-# Check required
+# Check required options
 : "${file_system:?'Filesystem missing'}"
 : "${mount_point:?'Mounting point missing'}"
 : "${source_dir:?'Source missing'}"
@@ -198,17 +203,12 @@ file_system="${file_system%/}"
 mount_point="${mount_point%/}"
 dest_dir="${dest_dir%/}"
 
-# Prepare
-#########
-
-# Mount filesystem
-[[ -n "${verbose}" ]] && echo -n "Mounting backup filesystem..."
 if ! grep -qs "${mount_point}" /proc/mounts; then
+    print-status "Mounting backup filesystem..."
     mount "${file_system}" "${mount_point}"
+    print-finish
 fi
-[[ -n "${verbose}" ]] && print-finish
 
-# Init backup
 exclude=$(exc_build ${exclusion})
 now=$(date "+${date_format}")
 aim="${mount_point}/${dest_dir}"
@@ -223,69 +223,55 @@ else
     opt="--link-dest=${last}"
 fi
 
-# rsync report level
-if [[ -n "${verbose}" ]]; then
-    progress="--info=stats1 --info=progress2"
-else
-    progress="--quiet"
-fi
-
-# Backup
-########
-[[ -n "${verbose}" ]] && echo "Backing up files..."
-rsync -aAXHEh ${progress} ${opt} ${exclude} "${source_dir}" "${target}"
+print-header "Backing up files..."
+rsync -aAXHEh --info=stats1 --info=progress2 ${opt} ${exclude} "${source_dir}" "${target}"
 
 # Post backup steps
-###################
+case "${backup_mode}" in
+    "snapshot")
+        print-status "Managing links for snapshots..."
+        # Remove symlink to previous snapshot
+        rm -f "${last}"
+        # Create new symlink to latest snapshot for the next backup to hardlink
+        ln -s "${target}" "${last}"
+        print-finish
 
-# Snapshot
-if [[ "${backup_mode}" == "snapshot" ]]; then
+        if [[ -n "${expire_date}" ]]; then
+            print-status "Deleting expired snapshots..."
+            date-action -dr --diff="${expire_date}" --format=${date_action_format} ${aim}/*
+            print-finish
+        fi
+        ;;
+    "archive")
+        old_dir=$(pwd)
+        cd "${aim}"
 
-    [[ -n "${verbose}" ]] && echo -n "Managing links for snapshots..."
-    # Remove symlink to previous snapshot
-    rm -f "${last}"
-    # Create new symlink to latest snapshot for the next backup to hardlink
-    ln -s "${target}" "${last}"
-    [[ -n "${verbose}" ]] && print-finish
+        echo -n "Compressing files..."
+        tar_file="${archive_prefix}${now}.tar.gz"
+        tar -I "pigz -1" --sort=name -cf "${archive_dir}/${tar_file}" "actual/"
+        print-finish
 
-    # Delete expired snapshots
-    if [[ -n "${expire_date}" ]]; then
-        [[ -n "${verbose}" ]] && echo -n "Deleting expired snapshots..."
-        date-action -dr --diff="${expire_date}" --format=${date_action_format} ${aim}/*
-        [[ -n "${verbose}" ]] && print-finish
-    fi
-fi
+        echo -n "Testing compression..."
+        pigz -t "${archive_dir}/${tar_file}"
+        print-finish
 
-# Archive
-if [[ "${backup_mode}" == "archive" ]]; then
-    # Go to backup dir
-    cd "${aim}"
+        if [[ -n "${expire_date}" ]]; then
+            echo -n "Deleting expired archives..."
+            date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
+            print-finish
+        fi
 
-    # Archive
-    [[ -n "${verbose}" ]] && echo -n "Compressing files..."
-    tar_file="${archive_prefix}${now}.tar.gz"
-    tar -I "pigz -1" --sort=name -cf "${archive_dir}/${tar_file}" "actual/"
-    [[ -n "${verbose}" ]] && print-finish
-
-    # Test compression
-    [[ -n "${verbose}" ]] && echo -n "Testing compression..."
-    pigz -t "${archive_dir}/${tar_file}"
-    [[ -n "${verbose}" ]] && print-finish
-
-    # Delete expired archives
-    if [[ -n "${expire_date}" ]]; then
-        [[ -n "${verbose}" ]] && echo -n "Deleting expired archives..."
-        date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
-        [[ -n "${verbose}" ]] && print-finish
-    fi
-
-    # Leave backup filesystem
-    cd
-fi
-
-[[ -n "${verbose}" ]] && print-finish "Backup finished"
+        cd "${old_dir}"
+        ;;
+esac
 
 # Unmount filesystem
-umount "${mount_point}/" || exit 0
+if grep -qs "${mount_point}" /etc/mtab; then
+    print-status "Unmounting backup filesystem..."
+    umount "${mount_point}"
+    print-finish
+fi
+
+print-finish "Backup finished"
 
 exit 0
