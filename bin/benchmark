@@ -79,7 +79,7 @@ runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.b
 #########
 version(){
     cat <<EOF
-Benchmark v1.0.0
+Benchmark v1.0.1
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 EOF
 }
@@ -103,6 +103,7 @@ OPTIONS:
     --report-prefix    Report file prefix, implies '-r'
 
 -h, --help             Display this help
+-v, --version          Print version
 EOF
     exit 0
 }
@@ -222,7 +223,6 @@ Model : ${cpu_model}
 Cores :  ${cpu_cores}
 MHz   : ${cpu_freq}
 Cache : ${cpu_cache}
-TLB   : ${cpu_TLB}
 
                         Memory
 ********************************************************
@@ -411,7 +411,6 @@ cpu_vendor=$(grep -m 1 "vendor_id" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_freq=$(grep -m 1 "cpu MHz" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_cache=$(grep -m 1 "cache size" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_cores=$(awk -F: '/model name/ {core++} END {print core}' <<<"${cpu_info}")
-cpu_TLB=$(grep -m 1 "TLB size" <<<"${cpu_info}" | cut -d ":" -f 2)
 
 # RAM info
 ram_info="$(free -h)"
