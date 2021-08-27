@@ -429,12 +429,20 @@ arch=$(grep -m 1 "Architecture" <<<"${host}" | cut -d ":" -f 2)
 disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,11 |
 sort | sed '/^loop/ d' | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
 
+# Sysinfo
 print_sysinfo
-[[ -n "${sys_check}" ]] && exit 0
-
-echo "Start Benchmarking..."
+if [[ -n "${sys_check}" ]]; then
+    if [[ -n "${create_report}" ]]; then
+        output_file="${report_file_prefix}${hostname}_$(date +"%F_%H_%M")"
+    else
+        output_file=/dev/null
+    fi
+    print_sysinfo > "${output_file}"
+    exit 0
+fi
 
 # Run Benchmarks
+echo "Start Benchmarking..."
 for type in "${tests[@]}"; do
     run_data="runs_${type}[@]"
 
