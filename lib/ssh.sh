@@ -7,6 +7,23 @@
 ## Helper functions for SSH ##
 ##############################
 
+# Unlock SSH key
+#
+# @param    $1  Path to SSH key
+# @param    $2  Path to password
+################################
+unlock-key() {
+    local key="${1?:"Path to SSH key missing"}"
+    local pass_path="${2?:"Path to password missing"}"
+
+    # Passphrase
+    password=$(pass-man retrieve "${pass_path}")
+    [[ "${?}" -gt 0 ]] && return 1
+
+    # Add key to ssh-agent
+    ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS="wrecho" ssh-add -t 6h "${key}" </dev/null
+}
+
 # Open SSH tunnel
 #
 # @param    $1  Args to SSH
