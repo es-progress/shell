@@ -4,7 +4,7 @@
 ##                                                                 ##
 ## Sign kernel modules                                             ##
 ##                                                                 ##
-## This needs a MOK key and ceertificate                           ##
+## This needs a MOK key and certificate                            ##
 ## And this key needs to be enrolled in EFI                        ##
 ## $ mokutil --import <PRIVATE_KEY>                                ##
 ##                                                                 ##
