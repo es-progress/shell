@@ -76,7 +76,7 @@ vault_close() {
 #######################
 vault_generate() {
     vault_open
-    pass generate -f a_temp
+    pass generate -f aaa_tmp
 }
 
 # Get pass from vault
