@@ -56,6 +56,7 @@ esgit-base(){
 esgit-pull(){
     git checkout main
     git pull origin main
+    git submodule update --init
 }
 
 # Show commits
