@@ -18,14 +18,16 @@ esgit-merge(){
     local branch="${1?:"Source branch missing"}"
     local into="${2:-"main"}"
 
-    # Pull newest
-    git fetch "origin"
+    print-header "Pull remote changes for source branch"
+    git checkout "${branch}"
+    git pull origin "${branch}" || return 1
+    print-header "Pull remote changes for target branch"
     git checkout "${into}"
     git pull origin "${into}" || return 1
-    # Merge and push
+    print-header "Merge and push"
     git merge --no-ff "${branch}" || return 1
     git push "origin" "${into}" || return 1
-    # Delete branches
+    print-header "Delete branches"
     git branch -d "${branch}"
     git branch -d -r "origin/${branch}"
 }
