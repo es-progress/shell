@@ -46,16 +46,14 @@ foreach-subdir-pipe(){
 # @param    $1  Command name
 ###############################
 proc-is-running(){
-    if [[ $# -lt 1 ]]; then
-        echo "Missing command"
-        return 2
-    fi
-    pgrep -f "${*}" >/dev/null 2>&1
+    local command="${1?:"Command missing"}"
+    shift
+    pgrep -f "${@}" "${command}" >/dev/null 2>&1
 }
 
 # Check if command exists
-# @param    $*  Command
+# @param    $@  Command
 #########################
 command-exists() {
-    command -v "$@" >/dev/null 2>&1
+    command -v "${@}" >/dev/null 2>&1
 }

@@ -51,10 +51,8 @@ build-mkdocs(){
     local config_file="${1?:"mkdocs config file missing"}"
     local destination="${2?:"Build destination missing"}"
 
-    # Build doc
     mkdocs build -f "${config_file}" -d "${destination}"
 
-    # Set permissions
     chmod -R g-w,o-rwx "${destination}"
     chgrp -R www-data "${destination}"
 }

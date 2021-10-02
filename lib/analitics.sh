@@ -14,5 +14,6 @@
 ###################################
 anal-disk-usage(){
     local dir="${1:-"."}"
-    du "${dir}" -hd1 2>/dev/null | sort -h
+    shift
+    du "${dir}" -hd1 "${@}" 2>/dev/null | sort -h
 }

@@ -19,7 +19,6 @@ dir-file(){
         return 1
     fi
 
-    # cd in subshell
     base_dir="$(builtin cd "$(dirname "${file}")" >/dev/null 2>&1 && pwd)"
     echo "${base_dir}"
 }
@@ -49,9 +48,8 @@ dir-parents() {
     while :; do
         dir=${dir%/*}
         parents+=("${dir}")
-
         [[ -z "${dir}" ]] && break
     done
 
-    echo "${parents[*]}"
+    echo "${parents[@]}"
 }

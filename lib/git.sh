@@ -37,10 +37,8 @@ esgit-merge(){
 esgit-report(){
     print-header "Git status"
     git status || return 1
-
     print-header "Branches"
     git branch -a -l -vv
-
     print-header "Remotes"
     git remote -v
 }
@@ -54,17 +52,15 @@ esgit-base(){
 }
 
 # Pull main branch
-##################
+#
+# @param    $1  Branch
+# @default      main
+######################
 esgit-pull(){
-    git checkout main
-    git pull origin main
+    local branch="${1:-"main"}"
+    git checkout "${branch}" || return 1
+    git pull origin "${branch}" || return 1
     git submodule update --init
-}
-
-# Show commits
-##############
-esgit-log(){
-    git --no-pager log --format="oneline"
 }
 
 # Statistics
@@ -75,8 +71,7 @@ esgit-stat-daily(){
 
     echo "Commits | Hour of day"
     echo "--------+------------"
-    git \
-        --no-pager log \
+    git --no-pager log \
         --author="${user}" \
         --format="%ad" \
         --date="format:%H" \
@@ -93,8 +88,7 @@ esgit-stat-weekly(){
 
     echo "Commits | Weekday (1=Monday)"
     echo "--------+-------------------"
-    git \
-        --no-pager log \
+    git --no-pager log \
         --author="${user}" \
         --format="%ad" \
         --date="format:%u" \
@@ -111,8 +105,7 @@ esgit-stat-monthly(){
 
     echo "Commits | Day of month"
     echo "--------+-------------"
-    git \
-        --no-pager log \
+    git --no-pager log \
         --author="${user}" \
         --format="%ad" \
         --date="format:%d" \

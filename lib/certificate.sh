@@ -5,6 +5,7 @@
 ## Certificate Functions Library ##
 ##                               ##
 ## Managing certificates & keys  ##
+## Wrapper for openssl           ##
 ###################################
 
 # Create private key
@@ -13,12 +14,12 @@
 ########################
 cert-create-key(){
     local key="${1?:"Key path missing"}"
-    openssl \
-        genpkey \
+    shift
+    openssl genpkey \
         -aes-256-cbc \
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
-        -out "${key}"
+        -out "${key}" "${@}"
 }
 
 # Create self-signed certificate
@@ -33,8 +34,8 @@ cert-create-selfsigned(){
     local cert="${2?:"Certificate path missing"}"
     local validity="${3?:"Valid days missing"}"
     local subject="${4?:"Certificate subject missing"}"
-    openssl \
-        req \
+    shift 4
+    openssl req \
         -new \
         -x509 \
         -sha512 \
@@ -43,7 +44,7 @@ cert-create-selfsigned(){
         -key "${priv_key}" \
         -out "${cert}" \
         -days "${validity}" \
-        -subj "${subject}"
+        -subj "${subject}" "${@}"
 }
 
 # Create Certificate Signing Request (CSR)
@@ -56,15 +57,15 @@ cert-create-csr(){
     local priv_key="${1?:"Private key path missing"}"
     local csr="${2?:"CSR path missing"}"
     local subject="${3?:"CSR subject missing"}"
-    openssl \
-        req \
+    shift 3
+    openssl req \
         -new \
         -sha512 \
         -newkey rsa:4096 \
         -nodes \
         -keyout "${priv_key}" \
         -out "${csr}" \
-        -subj "${subject}"
+        -subj "${subject}" "${@}"
 }
 
 # Sign Certificate Signing Request (CSR)
@@ -81,6 +82,7 @@ cert-sign-csr(){
     local csr="${3?:"CSR path missing"}"
     local cert="${4?:"Certificate path missing"}"
     local validity="${5?:"Valid days missing"}"
+    shift 5
 
     local tmp_config=$(mktemp)
     cat <<EOF >>"${tmp_config}"
@@ -91,8 +93,7 @@ subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer
 EOF
 
-    openssl \
-        x509 \
+    openssl x509 \
         -req \
         -sha512 \
         -extfile "${tmp_config}" \
@@ -101,7 +102,7 @@ EOF
         -CAcreateserial \
         -in "${csr}" \
         -out "${cert}" \
-        -days "${validity}"
+        -days "${validity}" "${@}"
 }
 
 # Create site certificate
@@ -132,11 +133,11 @@ cert-create-certificate(){
 ########################
 cert-view-csr(){
     local csr="${1?:"CSR path missing"}"
-    openssl \
-        req \
+    shift
+    openssl req \
         -noout \
         -text \
-        -in "${csr}"
+        -in "${csr}" "${@}"
 }
 
 # Check Certificate
@@ -145,9 +146,9 @@ cert-view-csr(){
 #########################
 cert-view-cert(){
     local cert="${1?:"Certificate path missing"}"
-    openssl \
-        x509 \
+    shift
+    openssl x509 \
         -noout \
         -text \
-        -in "${cert}"
+        -in "${cert}" "${@}"
 }

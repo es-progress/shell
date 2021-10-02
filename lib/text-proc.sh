@@ -24,7 +24,8 @@ implode() {
 #########################
 read-file-json(){
     local file="${1:?"File missing"}"
-    jq -rcM '.[]' "${file}"
+    shift
+    jq -rcM "${@}" '.[]' "${file}"
 }
 
 # Read config file

@@ -26,21 +26,19 @@ unlock-key() {
 
 # Open SSH tunnel
 #
-# @param    $1  Args to SSH
+# @param    $@  Args to SSH
 ###########################
 ssh-tunnel-open(){
-    local args="${1?:"Arguments to SSH missing"}"
-
     # Check if already opened
-    if proc-is-running "ssh ${args}"; then
+    if proc-is-running "ssh ${*}"; then
         return 0
     fi
 
     # Open tunnel
-    ssh ${args}
+    ssh "${@}"
 
     # Check if successful
-    if ! proc-is-running "ssh ${args}"; then
+    if ! proc-is-running "ssh ${*}"; then
         echo "Failed to open tunnel"
         return 1
     fi
@@ -48,21 +46,19 @@ ssh-tunnel-open(){
 
 # Close SSH tunnel
 #
-# @param    $1  Args to SSH
+# @param    $@  Args to SSH
 ###########################
 ssh-tunnel-close(){
-    local args="${1?:"Arguments to SSH missing"}"
-
     # Check if already closed
-    if ! proc-is-running "ssh ${args}"; then
+    if ! proc-is-running "ssh ${*}"; then
         return 0
     fi
 
     # Close tunnel
-    pkill -f "ssh ${args}"
+    pkill -f "ssh ${*}"
 
     # Check if successful
-    if proc-is-running "ssh ${args}"; then
+    if proc-is-running "ssh ${*}"; then
         echo "Failed to close tunnel"
         return 1
     fi
@@ -76,7 +72,7 @@ ssh-tunnel-close(){
 socks5-tunnel-open(){
     local remote="${1?:"Remote missing"}"
     local port="${2?:"Local port missing"}"
-    ssh-tunnel-open "-fqN -D ${port} ${remote}"
+    ssh-tunnel-open -fqN -D "${port}" "${remote}"
 }
 
 # Close socks5 tunnel
@@ -87,7 +83,7 @@ socks5-tunnel-open(){
 socks5-tunnel-close(){
     local remote="${1?:"Remote missing"}"
     local port="${2?:"Local port missing"}"
-    ssh-tunnel-close "-fqN -D ${port} ${remote}"
+    ssh-tunnel-close -fqN -D "${port}" "${remote}"
 }
 
 # Create SSH key
@@ -98,8 +94,12 @@ socks5-tunnel-close(){
 ssh-create-key(){
     local key_name="${1?:"Key name missing"}"
     local comment="${2?:"Key comment missing"}"
-
-    ssh-keygen -t ed25519 -a 96 -C "${comment}" -f "${key_name}.key"
+    shift 2
+    ssh-keygen \
+        -t ed25519 \
+        -a 96 \
+        -C "${comment}" \
+        -f "${key_name}.key" "${@}"
 }
 
 # Sign a user key
@@ -119,14 +119,14 @@ ssh-sign-user(){
     local principals="${4?:"Principals missing"}"
     local serial="${5?:"Serial number missing"}"
     local pubkey_path="${6?:"User public key path missing"}"
-
+    shift 6
     ssh-keygen \
         -V "${validity}" \
         -s "${ca_key_path}" \
         -I "${identity}" \
         -n "${principals}" \
         -z "${serial}" \
-        -- "${pubkey_path}"
+        "${@}" -- "${pubkey_path}"
 }
 
 # View a certificate
@@ -135,5 +135,6 @@ ssh-sign-user(){
 ###################################
 ssh-view-cert(){
     local cert="${1?:"Certificate path missing"}"
-    ssh-keygen -L -f "${cert}"
+    shift
+    ssh-keygen -L -f "${cert}" "${@}"
 }

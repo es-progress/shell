@@ -111,7 +111,7 @@ EOF
 # Check if command exists
 #########################
 command_exists() {
-    command -v "$@" >/dev/null 2>&1
+    command -v "${@}" >/dev/null 2>&1
 }
 
 # Clean up after tests
