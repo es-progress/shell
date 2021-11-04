@@ -30,7 +30,7 @@ debug-dns-mail(){
 ##################################
 debug-tunnel-open(){
     local remote="${1?:"Remote missing"}"
-    ssh-tunnel-open "-fqN -R 9003:localhost:9003 ${remote}"
+    ssh-tunnel-open -fqN -R 9003:localhost:9003 "${remote}"
 }
 
 # Close SSH tunnel to remote XDebug
@@ -39,7 +39,7 @@ debug-tunnel-open(){
 ###################################
 debug-tunnel-close(){
     local remote="${1?:"Remote missing"}"
-    ssh-tunnel-close "-fqN -R 9003:localhost:9003 ${remote}"
+    ssh-tunnel-close -fqN -R 9003:localhost:9003 "${remote}"
 }
 
 # Build mkdocs site
