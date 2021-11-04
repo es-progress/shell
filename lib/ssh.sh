@@ -15,13 +15,12 @@
 unlock-key() {
     local key="${1?:"Path to SSH key missing"}"
     local pass_path="${2?:"Path to password missing"}"
-
-    # Passphrase
-    password=$(pass-man retrieve "${pass_path}")
-    [[ "${?}" -gt 0 ]] && return 1
+    local password=$(pass-man retrieve "${pass_path}")
 
     # Add key to ssh-agent
-    ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS="wrecho" ssh-add -t 6h "${key}" </dev/null
+    if ! grep -qs "$(cat "${key}.pub")" <<<"$(ssh-add -L || return 0)"; then
+        ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS="wrecho" ssh-add -t 6h "${key}" </dev/null
+    fi
 }
 
 # Open SSH tunnel
