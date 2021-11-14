@@ -22,11 +22,12 @@ _E_ABORT=10
 # program with error code
 #
 # @param    $1  Error Message
+# @default      "fatal error"
 # @param    $2  Error code
 # @default      1
 ##############################
 error_exit(){
-    print-error "${1:-}"
+    print-error "${1:-"fatal error"}"
     exit "${2:-1}"
 }
 
