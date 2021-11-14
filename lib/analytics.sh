@@ -7,7 +7,7 @@
 ## Bash functions for statistics and analysis ##
 ################################################
 
-# Analize disk-usage
+# Analyze disk-usage
 #
 # @param    $1  Dir to check
 # @default      Current working dir

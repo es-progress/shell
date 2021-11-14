@@ -8,7 +8,7 @@
 ####################################
 
 # Merge source branch into main and push
-# Then delete local and remote tracking branch
+# then delete local and remote tracking branch
 #
 # @param    $1  Branch to be merged
 # @param    $2  Branch to merge into
