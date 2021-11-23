@@ -35,8 +35,13 @@ print-error() {
 # @param    $*  Message
 #######################
 print-section() {
+    local msg="${*}"
     echo
-    echo -e "${_TXT_BLUE}${_TXT_BOLD}${*}${_TXT_NORM}"
+    echo -e "${_TXT_BLUE}${_TXT_BOLD}${msg}${_TXT_NORM}"
+    for ((i = 0 ; i < ${#msg} ; i++)); do
+        echo -ne "${_TXT_BLUE}${_TXT_BOLD}=${_TXT_NORM}"
+    done
+    echo
 }
 
 # Print header
