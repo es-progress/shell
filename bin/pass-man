@@ -86,10 +86,9 @@ vault_generate() {
 #########################################
 vault_retrieve() {
     local path="${1?:"Path to password missing"}"
-    local args="${2:-}"
-
+    shift
     vault_open
-    pass ${args} "${path}"
+    pass "${@}" "${path}"
 }
 
 ################
@@ -103,8 +102,12 @@ IFS=$'\n\t'
 # Parse options
 action="${1:-}"
 pass_path="${2:-}"
-args="${3:-}"
 [[ -z "${action}" ]] && echo "Action missing" && usage
+if [[ $# -ge 2 ]]; then
+    shift 2
+elif [[ $# -eq 1 ]]; then
+    shift
+fi
 
 # Switch action
 case "${action}" in
@@ -119,7 +122,7 @@ case "${action}" in
         ;;
     retrieve)
         [[ -z "${pass_path}" ]] && echo "Path to password missing" && usage
-        vault_retrieve "${pass_path}" "${args}"
+        vault_retrieve "${pass_path}" "${@}"
         ;;
     *)
         echo "Invalid action" && usage

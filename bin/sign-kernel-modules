@@ -25,7 +25,7 @@ module="${1?:"Kernel module missing"}"
 priv_key="${2?:"MOK private key missing"}"
 cert_key="${3?:"MOK certificate missing"}"
 
-for modfile in $(dirname $(modinfo -n "${module}"))/*.ko; do
+for modfile in "$(dirname "$(modinfo -n "${module}")")"/*.ko; do
     echo "Signing ${modfile}"
     "/usr/src/linux-headers-$(uname -r)/scripts/sign-file" sha256 "${priv_key}" "${cert_key}" "${modfile}"
 done
