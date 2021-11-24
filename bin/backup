@@ -69,26 +69,12 @@ OPTIONAL
 HELP
 }
 
-# Exclusion builder
-# @param    $*  Files to exclude
-################################
-exc_build() {
-    local exclusion=""
-    for ex in "$@"; do
-        exclusion="${exclusion}--exclude=${ex} "
-    done
-    echo ${exclusion}
-}
-
 ################
 # SCRIPT START #
 ################
 
 # Strict mode minus IFS
 set -euo pipefail
-
-# Disable shell path expansion
-set -f
 
 source "${PATH_SOURCER}"
 check-root || exit 1
@@ -99,7 +85,7 @@ date_format="%F"
 date_action_format="YMD"
 backup_mode="archive"
 archive_dir="archive"
-exclusion=""
+exclusion=()
 expire_date=""
 archive_prefix=""
 
@@ -127,7 +113,7 @@ while :; do
             ;;
         -x | --exclude)
             shift
-            exclusion="${1}"
+            exclusion=("${exclusion[@]}" "--exclude=${1}")
             ;;
         --expire)
             shift
@@ -209,22 +195,21 @@ if ! grep -qs "${mount_point}" /proc/mounts; then
     print-finish
 fi
 
-exclude=$(exc_build ${exclusion})
 now=$(date "+${date_format}")
 aim="${mount_point}/${dest_dir}"
 
 # Set targets, options
 if [[ "${backup_mode}" == "archive" ]] || [[ "$backup_mode" == "quick" ]]; then
     target="${aim}/actual"
-    opt="--delete --inplace"
+    opt=(--delete --inplace)
 else
     target="${aim}/${now}"
     last="${aim}/last"
-    opt="--link-dest=${last}"
+    opt=("--link-dest=${last}")
 fi
 
 print-header "Backing up files..."
-rsync -aAXHEh --info=stats1 --info=progress2 ${opt} ${exclude} "${source_dir}" "${target}"
+rsync -aAXHEh --info=stats1 --info=progress2 "${opt[@]}" "${exclusion[@]}" "${source_dir}" "${target}"
 
 # Post backup steps
 case "${backup_mode}" in
@@ -238,7 +223,7 @@ case "${backup_mode}" in
 
         if [[ -n "${expire_date}" ]]; then
             print-status "Deleting expired snapshots..."
-            date-action -dr --diff="${expire_date}" --format=${date_action_format} ${aim}/*
+            date-action -dr --diff="${expire_date}" --format=${date_action_format} "${aim}"/*
             print-finish
         fi
         ;;

@@ -143,20 +143,16 @@ cpu_app_test() {
 # Benchmark
 ###########
 run_benchmark() {
-    local params="--time=${test_run_time}"
+    local params=("--time=${test_run_time}")
 
     # Compile params
     case "${1}" in
         cpu)
-            params="${params} --threads=${2} --cpu-max-prime=${3} cpu"
-            ;;
+            params=("${params[@]}" "--threads=${2}" "--cpu-max-prime=${3}" cpu) ;;
         memory)
-            params="${params} --threads=${2} --memory-block-size=${3} --memory-total-size=${4} --memory-access-mode=${5} memory"
-            ;;
+            params=("${params[@]}" "--threads=${2}" "--memory-block-size=${3}" "--memory-total-size=${4}" "--memory-access-mode=${5}" memory) ;;
         disk)
-            params="${params} --threads=${2} --file-num=${3} --file-block-size=${4} --file-test-mode=${5} --file-fsync-all=${6} \
-                        --file-rw-ratio=${7} --file-total-size=${8} fileio"
-            ;;
+            params=("${params[@]}" "--threads=${2}" "--file-num=${3}" "--file-block-size=${4}" "--file-test-mode=${5}" "--file-fsync-all=${6}" "--file-rw-ratio=${7}" "--file-total-size=${8}" fileio) ;;
         download)
             curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${4}"
             return 0
@@ -164,9 +160,9 @@ run_benchmark() {
     esac
 
     # Run benchmark
-    [[ "${1}" == "disk" ]] && sysbench ${params} prepare
-    sysbench ${params} run
-    [[ "${1}" == "disk" ]] && sysbench ${params} cleanup
+    [[ "${1}" == "disk" ]] && sysbench "${params[@]}" prepare
+    sysbench "${params[@]}" run
+    [[ "${1}" == "disk" ]] && sysbench "${params[@]}" cleanup
 
     return 0
 }
@@ -459,7 +455,7 @@ for type in "${tests[@]}"; do
         IFS=";" read -r -a params <<<"${run_param}"
 
         echo "Running ${type^^} benchmark #$((i + 1))..."
-        results=$(run_benchmark "${type}" ${params[*]})
+        results=$(run_benchmark "${type}" "${params[@]}")
         summary[${selector}]=$(filter_results "${type}" "${results}")
 
         i=$((i + 1))
