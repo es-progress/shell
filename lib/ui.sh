@@ -11,12 +11,12 @@
 # FORMAT CODES #
 ################
 
-_TXT_NORM="\e[0m"
-_TXT_BOLD="\e[1m"
-_TXT_BLUE="\e[34m"
-_TXT_GREEN="\e[32m"
-_TXT_RED="\e[31m"
-_TXT_YELLOW="\e[33m"
+TXT_NORM=$(tput sgr0)
+TXT_BOLD=$(tput bold)
+TXT_RED=$(tput setaf 1)
+TXT_YELLOW=$(tput setaf 3)
+TXT_GREEN=$(tput setaf 2)
+TXT_BLUE=$(tput setaf 4)
 
 #############
 # FUNCTIONS #
@@ -27,7 +27,7 @@ _TXT_YELLOW="\e[33m"
 # @param    $*  Message
 #######################
 print-error() {
-    echo -e "${_TXT_RED}${_TXT_BOLD}${*}${_TXT_NORM}"
+    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}"
 }
 
 # Print section header
@@ -37,9 +37,9 @@ print-error() {
 print-section() {
     local msg="${*}"
     echo
-    echo -e "${_TXT_BLUE}${_TXT_BOLD}${msg}${_TXT_NORM}"
+    echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
     for ((i = 0 ; i < ${#msg} ; i++)); do
-        echo -ne "${_TXT_BLUE}${_TXT_BOLD}=${_TXT_NORM}"
+        echo -ne "${TXT_BLUE}${TXT_BOLD}=${TXT_NORM}"
     done
     echo
 }
@@ -50,7 +50,7 @@ print-section() {
 #######################
 print-header() {
     echo
-    echo -e "${_TXT_YELLOW}${*}${_TXT_NORM}"
+    echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
 # Print status message
@@ -58,7 +58,7 @@ print-header() {
 # @param    $*  Message
 #######################
 print-status() {
-    echo -n -e "${_TXT_YELLOW}${*}${_TXT_NORM}"
+    echo -n -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
 # Print OK message
@@ -67,7 +67,7 @@ print-status() {
 # @default      Done
 #######################
 print-finish() {
-    echo -e "${_TXT_GREEN}${_TXT_BOLD}${*:-"Done."}${_TXT_NORM}"
+    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-"Done."}${TXT_NORM}"
 }
 
 # Script running time
