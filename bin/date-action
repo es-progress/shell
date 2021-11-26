@@ -70,11 +70,10 @@ HELP
 # PARSE OPTIONS #
 #################
 
-options=$(getopt -n date-action -o "rndh" -l "remove,newer,directory,format:,diff:,debug,help" -- "$@")
-[[ $? -ne 0 ]] && {
+if ! options=$(getopt -n date-action -o "rndh" -l "remove,newer,directory,format:,diff:,debug,help" -- "$@"); then
     echo "Try 'date-action --help' for more information"
     exit 1
-}
+fi
 eval set -- "${options}"
 
 while :; do
