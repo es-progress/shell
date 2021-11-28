@@ -11,12 +11,12 @@
 # FORMAT CODES #
 ################
 
-TXT_NORM=$(tput sgr0)
-TXT_BOLD=$(tput bold)
-TXT_RED=$(tput setaf 1)
-TXT_YELLOW=$(tput setaf 3)
-TXT_GREEN=$(tput setaf 2)
-TXT_BLUE=$(tput setaf 4)
+TXT_NORM="\e[0m"
+TXT_BOLD="\e[1m"
+TXT_RED="\e[31m"
+TXT_YELLOW="\e[33m"
+TXT_GREEN="\e[32m"
+TXT_BLUE="\e[34m"
 
 #############
 # FUNCTIONS #
