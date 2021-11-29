@@ -15,7 +15,7 @@
 foreach-subdir(){
     for dir in *; do
         [[ -d "${dir}" ]] || continue
-        print-header "${dir}"
+        print-section "${dir}"
         (
             cd "${dir}" || return 1
             ${*:-ls}
@@ -33,7 +33,7 @@ foreach-subdir-pipe(){
     local pipe="${2?:"Pipe command missing"}"
     for dir in *; do
         [[ -d "${dir}" ]] || continue
-        print-header "${dir}"
+        print-section "${dir}"
         (
             cd "${dir}" || return 1
             ${command} | ${pipe}
