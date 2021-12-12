@@ -7,6 +7,26 @@
 ## Functions regarding processes ##
 ###################################
 
+# Check if run as root
+######################
+check-root() {
+    if [[ $(id -u) -ne 0 ]]; then
+        print-error "Run as root!"
+        return 1
+    fi
+    return 0
+}
+
+# Check if not run as root
+##########################
+check-not-root() {
+    if [[ $(id -u) -eq 0 ]]; then
+        print-error "Don't run as root!"
+        return 1
+    fi
+    return 0
+}
+
 # Run command in each sub directory
 #
 # @param    $*  Command to run
