@@ -27,7 +27,7 @@ TXT_BLUE="\e[34m"
 # @param    $*  Message
 #######################
 print-error() {
-    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}"
+    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
 }
 
 # Print section header
