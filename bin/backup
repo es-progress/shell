@@ -189,7 +189,7 @@ file_system="${file_system%/}"
 mount_point="${mount_point%/}"
 dest_dir="${dest_dir%/}"
 
-if ! grep -qs "${mount_point}" /proc/mounts; then
+if ! findmnt "${mount_point}" >/dev/null; then
     print-status "Mounting backup filesystem..."
     mount "${file_system}" "${mount_point}"
     print-finish
