@@ -199,7 +199,7 @@ now=$(date "+${date_format}")
 aim="${mount_point}/${dest_dir}"
 
 # Set targets, options
-if [[ "${backup_mode}" == "archive" ]] || [[ "$backup_mode" == "quick" ]]; then
+if [[ "${backup_mode}" == "archive" || "$backup_mode" == "quick" ]]; then
     target="${aim}/actual"
     opt=(--delete --inplace)
 else

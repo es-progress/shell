@@ -13,11 +13,13 @@ lib_dir="${DIR_SHELL_LIB:-}"
 # No env var --> fall back to default
 if [[ -z "${lib_dir}" ]]; then
     # Get sourcer script dir
-    base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+    path_self=$(realpath "${0}")
+    base_dir="$(cd "$(dirname "${path_self}")" >/dev/null 2>&1 && pwd)"
     lib_dir="${base_dir}/../lib"
 fi
 
 # Import lib files
-while read -r file; do
-    source "${lib_dir}/${file}"
-done < <(ls -1 "${lib_dir}")
+files=$(find "${lib_dir}" -type f)
+for file in ${files}; do
+    source "${file}"
+done
