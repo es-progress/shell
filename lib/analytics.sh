@@ -7,11 +7,11 @@
 ## Bash functions for statistics and analysis ##
 ################################################
 
-# Analyze disk-usage
-#
-# @param    $1  Dir to check
-# @default      Current working dir
-###################################
+## Analyze disk-usage
+##
+## @param    $1  Dir to check
+## @default      Current working dir
+####################################
 anal-disk-usage(){
     local dir="${1:-"."}"
     shift

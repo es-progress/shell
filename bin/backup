@@ -14,12 +14,12 @@
 ##   C) snapshot (rsync snapshot style)      ##
 ###############################################
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Version
-#########
+## Version
+##########
 version(){
     cat <<"VERSION"
 Backup v1.2.0
@@ -27,9 +27,9 @@ Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
 
-# Usage
-#######
-usage() {
+## Usage
+########
+usage(){
     cat <<"HELP"
 
 Usage: backup REQUIRED_OPTIONS... [OPTIONS...]
@@ -69,9 +69,9 @@ OPTIONAL
 HELP
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode minus IFS
 set -euo pipefail

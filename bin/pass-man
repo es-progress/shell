@@ -8,20 +8,20 @@
 ## which is inside a tomb.         ##
 #####################################
 
-##########
-# CONFIG #
-##########
+############
+## CONFIG ##
+############
 
 # Timer to close tomb automatically
 timer=6h
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Usage
-#######
-usage() {
+## Usage
+########
+usage(){
     cat <<HELP
 
 pass-man v0.9.1
@@ -36,9 +36,9 @@ HELP
     exit 1
 }
 
-# Check if tomb is opened
-#########################
-check_tomb_open() {
+## Check if tomb is opened
+##########################
+check_tomb_open(){
     if tomb list >/dev/null 2>&1; then
         return 0
     else
@@ -46,9 +46,9 @@ check_tomb_open() {
     fi
 }
 
-# Open vault
-############
-vault_open() {
+## Open vault
+#############
+vault_open(){
     if ! check_tomb_open; then
         pass open -f --timer=${timer}
 
@@ -59,9 +59,9 @@ vault_open() {
     fi
 }
 
-# Close vault
-#############
-vault_close() {
+## Close vault
+##############
+vault_close(){
     if check_tomb_open; then
         pass close
 
@@ -72,28 +72,28 @@ vault_close() {
     fi
 }
 
-# Generate new password
-#######################
-vault_generate() {
+## Generate new password
+########################
+vault_generate(){
     vault_open
     pass generate -f aaa_tmp
 }
 
-# Get pass from vault
-#
-# @param    $1  Path to password
-# @param    $2  Extra arguments to 'pass'
-#########################################
-vault_retrieve() {
+## Get pass from vault
+##
+## @param    $1  Path to password
+## @param    $2  Extra arguments to 'pass'
+##########################################
+vault_retrieve(){
     local path="${1?:"Path to password missing"}"
     shift
     vault_open
     pass "${@}" "${path}"
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -euo pipefail

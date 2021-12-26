@@ -7,9 +7,9 @@
 ## Bash functions to interact with user ##
 ##########################################
 
-################
-# FORMAT CODES #
-################
+##################
+## FORMAT CODES ##
+##################
 
 TXT_NORM="\e[0m"
 TXT_BOLD="\e[1m"
@@ -18,23 +18,23 @@ TXT_YELLOW="\e[33m"
 TXT_GREEN="\e[32m"
 TXT_BLUE="\e[34m"
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Print error message
-#
-# @param    $*  Message
-#######################
-print-error() {
+## Print error message
+##
+## @param    $*  Message
+########################
+print-error(){
     echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
 }
 
-# Print section header
-#
-# @param    $*  Message
-#######################
-print-section() {
+## Print section header
+##
+## @param    $*  Message
+########################
+print-section(){
     local msg="${*}"
     echo
     echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
@@ -44,35 +44,35 @@ print-section() {
     echo
 }
 
-# Print header
-#
-# @param    $*  Message
-#######################
-print-header() {
+## Print header
+##
+## @param    $*  Message
+########################
+print-header(){
     echo
     echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
-# Print status message
-#
-# @param    $*  Message
-#######################
-print-status() {
+## Print status message
+##
+## @param    $*  Message
+########################
+print-status(){
     echo -n -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
-# Print OK message
-#
-# @param    $*  Message
-# @default      Done
-#######################
-print-finish() {
+## Print OK message
+##
+## @param    $*  Message
+## @default      Done
+########################
+print-finish(){
     echo -e "${TXT_GREEN}${TXT_BOLD}${*:-"Done."}${TXT_NORM}"
 }
 
-# Script running time
-#####################
-print-run-time() {
+## Script running time
+######################
+print-run-time(){
     local sec min hour
 
     sec=${SECONDS}
@@ -85,15 +85,15 @@ print-run-time() {
     printf "%d hours %02d mins %02d secs\n" ${hour} ${min} ${sec}
 }
 
-# Ask for confirmation
-######################
-confirm() {
+## Ask for confirmation
+#######################
+confirm(){
     read -r -p "Are you sure? (y/n) "
     [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && return 0 || return 1
 }
 
-# Clear console screen
-######################
-cls() {
+## Clear console screen
+#######################
+cls(){
     printf "\033c"
 }

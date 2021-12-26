@@ -15,15 +15,15 @@
 ## in a single script.                  ##
 ##########################################
 
-########################
-# BENCHMARK PARAMETERS #
-########################
+############
+## CONFIG ##
+############
 
 # Individual benchmark time limit (seconds)
 test_run_time=60
 
-# CPU
-#####
+## CPU
+######
 
 # Run parameters in semicolon limited string
 # Threads ; Max prime number
@@ -33,8 +33,8 @@ runs_cpu[1]="16;30000"
 # CPU test file size in MB
 cpu_test_file_size=50
 
-# Memory
-########
+## Memory
+#########
 
 # Run parameters in semicolon limited string
 # Threads ; Memory block size ; Memory total size ; Memory access mode
@@ -43,8 +43,8 @@ runs_memory[1]="16;4K;50G;rnd"
 runs_memory[2]="1;1M;100G;rnd"
 runs_memory[3]="1;1M;100G;seq"
 
-# Disk
-######
+## Disk
+#######
 
 # Run parameters in semicolon limited string
 # Threads ; Number of files ; Block size ; Test mode ; fsync after every request ; Read/write ratio ; Total files size
@@ -53,8 +53,8 @@ runs_disk[1]="16;64;64K;rndrw;off;3;4G"
 runs_disk[2]="1;1;1M;seqrd;off;3;4G"
 runs_disk[3]="1;1;1M;seqwr;off;3;4G"
 
-# Download Bandwidth
-####################
+## Download Bandwidth
+#####################
 
 # Run parameters in semicolon limited string
 # Name ; Location ; URL
@@ -71,12 +71,12 @@ runs_download[9]="Vultr;Los Angeles;https://lax-ca-us-ping.vultr.com/vultr.com.1
 runs_download[10]="Vultr;Tokyo;https://hnd-jp-ping.vultr.com/vultr.com.1000MB.bin"
 runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.bin"
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Version
-#########
+## Version
+##########
 version(){
     cat <<EOF
 Benchmark v1.0.1
@@ -84,9 +84,9 @@ Written by Sandor Semsey, Copyright(C) 2020, License MIT
 EOF
 }
 
-# Usage
-#######
-usage() {
+## Usage
+########
+usage(){
     cat <<EOF
 
 Usage: benchmark [OPTIONS]...
@@ -108,22 +108,22 @@ EOF
     exit 0
 }
 
-# Check if command exists
-#########################
-command_exists() {
+## Check if command exists
+##########################
+command_exists(){
     command -v "${@}" >/dev/null 2>&1
 }
 
-# Clean up after tests
-######################
-clean_up() {
+## Clean up after tests
+#######################
+clean_up(){
     rm -f test_file.*
     exit
 }
 
-# Test CPU with real use cases
-##############################
-cpu_app_test() {
+## Test CPU with real use cases
+###############################
+cpu_app_test(){
     local time_sha time_bzip time_aes
 
     dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
@@ -140,9 +140,9 @@ cpu_app_test() {
     rm -f "test_file.cpu"
 }
 
-# Benchmark
-###########
-run_benchmark() {
+## Benchmark
+############
+run_benchmark(){
     local params=("--time=${test_run_time}")
 
     # Compile params
@@ -164,12 +164,12 @@ run_benchmark() {
     return 0
 }
 
-# Filter benchmark results for summary
-#
-# @param    $1  Name of benchmark
-# @param    $2  Raw results
-######################################
-filter_results() {
+## Filter benchmark results for summary
+##
+## @param    $1  Name of benchmark
+## @param    $2  Raw results
+#######################################
+filter_results(){
     local filter
 
     # Set filter
@@ -195,9 +195,9 @@ filter_results() {
     sed -n "${filter}" <<<"${2}"
 }
 
-# Print test header with system info
-####################################
-print_sysinfo() {
+## Print test header with system info
+#####################################
+print_sysinfo(){
     cat <<EOF
 --------------------------------------------------------
  Benchmark v1.0.0
@@ -238,9 +238,9 @@ ${disks}
 EOF
 }
 
-# Print summary header
-######################
-print_summary_header() {
+## Print summary header
+#######################
+print_summary_header(){
     cat <<EOF
 ========================================================
                       TEST RESULTS
@@ -253,9 +253,9 @@ print_summary_header() {
 EOF
 }
 
-# Print summary
-###############
-print_summary() {
+## Print summary
+################
+print_summary(){
     local testname="${1}"
     run_data="runs_${testname}[@]"
 
@@ -318,9 +318,9 @@ print_summary() {
     fi
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode minus IFS
 set -euo pipefail
@@ -395,8 +395,8 @@ if [[ -z "${sys_check}" ]]; then
     done
 fi
 
-# Get System info
-#################
+## Get System info
+##################
 # CPU info
 cpu_info="$(cat /proc/cpuinfo)"
 cpu_model=$(grep -m 1 "model name" <<<"${cpu_info}" | cut -d ":" -f 2)
@@ -462,8 +462,8 @@ done
 echo "Benchmarking finished."
 echo
 
-# Summary
-#########
+## Summary
+##########
 
 # If we need to save report to file --> set filename
 # else: discard report (only output to terminal)

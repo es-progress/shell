@@ -7,10 +7,10 @@
 ## Bash functions involving paths ##
 ####################################
 
-# Get directory of a file
-#
-# @param    $1  File
-#########################
+## Get directory of a file
+##
+## @param    $1  File
+##########################
 dir-file(){
     local file="${1:?'File missing'}"
 
@@ -23,17 +23,17 @@ dir-file(){
     echo "${base_dir}"
 }
 
-# Get directory of running script
-#################################
+## Get directory of running script
+##################################
 dir-script(){
     dir-file "${BASH_SOURCE[0]}"
 }
 
-# Get all parent directory of a dir
-#
-# @param    $1  Directory
-###################################
-dir-parents() {
+## Get all parent directory of a dir
+##
+## @param    $1  Directory
+####################################
+dir-parents(){
     local dir="${1:?'Directory missing'}"
     local parents=()
 

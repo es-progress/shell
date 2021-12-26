@@ -8,9 +8,9 @@
 ## with different block sizes ##
 ################################
 
-##########
-# CONFIG #
-##########
+############
+## CONFIG ##
+############
 
 test_file_name="dd_test"
 block_sizes_small=(1k 2k 4k 8k 16k 32k)
@@ -20,22 +20,22 @@ block_count_small=262144
 block_count_medium=16384
 block_count_large=1024
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Clean up after tests
-######################
-clean_up() {
+## Clean up after tests
+#######################
+clean_up(){
     rm -f "${test_file_name}"
     exit
 }
 
-# Test 'dd' write speed
-#
-# @param    $1  Block size
-# @param    $2  Number of blocks to write
-#########################################
+## Test 'dd' write speed
+##
+## @param    $1  Block size
+## @param    $2  Number of blocks to write
+##########################################
 test_block_size(){
     local bs="${1?:"Block size missing"}"
     local count="${2?:"Number of blocks missing"}"
@@ -45,9 +45,9 @@ test_block_size(){
     echo
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -euo pipefail

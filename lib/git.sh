@@ -7,13 +7,13 @@
 ## Bash helper functions for git  ##
 ####################################
 
-# Merge source branch into main and push
-# then delete local and remote tracking branch
-#
-# @param    $1  Branch to be merged
-# @param    $2  Branch to merge into
-# @default      main
-##############################################
+## Merge source branch into main and push
+## then delete local and remote tracking branch
+##
+## @param    $1  Branch to be merged
+## @param    $2  Branch to merge into
+## @default      main
+###############################################
 esgit-merge(){
     local branch="${1?:"Source branch missing"}"
     local into="${2:-"main"}"
@@ -32,8 +32,8 @@ esgit-merge(){
     git branch -d -r "origin/${branch}"
 }
 
-# Check git repo status
-#######################
+## Check git repo status
+########################
 esgit-report(){
     print-header "Git status"
     git status || return 1
@@ -43,19 +43,19 @@ esgit-report(){
     git remote -v
 }
 
-# Interactive rebase
-# @param    $1  How many commits from HEAD
-##########################################
+## Interactive rebase
+## @param    $1  How many commits from HEAD
+###########################################
 esgit-base(){
     local commits="${1?:"Commits missing"}"
     git rebase -i "HEAD~${commits}"
 }
 
-# Pull main branch
-#
-# @param    $1  Branch
-# @default      main
-######################
+## Pull main branch
+##
+## @param    $1  Branch
+## @default      main
+#######################
 esgit-pull(){
     local branch="${1:-"main"}"
     git checkout "${branch}" || return 1
@@ -63,9 +63,9 @@ esgit-pull(){
     git submodule update --init
 }
 
-# Statistics
-# Daily commits
-###############
+## Statistics
+## Daily commits
+################
 esgit-stat-daily(){
     local user=$(git config --get --global user.name)
 
@@ -80,9 +80,9 @@ esgit-stat-daily(){
         | awk '{printf("%7s | %-12s\n",$1,$2)}'
 }
 
-# Statistics
-# Weekly commits
-################
+## Statistics
+## Weekly commits
+#################
 esgit-stat-weekly(){
     local user=$(git config --get --global user.name)
 
@@ -97,9 +97,9 @@ esgit-stat-weekly(){
         | awk '{printf("%7s | %-12s\n",$1,$2)}'
 }
 
-# Statistics
-# Monthly commits
-#################
+## Statistics
+## Monthly commits
+##################
 esgit-stat-monthly(){
     local user=$(git config --get --global user.name)
 

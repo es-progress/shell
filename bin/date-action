@@ -9,7 +9,7 @@
 #############################################
 
 ############
-# SETTINGS #
+## CONFIG ##
 ############
 
 # Formats
@@ -27,13 +27,13 @@ directory=0
 regex="${regex_YMD}"
 date_format="${date_format_YMD}"
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Usage
-#######
-usage() {
+## Usage
+########
+usage(){
     cat <<HELP
 
 date-action v1.0.0
@@ -66,9 +66,12 @@ HELP
     exit 0
 }
 
-#################
-# PARSE OPTIONS #
-#################
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode minus IFS
+set -euo pipefail
 
 if ! options=$(getopt -n date-action -o "rndh" -l "remove,newer,directory,format:,diff:,debug,help" -- "$@"); then
     echo "Try 'date-action --help' for more information"
@@ -117,13 +120,6 @@ while :; do
     esac
     shift
 done
-
-################
-# SCRIPT START #
-################
-
-# Strict mode minus IFS
-set -euo pipefail
 
 # Get reference date
 date_ref=$(date +${date_format} ${date_diff})

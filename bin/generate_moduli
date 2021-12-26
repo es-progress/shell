@@ -8,23 +8,23 @@
 ## Diffie-Hellman protocol ##
 #############################
 
-##########
-# CONFIG #
-##########
+############
+## CONFIG ##
+############
 
 bits_generate="4096 6144 7680 8192"
 tmp_file_prefix="DH_prime"
 results_file="DH_moduli"
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Generate primes for DH-GEX
-#
-# @param    $1  Lenght of primes in bits
-# @param    $2  Output file path
-########################################
+## Generate primes for DH-GEX
+##
+## @param    $1  Lenght of primes in bits
+## @param    $2  Output file path
+#########################################
 generate_DH_primes(){
     local bit="${1?:"Bit missing"}"
     local output_file="${2?:"Output file name missing"}"
@@ -34,9 +34,9 @@ generate_DH_primes(){
     ssh-keygen -M screen -f "${candidates}" -- "${output_file}"
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode minus IFS
 set -euo pipefail

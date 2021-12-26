@@ -7,32 +7,32 @@
 ## Bash functions for texts & strings ##
 ########################################
 
-# Join arguments by char
-#
-# @param    $1  Joining character
-# @param    $*  Items to join
-#################################
-implode() {
+## Join arguments by char
+##
+## @param    $1  Joining character
+## @param    $*  Items to join
+##################################
+implode(){
     local IFS="${1:?"Field separator missing"}"
     shift
     echo "${*}"
 }
 
-# Read JSON file
-#
-# @param    $1  JSON File
-#########################
+## Read JSON file
+##
+## @param    $1  JSON File
+##########################
 read-file-json(){
     local file="${1:?"File missing"}"
     shift
     jq -rcM "${@}" '.[]' "${file}"
 }
 
-# Read config file
-#
-# @param    $1  Config File
-# @param    $2  Section (read only this section)
-################################################
+## Read config file
+##
+## @param    $1  Config File
+## @param    $2  Section (read only this section)
+#################################################
 read-file-cfg(){
     local file="${1:?"File missing"}"
     local section="${2:-}"
