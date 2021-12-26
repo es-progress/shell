@@ -15,9 +15,9 @@
 ## in a single script.                  ##
 ##########################################
 
-########################
-# BENCHMARK PARAMETERS #
-########################
+############
+## CONFIG ##
+############
 
 # Individual benchmark time limit (seconds)
 test_run_time=60
@@ -71,9 +71,9 @@ runs_download[9]="Vultr;Los Angeles;https://lax-ca-us-ping.vultr.com/vultr.com.1
 runs_download[10]="Vultr;Tokyo;https://hnd-jp-ping.vultr.com/vultr.com.1000MB.bin"
 runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.bin"
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
 ## Version
 ##########
@@ -318,9 +318,9 @@ print_summary(){
     fi
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode minus IFS
 set -euo pipefail

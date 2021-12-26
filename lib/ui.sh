@@ -7,9 +7,9 @@
 ## Bash functions to interact with user ##
 ##########################################
 
-################
-# FORMAT CODES #
-################
+##################
+## FORMAT CODES ##
+##################
 
 TXT_NORM="\e[0m"
 TXT_BOLD="\e[1m"
@@ -18,9 +18,9 @@ TXT_YELLOW="\e[33m"
 TXT_GREEN="\e[32m"
 TXT_BLUE="\e[34m"
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
 ## Print error message
 ##

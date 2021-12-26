@@ -8,16 +8,16 @@
 ## which is inside a tomb.         ##
 #####################################
 
-##########
-# CONFIG #
-##########
+############
+## CONFIG ##
+############
 
 # Timer to close tomb automatically
 timer=6h
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
 ## Usage
 ########
@@ -91,9 +91,9 @@ vault_retrieve(){
     pass "${@}" "${path}"
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -euo pipefail

@@ -7,16 +7,16 @@
 ## Bash functions for error handling ##
 #######################################
 
-###############
-# ERROR CODES #
-###############
+#################
+## ERROR CODES ##
+#################
 
 # Aborted
 _E_ABORT=10
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
 ## Print error message and exit
 ## program with error code
