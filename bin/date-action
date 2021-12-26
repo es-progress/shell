@@ -31,9 +31,9 @@ date_format="${date_format_YMD}"
 # FUNCTIONS #
 #############
 
-# Usage
-#######
-usage() {
+## Usage
+########
+usage(){
     cat <<HELP
 
 date-action v1.0.0

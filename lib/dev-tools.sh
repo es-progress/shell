@@ -7,11 +7,11 @@
 ## Helper functions for dev ##
 ##############################
 
-# Retrieve Email related DNS records
-#
-# @param    $1  Domain
-# @param    $2  DKIM selector
-####################################
+## Retrieve Email related DNS records
+##
+## @param    $1  Domain
+## @param    $2  DKIM selector
+#####################################
 debug-dns-mail(){
     local domain="${1?:"Domain missing"}"
     local selector="${2?:"DKIM selector missing"}"
@@ -24,29 +24,29 @@ debug-dns-mail(){
     dig TXT "${selector}._domainkey.${domain}"
 }
 
-# Open SSH tunnel to remote XDebug
-#
-# @param    $1  Remote host
-##################################
+## Open SSH tunnel to remote XDebug
+##
+## @param    $1  Remote host
+###################################
 debug-tunnel-open(){
     local remote="${1?:"Remote missing"}"
     ssh-tunnel-open -fqN -R 9003:localhost:9003 "${remote}"
 }
 
-# Close SSH tunnel to remote XDebug
-#
-# @param    $1  Remote host
-###################################
+## Close SSH tunnel to remote XDebug
+##
+## @param    $1  Remote host
+####################################
 debug-tunnel-close(){
     local remote="${1?:"Remote missing"}"
     ssh-tunnel-close -fqN -R 9003:localhost:9003 "${remote}"
 }
 
-# Build mkdocs site
-#
-# @param    $1  mkdocs config file path
-# @param    $2  Build destination
-#######################################
+## Build mkdocs site
+##
+## @param    $1  mkdocs config file path
+## @param    $2  Build destination
+########################################
 build-mkdocs(){
     local config_file="${1?:"mkdocs config file missing"}"
     local destination="${2?:"Build destination missing"}"
@@ -57,10 +57,10 @@ build-mkdocs(){
     chgrp -R www-data "${destination}"
 }
 
-# Query ipstack for GeoIP data
-#
-# @param    $1  IP address
-##############################
+## Query ipstack for GeoIP data
+##
+## @param    $1  IP address
+###############################
 iplocation(){
     local ip="${1?:"IP address missing"}"
     curl -s -w"\n" "http://api.ipstack.com/${ip}?access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1" | jq
