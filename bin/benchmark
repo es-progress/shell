@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 ##########################################
-## ES-Ubuntu                            ##
-##                                      ##
 ## benchmark                            ##
 ##                                      ##
 ## A wrapper and runner for `sysbench`. ##

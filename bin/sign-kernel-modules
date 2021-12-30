@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #####################################################################
-## ES-Ubuntu                                                       ##
-##                                                                 ##
 ## Sign kernel modules                                             ##
 ##                                                                 ##
 ## This needs a MOK key and certificate                            ##

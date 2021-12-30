@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ##########################################
-## ES-Ubuntu                            ##
-##                                      ##
 ## UI Functions Library                 ##
 ##                                      ##
 ## Bash functions to interact with user ##

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 ################################
-## ES-Ubuntu                  ##
-##                            ##
 ## test_dd-write              ##
 ##                            ##
 ## Test 'dd' write speed      ##

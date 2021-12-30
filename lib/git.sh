@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ####################################
-## ES-Ubuntu                      ##
-##                                ##
 ## Git Functions Library          ##
 ##                                ##
 ## Bash helper functions for git  ##

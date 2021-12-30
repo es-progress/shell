@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ##############################
-## ES-Ubuntu                ##
-##                          ##
 ## Development Tools        ##
 ##                          ##
 ## Helper functions for dev ##

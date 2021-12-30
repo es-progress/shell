@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #############################
-## ES-Ubuntu               ##
-##                         ##
 ## generate_moduli         ##
 ##                         ##
 ## Regenerate moduli for   ##

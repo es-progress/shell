@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #####################################
-## ES-Ubuntu                       ##
-##                                 ##
 ## pass-man                        ##
 ##                                 ##
 ## Manages a 'pass' password-store ##

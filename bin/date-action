@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #############################################
-## ES-Ubuntu                               ##
-##                                         ##
 ## date-action                             ##
 ##                                         ##
 ## Check filenames for date (time) tags    ##

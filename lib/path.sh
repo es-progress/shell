@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ####################################
-## ES-Ubuntu                      ##
-##                                ##
 ## Path Functions Library         ##
 ##                                ##
 ## Bash functions involving paths ##
