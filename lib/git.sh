@@ -14,7 +14,7 @@
 ## @param    $2  Branch to merge into
 ## @default      main
 ###############################################
-esgit-merge(){
+ggit-merge(){
     local branch="${1?:"Source branch missing"}"
     local into="${2:-"main"}"
 
@@ -34,7 +34,7 @@ esgit-merge(){
 
 ## Check git repo status
 ########################
-esgit-report(){
+ggit-report(){
     print-header "Git status"
     git status || return 1
     print-header "Branches"
@@ -44,9 +44,10 @@ esgit-report(){
 }
 
 ## Interactive rebase
+##
 ## @param    $1  How many commits from HEAD
 ###########################################
-esgit-base(){
+ggit-base(){
     local commits="${1?:"Commits missing"}"
     git rebase -i "HEAD~${commits}"
 }
@@ -56,7 +57,7 @@ esgit-base(){
 ## @param    $1  Branch
 ## @default      main
 #######################
-esgit-pull(){
+ggit-pull(){
     local branch="${1:-"main"}"
     git checkout "${branch}" || return 1
     git pull origin "${branch}" || return 1
@@ -66,7 +67,7 @@ esgit-pull(){
 ## Statistics
 ## Daily commits
 ################
-esgit-stat-daily(){
+ggit-stat-daily(){
     local user=$(git config --get --global user.name)
 
     echo "Commits | Hour of day"
@@ -83,7 +84,7 @@ esgit-stat-daily(){
 ## Statistics
 ## Weekly commits
 #################
-esgit-stat-weekly(){
+ggit-stat-weekly(){
     local user=$(git config --get --global user.name)
 
     echo "Commits | Weekday (1=Monday)"
@@ -100,7 +101,7 @@ esgit-stat-weekly(){
 ## Statistics
 ## Monthly commits
 ##################
-esgit-stat-monthly(){
+ggit-stat-monthly(){
     local user=$(git config --get --global user.name)
 
     echo "Commits | Day of month"
