@@ -11,7 +11,6 @@
 ############
 ## CONFIG ##
 ############
-
 test_file_name="dd_test"
 block_sizes_small=(1k 2k 4k 8k 16k 32k)
 block_sizes_medium=(64k 128k 256k 512k)
@@ -67,7 +66,5 @@ done
 for bs in "${block_sizes_large[@]}"; do
     test_block_size "${bs}" "${block_count_large}"
 done
-
-clean_up
 
 exit 0
