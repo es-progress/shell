@@ -5,7 +5,7 @@
 ## benchmark                            ##
 ##                                      ##
 ## A wrapper and runner for `sysbench`. ##
-## You can desing multiple test runs    ##
+## You can design multiple test runs    ##
 ## with different test parameters,      ##
 ## so you can benchmark the system for: ##
 ##   - CPU                              ##
@@ -79,7 +79,7 @@ runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.b
 ##########
 version(){
     cat <<EOF
-Benchmark v1.0.1
+Benchmark v1.0.2
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 EOF
 }
@@ -109,6 +109,8 @@ EOF
 }
 
 ## Check if command exists
+##
+## @param    $1  Command
 ##########################
 command_exists(){
     command -v "${@}" >/dev/null 2>&1
@@ -132,21 +134,24 @@ cpu_app_test(){
     time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"test_file.cpu"; } 2>&1)
     time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"test_file.cpu"; } 2>&1)
 
-    # Print results
-    echo "SHA256-hashing:    ${time_sha}"
-    echo "bzip2-compressing: ${time_bzip}"
-    echo "AES-encrypting:    ${time_aes}"
+    printf "%-20s %s\n" "SHA256-hashing:" "${time_sha}"
+    printf "%-20s %s\n" "bzip2-compressing:" "${time_bzip}"
+    printf "%-20s %s\n" "AES-encrypting:" "${time_aes}"
 
     rm -f "test_file.cpu"
 }
 
 ## Benchmark
-############
+##
+## @param    $1  Type of benchmark
+## @param    $@  Params for benchmark
+#####################################
 run_benchmark(){
+    local type="${1?:"Benchmark type missing"}"
     local params=("--time=${test_run_time}")
 
     # Compile params
-    case "${1}" in
+    case "${type}" in
         cpu) params=("${params[@]}" "--threads=${2}" "--cpu-max-prime=${3}" cpu) ;;
         memory) params=("${params[@]}" "--threads=${2}" "--memory-block-size=${3}" "--memory-total-size=${4}" "--memory-access-mode=${5}" memory) ;;
         disk) params=("${params[@]}" "--threads=${2}" "--file-num=${3}" "--file-block-size=${4}" "--file-test-mode=${5}" "--file-fsync-all=${6}" "--file-rw-ratio=${7}" "--file-total-size=${8}" fileio) ;;
@@ -154,12 +159,16 @@ run_benchmark(){
             curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${4}"
             return 0
             ;;
+        *)
+            echo "Not supported type" >&2
+            return 1
+            ;;
     esac
 
     # Run benchmark
-    [[ "${1}" == "disk" ]] && sysbench "${params[@]}" prepare
+    [[ "${type}" == "disk" ]] && sysbench "${params[@]}" prepare
     sysbench "${params[@]}" run
-    [[ "${1}" == "disk" ]] && sysbench "${params[@]}" cleanup
+    [[ "${type}" == "disk" ]] && sysbench "${params[@]}" cleanup
 
     return 0
 }
@@ -170,29 +179,26 @@ run_benchmark(){
 ## @param    $2  Raw results
 #######################################
 filter_results(){
+    local type="${1?:"Benchmark type missing"}"
+    local raw="${2?:"Raw results missing"}"
     local filter
 
-    # Set filter
-    case "${1}" in
-        cpu_app)
-            filter='/^SHA256-hashing/ p; /^bzip2-compressing/ p; /^AES-encrypting/ p;'
-            ;;
-        cpu)
-            filter=' /^CPU speed:/,+1 p; /^Latency/,+3 p'
-            ;;
-        memory)
-            filter='/transferred/ p; /^Latency/,+3 p'
-            ;;
-        disk)
-            filter='/^Throughput/,+2 p; /^Latency/,+3 p'
-            ;;
+    case "${type}" in
+        cpu_app) filter='/^SHA256-hashing/ p; /^bzip2-compressing/ p; /^AES-encrypting/ p;' ;;
+        cpu) filter=' /^CPU speed:/,+1 p; /^Latency/,+3 p' ;;
+        memory) filter='/transferred/ p; /^Latency/,+3 p' ;;
+        disk) filter='/^Throughput/,+2 p; /^Latency/,+3 p' ;;
         download)
-            awk '{ printf "%d MBit/s\n", $0 * 8 / 1000 / 1000 } END { if (NR == 0) { print "error" } }' <<<"${2}"
+            awk '{ printf "%d MBit/s\n", $0 * 8 / 1000 / 1000 } END { if (NR == 0) { print "error" } }' <<<"${raw}"
             return 0
+            ;;
+        *)
+            echo "Not supported type" >&2
+            return 1
             ;;
     esac
 
-    sed -n "${filter}" <<<"${2}"
+    sed -n "${filter}" <<<"${raw}"
 }
 
 ## Print test header with system info
@@ -200,7 +206,7 @@ filter_results(){
 print_sysinfo(){
     cat <<EOF
 --------------------------------------------------------
- Benchmark v1.0.0
+ Benchmark v1.0.2
 
  ${hostname}
 --------------------------------------------------------
@@ -254,15 +260,15 @@ EOF
 }
 
 ## Print summary
-################
+##
+## @param    $1  Name of benchmark
+##################################
 print_summary(){
     local testname="${1}"
     run_data="runs_${testname}[@]"
 
     # Header
-    echo
-    echo "                        ${testname^^}                   "
-    echo "********************************************************"
+    printf "\n%30s\n********************************************************\n" "${testname^^}"
 
     # Parallel runs
     i=0
@@ -271,10 +277,7 @@ print_summary(){
         IFS=";" read -r -a params <<<"${run_param}"
 
         # Run header
-        echo
-        echo "Run #$((i + 1))"
-        echo "------"
-        echo
+        printf "\nRun #%d\n------\n\n" $((i + 1))
 
         # Print run parameters
         case "${testname}" in
@@ -309,12 +312,7 @@ print_summary(){
 
     # Print CPU application test results
     if [[ "${testname}" == "cpu" ]]; then
-        selector="cpu_app"
-        echo
-        echo "Application test"
-        echo "----------------"
-        echo
-        echo "${summary[${selector}]}"
+        printf "\nApplication test\n----------------\n\n%s\n" "${summary[cpu_app]}"
     fi
 }
 
@@ -322,14 +320,15 @@ print_summary(){
 ## SCRIPT START ##
 ##################
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 # Make sure test files are always deleted, even when the script is interrupted
 trap clean_up EXIT INT TERM
 
-declare -A summary
 tests=()
+declare -A summary
 
 # Parse options
 create_report=""
@@ -337,29 +336,17 @@ report_file_prefix=""
 sys_check=""
 while :; do
     case "${1:-}" in
-        -r | --report)
-            create_report=1
-            ;;
+        -r | --report) create_report=1 ;;
         --report-prefix)
             shift
             report_file_prefix="${1}"
             create_report=1
             ;;
-        -c | --cpu)
-            tests+=("cpu")
-            ;;
-        -m | --memory)
-            tests+=("memory")
-            ;;
-        -d | --disk)
-            tests+=("disk")
-            ;;
-        --download)
-            tests+=("download")
-            ;;
-        -s | --system)
-            sys_check=1
-            ;;
+        -c | --cpu) tests+=("cpu") ;;
+        -m | --memory) tests+=("memory") ;;
+        -d | --disk) tests+=("disk") ;;
+        --download) tests+=("download") ;;
+        -s | --system) sys_check=1 ;;
         -h | --help)
             version
             usage
@@ -369,11 +356,9 @@ while :; do
             version
             exit 0
             ;;
-        "")
-            break
-            ;;
+        "") break ;;
         *)
-            echo "Not supported option: ${1}"
+            echo "Not supported option: ${1}" >&2
             usage
             exit 1
             ;;
@@ -389,7 +374,7 @@ if [[ -z "${sys_check}" ]]; then
     required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
     for cmd in "${required_commands[@]}"; do
         if ! command_exists "${cmd}"; then
-            echo "Missing dependency: ${cmd}"
+            echo "Missing dependency: ${cmd}" >&2
             exit 1
         fi
     done
@@ -419,20 +404,19 @@ kernel=$(grep -m 1 "Kernel" <<<"${host}" | cut -d ":" -f 2)
 arch=$(grep -m 1 "Architecture" <<<"${host}" | cut -d ":" -f 2)
 
 # Disks
-disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,11 |
-sort | sed '/^loop/ d' | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
+disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,7,11 | sort | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
+
+# If we need to save report to file --> set filename
+# else: discard report (only output to terminal)
+if [[ -n "${create_report}" ]]; then
+    output_file="${report_file_prefix}${hostname}_$(date +"%F_%H_%M")"
+else
+    output_file=/dev/null
+fi
 
 # Sysinfo
-print_sysinfo
-if [[ -n "${sys_check}" ]]; then
-    if [[ -n "${create_report}" ]]; then
-        output_file="${report_file_prefix}${hostname}_$(date +"%F_%H_%M")"
-    else
-        output_file=/dev/null
-    fi
-    print_sysinfo > "${output_file}"
-    exit 0
-fi
+print_sysinfo | tee "${output_file}"
+[[ -n "${sys_check}" ]] && exit 0
 
 # Run Benchmarks
 echo "Start Benchmarking..."
@@ -464,16 +448,7 @@ echo
 
 ## Summary
 ##########
-
-# If we need to save report to file --> set filename
-# else: discard report (only output to terminal)
-if [[ -n "${create_report}" ]]; then
-    output_file="${report_file_prefix}${hostname}_$(date +"%F_%H_%M")"
-else
-    output_file=/dev/null
-fi
-
-print_summary_header | tee "${output_file}"
+print_summary_header | tee -a "${output_file}"
 
 for type in "${tests[@]}"; do
     print_summary "${type}" | tee -a "${output_file}"
