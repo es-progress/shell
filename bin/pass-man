@@ -11,7 +11,6 @@
 ############
 ## CONFIG ##
 ############
-
 # Timer to close tomb automatically
 timer=6h
 
@@ -24,7 +23,7 @@ timer=6h
 usage(){
     cat <<HELP
 
-pass-man v0.9.1
+pass-man v1.0.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
 Usage: vault ACTION [TARGET] [OPTIONS]
@@ -50,10 +49,10 @@ check_tomb_open(){
 #############
 vault_open(){
     if ! check_tomb_open; then
-        pass open -f --timer=${timer}
+        pass open -f --timer="${timer}"
 
         if ! check_tomb_open; then
-            echo "Tomb could not be opened." >&2
+            echo "Failed to open tomb." >&2
             exit 1
         fi
     fi
@@ -66,7 +65,7 @@ vault_close(){
         pass close
 
         if check_tomb_open; then
-            echo "Tomb could not be closed." >&2
+            echo "Failed to close tomb." >&2
             exit 1
         fi
     fi
@@ -82,7 +81,7 @@ vault_generate(){
 ## Get pass from vault
 ##
 ## @param    $1  Path to password
-## @param    $2  Extra arguments to 'pass'
+## @param    $@  Extra arguments to 'pass'
 ##########################################
 vault_retrieve(){
     local path="${1?:"Path to password missing"}"
@@ -102,7 +101,6 @@ IFS=$'\n\t'
 # Parse options
 action="${1:-}"
 pass_path="${2:-}"
-[[ -z "${action}" ]] && echo "Action missing" && usage
 if [[ $# -ge 2 ]]; then
     shift 2
 elif [[ $# -eq 1 ]]; then
@@ -111,22 +109,15 @@ fi
 
 # Switch action
 case "${action}" in
-    open)
-        vault_open
-        ;;
-    close)
-        vault_close
-        ;;
-    generate)
-        vault_generate
-        ;;
+    open) vault_open ;;
+    close) vault_close ;;
+    generate) vault_generate ;;
     retrieve)
-        [[ -z "${pass_path}" ]] && echo "Path to password missing" && usage
+        [[ -z "${pass_path}" ]] && echo "Path to password missing" >&2 && usage
         vault_retrieve "${pass_path}" "${@}"
         ;;
-    *)
-        echo "Invalid action" && usage
-        ;;
+    "") echo "Action missing" >&2 && usage ;;
+    *) echo "Invalid action" >&2 && usage ;;
 esac
 
 exit 0
