@@ -1,0 +1,54 @@
+###################
+## Docs          ##
+## mkdocs config ##
+###################
+---
+# General info
+site_name: Shell Library for ES-Progress
+site_url: https://shell.es-progress.hu
+site_author: Sandor Semsey
+copyright: Copyright © 2021 Sandor Semsey
+repo_url: https://github.com/es-progress/shell
+repo_name: es-progress/shell
+edit_uri: edit/main/docs/
+
+theme:
+    name: material
+    custom_dir: docs/theme
+    palette:
+        primary: cyan
+        accent: pink
+    language: en
+    favicon: terminal.png
+    icon:
+        logo: material/book
+    font:
+        text: Ubuntu
+        code: Ubuntu Mono
+
+markdown_extensions:
+    - toc:
+          permalink: "#"
+    - admonition
+    - codehilite
+    - pymdownx.superfences
+    - pymdownx.keys
+    - pymdownx.emoji:
+          emoji_index: !!python/name:pymdownx.emoji.gemoji
+    - pymdownx.tasklist:
+          clickable_checkbox: yes
+    - pymdownx.mark
+    - pymdownx.details
+    - attr_list
+
+plugins:
+    - search
+    - minify:
+          minify_html: true
+          htmlmin_opts:
+              remove_comments: true
+              remove_empty_space: true
+              reduce_boolean_attributes: true
+    - literate-nav:
+          nav_file: nav.md
+    - git-revision-date-localized
