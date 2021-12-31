@@ -14,6 +14,10 @@
 ## ssh-add SSH_KEY </dev/null                  ##
 #################################################
 
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
 # Echo special env variable
 echo "${ECHO_WRAP:-}"
 
