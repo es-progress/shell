@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ########################################
-## ES-Ubuntu                          ##
-##                                    ##
 ## Text-processsing Functions Library ##
 ##                                    ##
 ## Bash functions for texts & strings ##

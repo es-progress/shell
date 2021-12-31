@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 #######################################
-## ES-Ubuntu                         ##
-##                                   ##
 ## Error Functions Library           ##
 ##                                   ##
 ## Bash functions for error handling ##

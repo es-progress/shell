@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ###################################
-## ES-Ubuntu                     ##
-##                               ##
 ## Processes & running           ##
 ##                               ##
 ## Functions regarding processes ##

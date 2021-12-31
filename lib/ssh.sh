@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ##############################
-## ES-Ubuntu                ##
-##                          ##
 ## SSH Functions Library    ##
 ##                          ##
 ## Helper functions for SSH ##

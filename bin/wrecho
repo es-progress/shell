@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #################################################
-## ES-Ubuntu                                   ##
-##                                             ##
 ## echo wrapper                                ##
 ##                                             ##
 ## A wrapper for `echo`.                       ##
@@ -12,7 +10,7 @@
 ## Example:                                    ##
 ##                                             ##
 ## export ECHO_WRAP=password                   ##
-## export SSH_ASKPASS=/path/to/ECHO_WRAP       ##
+## export SSH_ASKPASS=/path/to/wrecho          ##
 ## ssh-add SSH_KEY </dev/null                  ##
 #################################################
 

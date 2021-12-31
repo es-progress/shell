@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ###################################
-## ES-Ubuntu                     ##
-##                               ##
 ## Certificate Functions Library ##
 ##                               ##
 ## Managing certificates & keys  ##

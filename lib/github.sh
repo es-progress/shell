@@ -1,7 +1,5 @@
 # shellcheck shell=bash
 ##################################
-## ES-Ubuntu                    ##
-##                              ##
 ## GitHub REST API Library      ##
 ##                              ##
 ## Interact with the GitHub API ##

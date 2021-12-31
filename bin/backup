@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 ###############################################
-## ES-Ubuntu                                 ##
-##                                           ##
 ## backup                                    ##
 ##                                           ##
 ## A wrapper for `rsync`.                    ##
@@ -22,7 +20,7 @@
 ##########
 version(){
     cat <<"VERSION"
-Backup v1.2.0
+Backup v1.2.1
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -231,17 +229,17 @@ case "${backup_mode}" in
         old_dir=$(pwd)
         cd "${aim}"
 
-        echo -n "Compressing files..."
+        print-status "Compressing files..."
         tar_file="${archive_prefix}${now}.tar.gz"
         tar -I "pigz -1" --sort=name -cf "${archive_dir}/${tar_file}" "actual/"
         print-finish
 
-        echo -n "Testing compression..."
+        print-status "Testing compression..."
         pigz -t "${archive_dir}/${tar_file}"
         print-finish
 
         if [[ -n "${expire_date}" ]]; then
-            echo -n "Deleting expired archives..."
+            print-status "Deleting expired archives..."
             date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
             print-finish
         fi

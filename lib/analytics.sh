@@ -1,8 +1,6 @@
 # shellcheck shell=bash
 ################################################
-## ES-Ubuntu                                  ##
-##                                            ##
-## Analitics Functions Library                ##
+## Analytics Functions Library                ##
 ##                                            ##
 ## Bash functions for statistics and analysis ##
 ################################################
