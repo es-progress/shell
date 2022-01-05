@@ -20,7 +20,7 @@
 ##########
 version(){
     cat <<"VERSION"
-Backup v1.2.1
+Backup v1.2.2
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -249,7 +249,7 @@ case "${backup_mode}" in
 esac
 
 # Unmount filesystem
-if grep -qs "${mount_point}" /etc/mtab; then
+if findmnt "${mount_point}" >/dev/null; then
     print-status "Unmounting backup filesystem..."
     umount "${mount_point}"
     print-finish
