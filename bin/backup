@@ -20,7 +20,7 @@
 ##########
 version(){
     cat <<"VERSION"
-Backup v1.2.4
+Backup v1.3.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -67,8 +67,9 @@ HELP
 ## SCRIPT START ##
 ##################
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 source "${PATH_SOURCER}"
 check-root || exit 1
@@ -214,25 +215,24 @@ case "${backup_mode}" in
         fi
         ;;
     "archive")
-        old_dir=$(pwd)
-        cd "${aim}"
+        if [[ ! -e "${destination}/${archive_dir}" ]]; then
+            print-status "Create archive dir..."
+            mkdir -p "${destination}/${archive_dir}"
+            print-finish
+        fi
 
         print-status "Compress files..."
-        tar_file="${archive_prefix}${now}.tar.gz"
-        tar -I "pigz -1" --sort=name -cf "${archive_dir}/${tar_file}" "actual/"
-        print-finish
-
-        print-status "Testing compression..."
-        pigz -t "${archive_dir}/${tar_file}"
+        tar -C "${destination}" -I "pigz --fast" --sort=name -cf "${destination}/${archive_dir}/${archive_prefix}${now}.tar.gz" "actual/"
         print-finish
 
         if [[ -n "${expire_date}" ]]; then
             print-status "Delete expired archives..."
+            old_dir=$(pwd)
+            cd "${destination}"
             date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
             print-finish
+            cd "${old_dir}"
         fi
-
-        cd "${old_dir}"
         ;;
 esac
 
