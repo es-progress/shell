@@ -20,7 +20,7 @@
 ##########
 version(){
     cat <<"VERSION"
-Backup v1.2.3
+Backup v1.2.4
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -44,7 +44,7 @@ REQUIRED
 -m, --mount [DIR]              mounting point for given filesystem
 
 OPTIONAL
--a, --archive [DIR]            put archives in DIR
+-a, --archive [DIR]            put archives in DIR, defaults to 'archive'
     --expire [STRING]          deletes archives older than this date (eg. -2days) for STRING see `man date`
     --format [FORMAT]          appends current date to archive filename
                                supported FORMATS:
@@ -91,15 +91,16 @@ while :; do
             ;;
         -d | --destination)
             shift
-            dest_dir="${1}"
+            # Remove trailing slash
+            dest_dir="${1%/}"
             ;;
         -f | --filesystem)
             shift
-            file_system="${1}"
+            file_system="${1%/}"
             ;;
         -m | --mount)
             shift
-            mount_point="${1}"
+            mount_point="${1%/}"
             ;;
         -a | --archive)
             shift
@@ -168,11 +169,6 @@ done
 : "${source_dir:?'Source missing'}"
 : "${dest_dir:?'Destination missing'}"
 
-# Remove trailing slash
-file_system="${file_system%/}"
-mount_point="${mount_point%/}"
-dest_dir="${dest_dir%/}"
-
 if ! findmnt "${mount_point}" >/dev/null; then
     print-status "Mount backup filesystem..."
     mount "${file_system}" "${mount_point}"
@@ -180,15 +176,21 @@ if ! findmnt "${mount_point}" >/dev/null; then
 fi
 
 now=$(date "+${date_format}")
-aim="${mount_point}/${dest_dir}"
+destination="${mount_point}/${dest_dir}"
 
-# Set targets, options
-if [[ "${backup_mode}" == "archive" || "$backup_mode" == "quick" ]]; then
-    target="${aim}/actual"
+if [[ ! -e "${destination}" ]]; then
+    print-status "Create destination dir..."
+    mkdir -p "${destination}"
+    print-finish
+fi
+
+# Set rsync targets, options
+if [[ "${backup_mode}" == "archive" || "${backup_mode}" == "quick" ]]; then
+    target="${destination}/actual"
     opt=(--delete --inplace)
 else
-    target="${aim}/${now}"
-    last="${aim}/last"
+    target="${destination}/${now}"
+    last="${destination}/last"
     opt=("--link-dest=${last}")
 fi
 
@@ -207,7 +209,7 @@ case "${backup_mode}" in
 
         if [[ -n "${expire_date}" ]]; then
             print-status "Delete expired snapshots..."
-            date-action -dr --diff="${expire_date}" --format=${date_action_format} "${aim}"/*
+            date-action -dr --diff="${expire_date}" --format=${date_action_format} "${destination}"/*
             print-finish
         fi
         ;;
