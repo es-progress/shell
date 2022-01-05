@@ -20,7 +20,7 @@
 ##########
 version(){
     cat <<"VERSION"
-Backup v1.2.2
+Backup v1.2.3
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -39,28 +39,24 @@ OPTIONS
 
 REQUIRED
 -s, --source [DIR]             source DIRECTORY to backup
--d, --destination [DIR]        destination DIRECTORY to put backup (relative to mounting point)
+-d, --destination [DIR]        destination DIRECTORY to put backup on target filesystem (relative to mounting point)
 -f, --filesystem [FILESYSTEM]  target FILESYSTEM to backup to (eg. /dev/sda3)
 -m, --mount [DIR]              mounting point for given filesystem
 
 OPTIONAL
 -a, --archive [DIR]            put archives in DIR
     --expire [STRING]          deletes archives older than this date (eg. -2days) for STRING see `man date`
-
     --format [FORMAT]          appends current date to archive filename
                                supported FORMATS:
                                24H (HH:MM:SS eg. 17:26:14)
                                YMD (YYYY-mm-dd eg. 2020-02-19)       <--default
                                FULL (YYYY-mm-dd_HH:MM:SS)
-
     --mode [MODE]              select MODE:
                                ARCHIVE:  backup and create archives  <--default
                                SNAPSHOT: snapshot backup
                                QUICK:    backup only
-
     --exclude [PATTERN]        exclude files matching PATTERN
     --prefix [STRING]          optional prefix on archive files
-
     --debug                    print commands as executed
 -h, --help                     display this help
 -v, --version                  print version info
@@ -124,15 +120,9 @@ while :; do
         --mode)
             shift
             case "${1}" in
-                QUICK)
-                    backup_mode="quick"
-                    ;;
-                SNAPSHOT)
-                    backup_mode="snapshot"
-                    ;;
-                ARCHIVE)
-                    backup_mode="archive"
-                    ;;
+                QUICK) backup_mode="quick" ;;
+                SNAPSHOT) backup_mode="snapshot" ;;
+                ARCHIVE) backup_mode="archive" ;;
             esac
             ;;
         --format)
@@ -152,9 +142,7 @@ while :; do
                     ;;
             esac
             ;;
-        --debug)
-            set -x
-            ;;
+        --debug) set -x ;;
         -h | --help)
             version
             usage
@@ -164,9 +152,7 @@ while :; do
             version
             exit 0
             ;;
-        "")
-            break
-            ;;
+        "") break ;;
         *)
             echo "Not supported option: ${1}"
             usage
@@ -188,7 +174,7 @@ mount_point="${mount_point%/}"
 dest_dir="${dest_dir%/}"
 
 if ! findmnt "${mount_point}" >/dev/null; then
-    print-status "Mounting backup filesystem..."
+    print-status "Mount backup filesystem..."
     mount "${file_system}" "${mount_point}"
     print-finish
 fi
@@ -206,13 +192,13 @@ else
     opt=("--link-dest=${last}")
 fi
 
-print-header "Backing up files..."
+print-header "Backup files..."
 rsync -aAXHEh --info=stats1 --info=progress2 "${opt[@]}" "${exclusion[@]}" "${source_dir}" "${target}"
 
 # Post backup steps
 case "${backup_mode}" in
     "snapshot")
-        print-status "Managing links for snapshots..."
+        print-status "Manage links for snapshots..."
         # Remove symlink to previous snapshot
         rm -f "${last}"
         # Create new symlink to latest snapshot for the next backup to hardlink
@@ -220,7 +206,7 @@ case "${backup_mode}" in
         print-finish
 
         if [[ -n "${expire_date}" ]]; then
-            print-status "Deleting expired snapshots..."
+            print-status "Delete expired snapshots..."
             date-action -dr --diff="${expire_date}" --format=${date_action_format} "${aim}"/*
             print-finish
         fi
@@ -229,7 +215,7 @@ case "${backup_mode}" in
         old_dir=$(pwd)
         cd "${aim}"
 
-        print-status "Compressing files..."
+        print-status "Compress files..."
         tar_file="${archive_prefix}${now}.tar.gz"
         tar -I "pigz -1" --sort=name -cf "${archive_dir}/${tar_file}" "actual/"
         print-finish
@@ -239,7 +225,7 @@ case "${backup_mode}" in
         print-finish
 
         if [[ -n "${expire_date}" ]]; then
-            print-status "Deleting expired archives..."
+            print-status "Delete expired archives..."
             date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
             print-finish
         fi
