@@ -7,7 +7,7 @@
 ##   A) archive                              ##
 ##      1. Backup (rsync)                    ##
 ##      2. Archive (tar & gzip)              ##
-##      3. Delete old archives (date-action) ##
+##      3. Delete old archives (find)        ##
 ##   B) quick (rsync)                        ##
 ##   C) snapshot (rsync snapshot style)      ##
 ###############################################
