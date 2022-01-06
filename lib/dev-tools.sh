@@ -63,3 +63,18 @@ iplocation(){
     local ip="${1?:"IP address missing"}"
     curl -s -w"\n" "http://api.ipstack.com/${ip}?access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1" | jq
 }
+
+## Pretty print serialized PHP object
+##
+## @param   $1  Serial string
+#####################################
+dev-pretty-php(){
+    local serial="${1?:"Serialized data missing"}"
+    php <<EOF
+<?php
+echo "\n";
+var_export(unserialize('${serial}'));
+echo "\n";
+?>
+EOF
+}
