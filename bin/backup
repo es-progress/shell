@@ -20,7 +20,7 @@
 ##########
 version(){
     cat <<"VERSION"
-Backup v1.3.0
+Backup v2.0.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -45,7 +45,7 @@ REQUIRED
 
 OPTIONAL
 -a, --archive [DIR]            put archives in DIR, defaults to 'archive'
-    --expire [STRING]          deletes archives older than this date (eg. -2days) for STRING see `man date`
+    --expire [NUM]             deletes archives older than NUM days (NUM*24 hours)
     --format [FORMAT]          appends current date to archive filename
                                supported FORMATS:
                                24H (HH:MM:SS eg. 17:26:14)
@@ -210,7 +210,10 @@ case "${backup_mode}" in
 
         if [[ -n "${expire_date}" ]]; then
             print-status "Delete expired snapshots..."
-            date-action -dr --diff="${expire_date}" --format=${date_action_format} "${destination}"/*
+            expired=$(find "${destination}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}")
+            for dir in ${expired}; do
+                rm -rf "${dir}"
+            done
             print-finish
         fi
         ;;
@@ -227,11 +230,11 @@ case "${backup_mode}" in
 
         if [[ -n "${expire_date}" ]]; then
             print-status "Delete expired archives..."
-            old_dir=$(pwd)
-            cd "${destination}"
-            date-action -r --diff="${expire_date}" --format=${date_action_format} "${archive_dir}/*"
+            expired=$(find "${destination}/${archive_dir}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}")
+            for dir in ${expired}; do
+                rm -rf "${dir}"
+            done
             print-finish
-            cd "${old_dir}"
         fi
         ;;
 esac
