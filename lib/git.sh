@@ -62,6 +62,17 @@ ggit-pull(){
     git submodule update --init
 }
 
+## Diff stat
+##
+## @param    $1  Branch A
+## @param    $2  Branch B
+#########################
+ggit-diff(){
+    local branch_a="${1?:"Branch A missing"}"
+    local branch_b="${2?:"Branch B missing"}"
+    git diff --stat "${branch_a}" "${branch_b}"
+}
+
 ## Statistics
 ## Daily commits
 ################
