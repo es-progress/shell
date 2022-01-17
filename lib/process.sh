@@ -31,8 +31,8 @@ check-not-root(){
 ## @default  ls
 ####################################
 foreach-subdir(){
-    for dir in *; do
-        [[ -d "${dir}" ]] || continue
+    dirs=$(find . -mindepth 1 -maxdepth 1 -type d | sort)
+    for dir in ${dirs}; do
         print-section "${dir}"
         (
             cd "${dir}" || return 1
@@ -49,8 +49,8 @@ foreach-subdir(){
 foreach-subdir-pipe(){
     local command="${1?:"Command missing"}"
     local pipe="${2?:"Pipe command missing"}"
-    for dir in *; do
-        [[ -d "${dir}" ]] || continue
+    dirs=$(find . -mindepth 1 -maxdepth 1 -type d | sort)
+    for dir in ${dirs}; do
         print-section "${dir}"
         (
             cd "${dir}" || return 1
