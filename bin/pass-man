@@ -21,7 +21,7 @@ timer=6h
 usage(){
     cat <<HELP
 
-pass-man v1.0.0
+pass-man v1.1.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
 Usage: vault ACTION [TARGET] [OPTIONS]
@@ -73,7 +73,7 @@ vault_close(){
 ########################
 vault_generate(){
     vault_open
-    pass generate -f aaa_tmp
+    pass generate -f aaa_tmp "${@}"
 }
 
 ## Get pass from vault
@@ -98,20 +98,21 @@ IFS=$'\n\t'
 
 # Parse options
 action="${1:-}"
-pass_path="${2:-}"
-if [[ $# -ge 2 ]]; then
-    shift 2
-elif [[ $# -eq 1 ]]; then
-    shift
-fi
+[[ -n "${action}" ]] && shift
 
 # Switch action
 case "${action}" in
     open) vault_open ;;
     close) vault_close ;;
-    generate) vault_generate ;;
+    generate) vault_generate "${@}" ;;
     retrieve)
-        [[ -z "${pass_path}" ]] && echo "Path to password missing" >&2 && usage
+        pass_path="${1:-}"
+        if [[ -n "${pass_path}" ]]; then
+            shift
+        else
+            echo "Path to password missing" >&2
+            usage
+        fi
         vault_retrieve "${pass_path}" "${@}"
         ;;
     "") echo "Action missing" >&2 && usage ;;
