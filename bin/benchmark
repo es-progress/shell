@@ -18,56 +18,74 @@
 ############
 
 # Individual benchmark time limit (seconds)
-test_run_time=60
+# Quick benchmark
+test_run_time_quick=6
+# Deep benchmark
+test_run_time_deep=60
 
 ## CPU
 ######
 
 # Run parameters in semicolon limited string
 # Threads ; Max prime number
-runs_cpu[0]="1;30000"
-runs_cpu[1]="16;30000"
+# Quick benchmark
+runs_cpu_quick[0]="1;10000"
+# Deep benchmark
+runs_cpu_deep[0]="1;30000"
+runs_cpu_deep[1]="16;30000"
 
 # CPU test file size in MB
-cpu_test_file_size=50
+# Quick benchmark
+cpu_test_file_size_quick=5
+# Deep benchmark
+cpu_test_file_size_deep=50
 
 ## Memory
 #########
 
 # Run parameters in semicolon limited string
 # Threads ; Memory block size ; Memory total size ; Memory access mode
-runs_memory[0]="1;512;30G;rnd"
-runs_memory[1]="16;4K;50G;rnd"
-runs_memory[2]="1;1M;100G;rnd"
-runs_memory[3]="1;1M;100G;seq"
+# Quick benchmark
+runs_memory_quick[0]="1;1M;10G;seq"
+# Deep benchmark
+runs_memory_deep[0]="1;512;30G;rnd"
+runs_memory_deep[1]="16;4K;50G;rnd"
+runs_memory_deep[2]="1;1M;100G;rnd"
+runs_memory_deep[3]="1;1M;100G;seq"
 
 ## Disk
 #######
 
 # Run parameters in semicolon limited string
 # Threads ; Number of files ; Block size ; Test mode ; fsync after every request ; Read/write ratio ; Total files size
-runs_disk[0]="1;64;4K;rndrw;on;3;4G"
-runs_disk[1]="16;64;64K;rndrw;off;3;4G"
-runs_disk[2]="1;1;1M;seqrd;off;3;4G"
-runs_disk[3]="1;1;1M;seqwr;off;3;4G"
+# Quick benchmark
+runs_disk_quick[0]="1;1;1M;seqrd;off;3;1G"
+# Deep benchmark
+runs_disk_deep[0]="1;64;4K;rndrw;on;3;4G"
+runs_disk_deep[1]="16;64;64K;rndrw;off;3;4G"
+runs_disk_deep[2]="1;1;1M;seqrd;off;3;4G"
+runs_disk_deep[3]="1;1;1M;seqwr;off;3;4G"
 
 ## Download Bandwidth
 #####################
 
 # Run parameters in semicolon limited string
 # Name ; Location ; URL
-runs_download[0]="CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test"
-runs_download[1]="Fibernet;Hungary;http://fibernet-bwt.loom.hu/downfile/mega.down"
-runs_download[2]="Vultr;London;https://lon-gb-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[3]="Vultr;Frankfurt;https://fra-de-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[4]="Vultr;Paris;https://par-fr-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[5]="Vultr;Amsterdam;https://ams-nl-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[6]="Otenet;Athens;http://speedtest.ftp.otenet.gr/files/test1Gb.db"
-runs_download[7]="Vultr;New York;https://nj-us-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[8]="Vultr;Dallas;https://tx-us-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[9]="Vultr;Los Angeles;https://lax-ca-us-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[10]="Vultr;Tokyo;https://hnd-jp-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.bin"
+# Quick benchmark
+runs_download_quick[0]="CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test"
+# Deep benchmark
+runs_download_deep[0]="CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test"
+runs_download_deep[1]="Fibernet;Hungary;http://fibernet-bwt.loom.hu/downfile/mega.down"
+runs_download_deep[2]="Vultr;London;https://lon-gb-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[3]="Vultr;Frankfurt;https://fra-de-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[4]="Vultr;Paris;https://par-fr-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[5]="Vultr;Amsterdam;https://ams-nl-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[6]="Otenet;Athens;http://speedtest.ftp.otenet.gr/files/test1Gb.db"
+runs_download_deep[7]="Vultr;New York;https://nj-us-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[8]="Vultr;Dallas;https://tx-us-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[9]="Vultr;Los Angeles;https://lax-ca-us-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[10]="Vultr;Tokyo;https://hnd-jp-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.bin"
 
 ###############
 ## FUNCTIONS ##
@@ -77,7 +95,7 @@ runs_download[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.b
 ##########
 version(){
     cat <<EOF
-Benchmark v1.0.2
+Benchmark v1.1.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 EOF
 }
@@ -99,6 +117,8 @@ OPTIONS:
 -s, --system           Run only a system check
 -r, --report           Save test report to file
     --report-prefix    Report file prefix, implies '-r'
+-q, --quick            Do a quick benchmark
+    --deep             Deep benchmarking
 
 -h, --help             Display this help
 -v, --version          Print version
@@ -204,7 +224,7 @@ filter_results(){
 print_sysinfo(){
     cat <<EOF
 --------------------------------------------------------
- Benchmark v1.0.2
+ Benchmark v1.1.0
 
  ${hostname}
 --------------------------------------------------------
@@ -332,6 +352,7 @@ declare -A summary
 create_report=""
 report_file_prefix=""
 sys_check=""
+benchmark_depth=""
 while :; do
     case "${1:-}" in
         -r | --report) create_report=1 ;;
@@ -345,6 +366,24 @@ while :; do
         -d | --disk) tests+=("disk") ;;
         --download) tests+=("download") ;;
         -s | --system) sys_check=1 ;;
+        -q | --quick)
+            benchmark_depth=quick
+            test_run_time="${test_run_time_quick}"
+            runs_cpu=("${runs_cpu_quick[@]}")
+            cpu_test_file_size="${cpu_test_file_size_quick}"
+            runs_memory=("${runs_memory_quick[@]}")
+            runs_disk=("${runs_disk_quick[@]}")
+            runs_download=("${runs_download_quick[@]}")
+            ;;
+        --deep)
+            benchmark_depth=deep
+            test_run_time="${test_run_time_deep}"
+            runs_cpu=("${runs_cpu_deep[@]}")
+            cpu_test_file_size="${cpu_test_file_size_deep}"
+            runs_memory=("${runs_memory_deep[@]}")
+            runs_disk=("${runs_disk_deep[@]}")
+            runs_download=("${runs_download_deep[@]}")
+            ;;
         -h | --help)
             version
             usage
@@ -363,6 +402,11 @@ while :; do
     esac
     shift
 done
+
+if [[ -z "${benchmark_depth}" ]]; then
+    echo "Benchmark depth missing (quick or full)" >&2
+    exit 1
+fi
 
 # If no test specified --> run all
 [[ -z "${tests[*]}" ]] && tests=(cpu memory disk download)
