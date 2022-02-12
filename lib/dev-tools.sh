@@ -60,8 +60,10 @@ build-mkdocs(){
 ## @param    $1  IP address
 ###############################
 iplocation(){
-    local ip="${1?:"IP address missing"}"
-    curl -s -w"\n" "http://api.ipstack.com/${ip}?access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1" | jq
+    : "${1?:"IP address missing"}"
+    for arg; do
+        curl -s -w"\n" "http://api.ipstack.com/${arg}?access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1" | jq
+    done
 }
 
 ## Pretty print serialized PHP object
