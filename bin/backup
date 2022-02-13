@@ -18,7 +18,7 @@
 
 ## Version
 ##########
-version(){
+_version(){
     cat <<"VERSION"
 Backup v2.0.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
@@ -27,7 +27,7 @@ VERSION
 
 ## Usage
 ########
-usage(){
+_usage(){
     cat <<"HELP"
 
 Usage: backup REQUIRED_OPTIONS... [OPTIONS...]
@@ -146,18 +146,18 @@ while :; do
             ;;
         --debug) set -x ;;
         -h | --help)
-            version
-            usage
+            _version
+            _usage
             exit 0
             ;;
         -v | --version)
-            version
+            _version
             exit 0
             ;;
         "") break ;;
         *)
             echo "Not supported option: ${1}"
-            usage
+            _usage
             exit 1
             ;;
     esac
