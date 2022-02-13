@@ -130,20 +130,20 @@ EOF
 ##
 ## @param    $1  Command
 ##########################
-_command_exists(){
+_command-exists(){
     command -v "${@}" >/dev/null 2>&1
 }
 
 ## Clean up after tests
 #######################
-_clean_up(){
+_clean-up(){
     rm -f test_file.*
     exit
 }
 
 ## Test CPU with real use cases
 ###############################
-_cpu_app_test(){
+_cpu-app-test(){
     local time_sha time_bzip time_aes
 
     dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
@@ -164,7 +164,7 @@ _cpu_app_test(){
 ## @param    $1  Type of benchmark
 ## @param    $@  Params for benchmark
 #####################################
-_run_benchmark(){
+_run-benchmark(){
     local type="${1?:"Benchmark type missing"}"
     local params=("--time=${test_run_time}")
 
@@ -196,7 +196,7 @@ _run_benchmark(){
 ## @param    $1  Name of benchmark
 ## @param    $2  Raw results
 #######################################
-_filter_results(){
+_filter-results(){
     local type="${1?:"Benchmark type missing"}"
     local raw="${2?:"Raw results missing"}"
     local filter
@@ -221,7 +221,7 @@ _filter_results(){
 
 ## Print test header with system info
 #####################################
-_print_sysinfo(){
+_print-sysinfo(){
     cat <<EOF
 --------------------------------------------------------
  Benchmark v1.1.0
@@ -264,7 +264,7 @@ EOF
 
 ## Print summary header
 #######################
-_print_summary_header(){
+_print-summary-header(){
     cat <<EOF
 ========================================================
                       TEST RESULTS
@@ -281,7 +281,7 @@ EOF
 ##
 ## @param    $1  Name of benchmark
 ##################################
-_print_summary(){
+_print-summary(){
     local testname="${1}"
     run_data="runs_${testname}[@]"
 
@@ -343,7 +343,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Make sure test files are always deleted, even when the script is interrupted
-trap _clean_up EXIT INT TERM
+trap _clean-up EXIT INT TERM
 
 tests=()
 declare -A summary
@@ -415,7 +415,7 @@ fi
 if [[ -z "${sys_check}" ]]; then
     required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
     for cmd in "${required_commands[@]}"; do
-        if ! _command_exists "${cmd}"; then
+        if ! _command-exists "${cmd}"; then
             echo "Missing dependency: ${cmd}" >&2
             exit 1
         fi
@@ -457,7 +457,7 @@ else
 fi
 
 # Sysinfo
-_print_sysinfo | tee "${output_file}"
+_print-sysinfo | tee "${output_file}"
 [[ -n "${sys_check}" ]] && exit 0
 
 # Run Benchmarks
@@ -467,8 +467,8 @@ for type in "${tests[@]}"; do
 
     if [[ "${type}" == "cpu" ]]; then
         echo "Running CPU application test..."
-        results=$(_cpu_app_test)
-        summary[cpu_app]="$(_filter_results cpu_app "${results}")"
+        results=$(_cpu-app-test)
+        summary[cpu_app]="$(_filter-results cpu_app "${results}")"
     fi
 
     # Parallel runs
@@ -478,8 +478,8 @@ for type in "${tests[@]}"; do
         IFS=";" read -r -a params <<<"${run_param}"
 
         echo "Running ${type^^} benchmark #$((i + 1))..."
-        results=$(_run_benchmark "${type}" "${params[@]}")
-        summary[${selector}]=$(_filter_results "${type}" "${results}")
+        results=$(_run-benchmark "${type}" "${params[@]}")
+        summary[${selector}]=$(_filter-results "${type}" "${results}")
 
         i=$((i + 1))
     done
@@ -490,10 +490,10 @@ echo
 
 ## Summary
 ##########
-_print_summary_header | tee -a "${output_file}"
+_print-summary-header | tee -a "${output_file}"
 
 for type in "${tests[@]}"; do
-    _print_summary "${type}" | tee -a "${output_file}"
+    _print-summary "${type}" | tee -a "${output_file}"
 done
 
 exit 0

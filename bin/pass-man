@@ -35,7 +35,7 @@ HELP
 
 ## Check if tomb is opened
 ##########################
-_check_tomb_open(){
+_check-tomb-open(){
     if tomb list >/dev/null 2>&1; then
         return 0
     else
@@ -45,11 +45,11 @@ _check_tomb_open(){
 
 ## Open vault
 #############
-_vault_open(){
-    if ! _check_tomb_open; then
+_vault-open(){
+    if ! _check-tomb-open; then
         pass open -f --timer="${timer}"
 
-        if ! _check_tomb_open; then
+        if ! _check-tomb-open; then
             echo "Failed to open tomb." >&2
             exit 1
         fi
@@ -58,11 +58,11 @@ _vault_open(){
 
 ## Close vault
 ##############
-_vault_close(){
-    if _check_tomb_open; then
+_vault-close(){
+    if _check-tomb-open; then
         pass close
 
-        if _check_tomb_open; then
+        if _check-tomb-open; then
             echo "Failed to close tomb." >&2
             exit 1
         fi
@@ -71,8 +71,8 @@ _vault_close(){
 
 ## Generate new password
 ########################
-_vault_generate(){
-    _vault_open
+_vault-generate(){
+    _vault-open
     pass generate -f aaa_tmp "${@}"
 }
 
@@ -81,10 +81,10 @@ _vault_generate(){
 ## @param    $1  Path to password
 ## @param    $@  Extra arguments to 'pass'
 ##########################################
-_vault_retrieve(){
+_vault-retrieve(){
     local path="${1?:"Path to password missing"}"
     shift
-    _vault_open
+    _vault-open
     pass "${@}" "${path}"
 }
 
@@ -102,9 +102,9 @@ action="${1:-}"
 
 # Switch action
 case "${action}" in
-    open) _vault_open ;;
-    close) _vault_close ;;
-    generate) _vault_generate "${@}" ;;
+    open) _vault-open ;;
+    close) _vault-close ;;
+    generate) _vault-generate "${@}" ;;
     retrieve)
         pass_path="${1:-}"
         if [[ -n "${pass_path}" ]]; then
@@ -113,7 +113,7 @@ case "${action}" in
             echo "Path to password missing" >&2
             _usage
         fi
-        _vault_retrieve "${pass_path}" "${@}"
+        _vault-retrieve "${pass_path}" "${@}"
         ;;
     "") echo "Action missing" >&2 && _usage ;;
     *) echo "Invalid action" >&2 && _usage ;;
