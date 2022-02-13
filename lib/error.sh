@@ -24,7 +24,7 @@ _E_ABORT=10
 ## @param    $2  Error code
 ## @default      1
 ###############################
-error_exit(){
+error-exit(){
     print-error "${1:-"fatal error"}"
     exit "${2:-1}"
 }
