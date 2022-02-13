@@ -93,7 +93,7 @@ runs_download_deep[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.100
 
 ## Version
 ##########
-version(){
+_version(){
     cat <<EOF
 Benchmark v1.1.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
@@ -102,7 +102,7 @@ EOF
 
 ## Usage
 ########
-usage(){
+_usage(){
     cat <<EOF
 
 Usage: benchmark [OPTIONS]...
@@ -130,20 +130,20 @@ EOF
 ##
 ## @param    $1  Command
 ##########################
-command_exists(){
+_command_exists(){
     command -v "${@}" >/dev/null 2>&1
 }
 
 ## Clean up after tests
 #######################
-clean_up(){
+_clean_up(){
     rm -f test_file.*
     exit
 }
 
 ## Test CPU with real use cases
 ###############################
-cpu_app_test(){
+_cpu_app_test(){
     local time_sha time_bzip time_aes
 
     dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
@@ -164,7 +164,7 @@ cpu_app_test(){
 ## @param    $1  Type of benchmark
 ## @param    $@  Params for benchmark
 #####################################
-run_benchmark(){
+_run_benchmark(){
     local type="${1?:"Benchmark type missing"}"
     local params=("--time=${test_run_time}")
 
@@ -196,7 +196,7 @@ run_benchmark(){
 ## @param    $1  Name of benchmark
 ## @param    $2  Raw results
 #######################################
-filter_results(){
+_filter_results(){
     local type="${1?:"Benchmark type missing"}"
     local raw="${2?:"Raw results missing"}"
     local filter
@@ -221,7 +221,7 @@ filter_results(){
 
 ## Print test header with system info
 #####################################
-print_sysinfo(){
+_print_sysinfo(){
     cat <<EOF
 --------------------------------------------------------
  Benchmark v1.1.0
@@ -264,7 +264,7 @@ EOF
 
 ## Print summary header
 #######################
-print_summary_header(){
+_print_summary_header(){
     cat <<EOF
 ========================================================
                       TEST RESULTS
@@ -281,7 +281,7 @@ EOF
 ##
 ## @param    $1  Name of benchmark
 ##################################
-print_summary(){
+_print_summary(){
     local testname="${1}"
     run_data="runs_${testname}[@]"
 
@@ -343,7 +343,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Make sure test files are always deleted, even when the script is interrupted
-trap clean_up EXIT INT TERM
+trap _clean_up EXIT INT TERM
 
 tests=()
 declare -A summary
@@ -385,18 +385,18 @@ while :; do
             runs_download=("${runs_download_deep[@]}")
             ;;
         -h | --help)
-            version
-            usage
+            _version
+            _usage
             exit 0
             ;;
         -v | --version)
-            version
+            _version
             exit 0
             ;;
         "") break ;;
         *)
             echo "Not supported option: ${1}" >&2
-            usage
+            _usage
             exit 1
             ;;
     esac
@@ -415,7 +415,7 @@ fi
 if [[ -z "${sys_check}" ]]; then
     required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
     for cmd in "${required_commands[@]}"; do
-        if ! command_exists "${cmd}"; then
+        if ! _command_exists "${cmd}"; then
             echo "Missing dependency: ${cmd}" >&2
             exit 1
         fi
@@ -457,7 +457,7 @@ else
 fi
 
 # Sysinfo
-print_sysinfo | tee "${output_file}"
+_print_sysinfo | tee "${output_file}"
 [[ -n "${sys_check}" ]] && exit 0
 
 # Run Benchmarks
@@ -467,8 +467,8 @@ for type in "${tests[@]}"; do
 
     if [[ "${type}" == "cpu" ]]; then
         echo "Running CPU application test..."
-        results=$(cpu_app_test)
-        summary[cpu_app]="$(filter_results cpu_app "${results}")"
+        results=$(_cpu_app_test)
+        summary[cpu_app]="$(_filter_results cpu_app "${results}")"
     fi
 
     # Parallel runs
@@ -478,8 +478,8 @@ for type in "${tests[@]}"; do
         IFS=";" read -r -a params <<<"${run_param}"
 
         echo "Running ${type^^} benchmark #$((i + 1))..."
-        results=$(run_benchmark "${type}" "${params[@]}")
-        summary[${selector}]=$(filter_results "${type}" "${results}")
+        results=$(_run_benchmark "${type}" "${params[@]}")
+        summary[${selector}]=$(_filter_results "${type}" "${results}")
 
         i=$((i + 1))
     done
@@ -490,10 +490,10 @@ echo
 
 ## Summary
 ##########
-print_summary_header | tee -a "${output_file}"
+_print_summary_header | tee -a "${output_file}"
 
 for type in "${tests[@]}"; do
-    print_summary "${type}" | tee -a "${output_file}"
+    _print_summary "${type}" | tee -a "${output_file}"
 done
 
 exit 0

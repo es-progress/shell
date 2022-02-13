@@ -23,7 +23,7 @@ block_count_large=1024
 
 ## Clean up after tests
 #######################
-clean_up(){
+_clean_up(){
     rm -f "${test_file_name}"
     exit
 }
@@ -33,7 +33,7 @@ clean_up(){
 ## @param    $1  Block size
 ## @param    $2  Number of blocks to write
 ##########################################
-test_block_size(){
+_test_block_size(){
     local bs="${1?:"Block size missing"}"
     local count="${2?:"Number of blocks missing"}"
 
@@ -51,18 +51,18 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Make sure test files are always deleted, even when the script is interrupted
-trap clean_up EXIT INT TERM
+trap _clean_up EXIT INT TERM
 
 for bs in "${block_sizes_small[@]}"; do
-    test_block_size "${bs}" "${block_count_small}"
+    _test_block_size "${bs}" "${block_count_small}"
 done
 
 for bs in "${block_sizes_medium[@]}"; do
-    test_block_size "${bs}" "${block_count_medium}"
+    _test_block_size "${bs}" "${block_count_medium}"
 done
 
 for bs in "${block_sizes_large[@]}"; do
-    test_block_size "${bs}" "${block_count_large}"
+    _test_block_size "${bs}" "${block_count_large}"
 done
 
 exit 0
