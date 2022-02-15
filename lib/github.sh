@@ -17,6 +17,8 @@ gh-check-connection(){
 ## Check authentication
 #######################
 gh-check-auth(){
+    : "${GH_USER:?"GH_USER missing"}"
+    : "${GH_TOKEN:?"GH_TOKEN missing"}"
     status_code=$(curl -s -o /dev/null -w "%{http_code}" -u "${GH_USER}:${GH_TOKEN}" https://api.github.com/user)
     [[ "${status_code}" == "200" ]] && return 0 || return 1
 }
