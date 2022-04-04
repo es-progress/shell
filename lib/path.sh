@@ -1,9 +1,10 @@
 # shellcheck shell=bash
-####################################
-## Path Functions Library         ##
-##                                ##
-## Bash functions involving paths ##
-####################################
+###################################
+## Path Functions Library        ##
+##                               ##
+## Bash functions                ##
+## Involving paths & permissions ##
+###################################
 
 ## Get directory of a file
 ##
@@ -50,4 +51,18 @@ dir-parents(){
     done
 
     echo "${parents[@]}"
+}
+
+## Recursively set group on directory to user
+## remove world permissions
+##
+## @param   $1  Group
+## @param   $2  Directory
+#############################################
+give(){
+    local user="${1:?'User missing'}"
+    local dir="${2:?'Directory missing'}"
+    shift 2
+    sudo chgrp -R "${user}" "${dir}" "${@}"
+    sudo chmod -R o-rwx "${dir}" "${@}"
 }
