@@ -73,6 +73,19 @@ ggit-diff(){
     git diff --stat "${branch_a}" "${branch_b}"
 }
 
+## Commit CiviCRM extension
+##
+## @param   $1  Extension dir
+#############################
+ggit-commit(){
+    local extension="${1?:"Extension missing"}"
+    local version key
+    key=$(sed -n '/extension key/ p' "${extension}/info.xml"| sed -r 's@^<extension key="(.*)" type="module">$@\1@')
+    version=$(sed -n '/<version>/ p' "${extension}/info.xml"| sed -r 's@^\s*<version>(.*)</version>@\1@')
+
+    git commit -m "${key} v${version}" "${extension}"
+}
+
 ## Statistics
 ## Daily commits
 ################
