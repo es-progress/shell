@@ -23,7 +23,7 @@ ggit-merge(){
     git checkout "${into}"
     git pull origin "${into}" || return 1
     print-header "Merge and push"
-    git merge --no-ff "${branch}" || return 1
+    git merge --no-ff "${branch}" -m "Merge branch '${branch}' into ${into}" || return 1
     git push "origin" "${into}" || return 1
     print-header "Delete branches"
     git branch -d "${branch}"
