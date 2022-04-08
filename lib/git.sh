@@ -75,15 +75,15 @@ ggit-diff(){
 
 ## Commit CiviCRM extension
 ##
-## @param   $1  Extension dir
-#############################
+## @param   $*  Extension dirs
+##############################
 ggit-commit(){
-    local extension="${1?:"Extension missing"}"
     local version key
-    key=$(sed -n '/extension key/ p' "${extension}/info.xml"| sed -r 's@^<extension key="(.*)" type="module">$@\1@')
-    version=$(sed -n '/<version>/ p' "${extension}/info.xml"| sed -r 's@^\s*<version>(.*)</version>@\1@')
-
-    git commit -m "${key} v${version}" "${extension}"
+    for arg; do
+        key=$(sed -n '/extension key/ p' "${arg}/info.xml"| sed -r 's@^<extension key="(.*)" type="module">$@\1@')
+        version=$(sed -n '/<version>/ p' "${arg}/info.xml"| sed -r 's@^\s*<version>(.*)</version>@\1@')
+        git commit -m "${key} v${version}" "${arg}"
+    done
 }
 
 ## Statistics
