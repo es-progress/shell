@@ -12,9 +12,10 @@
 TXT_NORM="\e[0m"
 TXT_BOLD="\e[1m"
 TXT_RED="\e[31m"
-TXT_YELLOW="\e[33m"
 TXT_GREEN="\e[32m"
+TXT_YELLOW="\e[33m"
 TXT_BLUE="\e[34m"
+TXT_PURPLE="\e[35m"
 
 ###############
 ## FUNCTIONS ##
