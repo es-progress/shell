@@ -107,6 +107,12 @@ ggit-base(){
     git switch "${branch_onto}" || return 1
 }
 
+## Show log graphically
+#######################
+ggit-adog(){
+    git log --all --decorate --oneline --graph
+}
+
 ## Statistics
 ## Daily commits
 ################
