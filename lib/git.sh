@@ -16,10 +16,10 @@ ggit-merge(){
     local branch="${1?:"Source branch missing"}"
     local into="${2:-"main"}"
 
-    print-header "Pull remote changes for source branch"
+    print-header "Pull remote changes for ${branch}"
     git checkout "${branch}"
     git pull origin "${branch}" || return 1
-    print-header "Pull remote changes for target branch"
+    print-header "Pull remote changes for ${into}"
     git checkout "${into}"
     git pull origin "${into}" || return 1
     print-header "Merge and push"
@@ -57,7 +57,9 @@ ggit-fix(){
 #######################
 ggit-pull(){
     local branch="${1:-"main"}"
+    print-header "Switch to ${branch}"
     git checkout "${branch}" || return 1
+    print-header "Pull remote changes for ${branch}"
     git pull origin "${branch}" || return 1
     git submodule update --init
 }
@@ -95,9 +97,13 @@ ggit-commit(){
 ggit-base(){
     local branch_src="${1?:"Branch to rebase missing"}"
     local branch_onto="${2:-"main"}"
+    print-header "Switch to ${branch_src}"
     git switch "${branch_src}" || return 1
+    print-header "Rebase ${branch_src} onto ${branch_onto}"
     git rebase "${branch_onto}" || return 1
+    print-header "Push ${branch_src}"
     git push origin "+${branch_src}" || return 1
+    print-header "Switch to ${branch_onto}"
     git switch "${branch_onto}" || return 1
 }
 
