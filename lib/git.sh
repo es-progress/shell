@@ -41,7 +41,7 @@ ggit-report(){
     git remote -v
 }
 
-## Interactive rebase
+## Interactive rebase (change history)
 ##
 ## @param    $1  How many commits from HEAD
 ###########################################
@@ -84,6 +84,21 @@ ggit-commit(){
         version=$(sed -n '/<version>/ p' "${arg}/info.xml"| sed -r 's@^\s*<version>(.*)</version>@\1@')
         git commit -m "${key} v${version}" "${arg}"
     done
+}
+
+## Rebase branch
+##
+## @param    $1  Branch to rebase
+## @param    $2  Rebase onto this branch
+## @default      main
+########################################
+ggit-base(){
+    local branch_src="${1?:"Branch to rebase missing"}"
+    local branch_onto="${2:-"main"}"
+    git switch "${branch_src}" || return 1
+    git rebase "${branch_onto}" || return 1
+    git push origin "+${branch_src}" || return 1
+    git switch "${branch_onto}" || return 1
 }
 
 ## Statistics
