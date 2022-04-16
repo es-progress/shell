@@ -45,7 +45,7 @@ ggit-report(){
 ##
 ## @param    $1  How many commits from HEAD
 ###########################################
-ggit-base(){
+ggit-fix(){
     local commits="${1?:"Commits missing"}"
     git rebase -i "HEAD~${commits}"
 }
