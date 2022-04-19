@@ -81,7 +81,7 @@ ggit-diff(){
 ##############################
 ggit-commit(){
     local version key
-    for arg; do
+    for arg in "${@}"; do
         key=$(sed -n '/extension key/ p' "${arg}/info.xml"| sed -r 's@^<extension key="(.*)" type="module">$@\1@')
         version=$(sed -n '/<version>/ p' "${arg}/info.xml"| sed -r 's@^\s*<version>(.*)</version>@\1@')
         git commit -m "${key} v${version}" "${arg}"

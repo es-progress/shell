@@ -61,7 +61,7 @@ build-mkdocs(){
 ###############################
 iplocation(){
     : "${1?:"IP address missing"}"
-    for arg; do
+    for arg in "${@}"; do
         curl -s -w"\n" "http://api.ipstack.com/${arg}?access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1" | jq
     done
 }
