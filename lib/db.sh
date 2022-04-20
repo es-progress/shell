@@ -76,7 +76,7 @@ db-dump-structure-tables(){
 db-dump-data-db(){
     local db="${1:?'DB name missing'}"
     shift
-    db-dump-wrapper --no-create-info --skip-extended-insert --routines "${@}" "${db}"
+    db-dump-wrapper --no-create-info --skip-extended-insert --skip-triggers "${@}" "${db}"
 }
 
 ## Dump tables from a DB
@@ -88,7 +88,7 @@ db-dump-data-db(){
 db-dump-data-tables(){
     local db="${1:?'DB name missing'}"
     shift
-    db-dump-wrapper --no-create-info --skip-extended-insert "${db}" "${@}"
+    db-dump-wrapper --no-create-info --skip-extended-insert --skip-triggers "${db}" "${@}"
 }
 
 ## List tables from a DB
