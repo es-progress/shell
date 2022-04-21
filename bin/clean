@@ -7,6 +7,9 @@
 ## Delete caches            ##
 ##############################
 
+# Config
+journal_retention="2w"
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -26,6 +29,9 @@ for line in ${snaps}; do
     IFS=$' \t' read -r snapname revision <<< "${line}"
     snap remove "${snapname}" --revision="${revision}"
 done
+
+# Rotate journal
+journalctl --flush --rotate --vacuum-time="${journal_retention}"
 
 # cache
 rm -rf /var/cache/*
