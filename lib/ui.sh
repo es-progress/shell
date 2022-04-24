@@ -9,13 +9,13 @@
 ## FORMAT CODES ##
 ##################
 
-TXT_NORM="\e[0m"
-TXT_BOLD="\e[1m"
-TXT_RED="\e[31m"
-TXT_GREEN="\e[32m"
-TXT_YELLOW="\e[33m"
-TXT_BLUE="\e[34m"
-TXT_PURPLE="\e[35m"
+export TXT_NORM="\e[0m"
+export TXT_BOLD="\e[1m"
+export TXT_RED="\e[31m"
+export TXT_GREEN="\e[32m"
+export TXT_YELLOW="\e[33m"
+export TXT_BLUE="\e[34m"
+export TXT_PURPLE="\e[35m"
 
 ###############
 ## FUNCTIONS ##

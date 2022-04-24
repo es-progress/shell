@@ -10,7 +10,7 @@
 #################
 
 # Aborted
-_E_ABORT=10
+export _E_ABORT=10
 
 ###############
 ## FUNCTIONS ##
