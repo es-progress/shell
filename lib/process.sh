@@ -28,7 +28,6 @@ check-not-root() {
 ## Run command in each sub directory
 ##
 ## @param    $*  Command to run
-## @default  ls
 ####################################
 foreach-subdir() {
     dirs=$(find . -mindepth 1 -maxdepth 1 -type d | sort)
@@ -36,7 +35,7 @@ foreach-subdir() {
         print-section "${dir}"
         (
             cd "${dir}" || return 1
-            ${*:-ls}
+            "${@}"
         )
     done
 }
