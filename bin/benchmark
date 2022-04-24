@@ -93,7 +93,7 @@ runs_download_deep[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.100
 
 ## Version
 ##########
-_version(){
+_version() {
     cat <<EOF
 Benchmark v1.1.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
@@ -102,7 +102,7 @@ EOF
 
 ## Usage
 ########
-_usage(){
+_usage() {
     cat <<EOF
 
 Usage: benchmark [OPTIONS]...
@@ -130,20 +130,20 @@ EOF
 ##
 ## @param    $1  Command
 ##########################
-_command-exists(){
+_command-exists() {
     command -v "${@}" >/dev/null 2>&1
 }
 
 ## Clean up after tests
 #######################
-_clean-up(){
+_clean-up() {
     rm -f test_file.*
     exit
 }
 
 ## Test CPU with real use cases
 ###############################
-_cpu-app-test(){
+_cpu-app-test() {
     local time_sha time_bzip time_aes
 
     dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
@@ -164,7 +164,7 @@ _cpu-app-test(){
 ## @param    $1  Type of benchmark
 ## @param    $@  Params for benchmark
 #####################################
-_run-benchmark(){
+_run-benchmark() {
     local type="${1?:"Benchmark type missing"}"
     local params=("--time=${test_run_time}")
 
@@ -196,7 +196,7 @@ _run-benchmark(){
 ## @param    $1  Name of benchmark
 ## @param    $2  Raw results
 #######################################
-_filter-results(){
+_filter-results() {
     local type="${1?:"Benchmark type missing"}"
     local raw="${2?:"Raw results missing"}"
     local filter
@@ -221,7 +221,7 @@ _filter-results(){
 
 ## Print test header with system info
 #####################################
-_print-sysinfo(){
+_print-sysinfo() {
     cat <<EOF
 --------------------------------------------------------
  Benchmark v1.1.0
@@ -264,7 +264,7 @@ EOF
 
 ## Print summary header
 #######################
-_print-summary-header(){
+_print-summary-header() {
     cat <<EOF
 ========================================================
                       TEST RESULTS
@@ -281,7 +281,7 @@ EOF
 ##
 ## @param    $1  Name of benchmark
 ##################################
-_print-summary(){
+_print-summary() {
     local testname="${1}"
     run_data="runs_${testname}[@]"
 

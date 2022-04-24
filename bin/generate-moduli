@@ -22,7 +22,7 @@ results_file="DH_moduli"
 ## @param    $1  Lenght of primes in bits
 ## @param    $2  Output file path
 #########################################
-_generate-DH-primes(){
+_generate-DH-primes() {
     local bit="${1?:"Bit missing"}"
     local output_file="${2?:"Output file name missing"}"
     local candidates=$(mktemp --tmpdir DH_candidates.XXXXXXXX)

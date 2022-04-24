@@ -24,14 +24,14 @@ _E_ABORT=10
 ## @param    $2  Error code
 ## @default      1
 ###############################
-error-exit(){
+error-exit() {
     print-error "${1:-"fatal error"}"
     exit "${2:-1}"
 }
 
 ## Abort program
 ################
-abort(){
+abort() {
     print-error "Aborted."
     exit ${_E_ABORT}
 }

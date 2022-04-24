@@ -10,7 +10,7 @@
 ## @param    $1  Joining character
 ## @param    $*  Items to join
 ##################################
-implode(){
+implode() {
     local IFS="${1:?"Field separator missing"}"
     shift
     echo "${*}"
@@ -20,7 +20,7 @@ implode(){
 ##
 ## @param    $1  JSON File
 ##########################
-read-file-json(){
+read-file-json() {
     local file="${1:?"File missing"}"
     shift
     jq -rcM "${@}" '.[]' "${file}"
@@ -31,7 +31,7 @@ read-file-json(){
 ## @param    $1  Config File
 ## @param    $2  Section (read only this section)
 #################################################
-read-file-cfg(){
+read-file-cfg() {
     local file="${1:?"File missing"}"
     local section="${2:-}"
     local contents
@@ -72,7 +72,7 @@ urlencode() {
 ##
 ## @param   $1  String to decode
 ################################
-urldecode(){
+urldecode() {
     local encoded="${1:?"URL-encoded string missing"}"
 
     # Change + to space

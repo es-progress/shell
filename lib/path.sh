@@ -10,7 +10,7 @@
 ##
 ## @param    $1  File
 ##########################
-dir-file(){
+dir-file() {
     local file="${1:?'File missing'}"
 
     if [[ ! -f "${file}" ]]; then
@@ -24,7 +24,7 @@ dir-file(){
 
 ## Get directory of running script
 ##################################
-dir-script(){
+dir-script() {
     dir-file "${BASH_SOURCE[0]}"
 }
 
@@ -32,7 +32,7 @@ dir-script(){
 ##
 ## @param    $1  Directory
 ####################################
-dir-parents(){
+dir-parents() {
     local dir="${1:?'Directory missing'}"
     local parents=()
 
@@ -59,7 +59,7 @@ dir-parents(){
 ## @param   $1  Group
 ## @param   $2  Directory
 #############################################
-give(){
+give() {
     local user="${1:?'User missing'}"
     local dir="${2:?'Directory missing'}"
     shift 2

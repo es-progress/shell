@@ -10,7 +10,7 @@
 ##
 ## @param    $1  Key path
 #########################
-cert-create-key(){
+cert-create-key() {
     local key="${1?:"Key path missing"}"
     shift
     openssl genpkey \
@@ -27,7 +27,7 @@ cert-create-key(){
 ## @param    $3  Validity in days
 ## @param    $4  Certificate subject
 ####################################
-cert-create-selfsigned(){
+cert-create-selfsigned() {
     local priv_key="${1?:"Private key path missing"}"
     local cert="${2?:"Certificate path missing"}"
     local validity="${3?:"Valid days missing"}"
@@ -51,7 +51,7 @@ cert-create-selfsigned(){
 ## @param    $2  CSR path
 ## @param    $3  CSR subject
 ###########################################
-cert-create-csr(){
+cert-create-csr() {
     local priv_key="${1?:"Private key path missing"}"
     local csr="${2?:"CSR path missing"}"
     local subject="${3?:"CSR subject missing"}"
@@ -74,7 +74,7 @@ cert-create-csr(){
 ## @param    $4  Certificate path
 ## @param    $5  Validity in days
 ###########################################
-cert-sign-csr(){
+cert-sign-csr() {
     local ca_priv_key="${1?:"CA private key path missing"}"
     local ca_cert="${2?:"CA cert path missing"}"
     local csr="${3?:"CSR path missing"}"
@@ -112,7 +112,7 @@ EOF
 ## @param    $5  Certificate path
 ## @param    $6  Validity in days
 ####################################
-cert-create-certificate(){
+cert-create-certificate() {
     local priv_key="${1?:"Private key path missing"}"
     local subject="${2?:"CSR subject missing"}"
     local ca_priv_key="${3?:"CA private key path missing"}"
@@ -129,7 +129,7 @@ cert-create-certificate(){
 ##
 ## @param    $1  CSR path
 #########################
-cert-view-csr(){
+cert-view-csr() {
     local csr="${1?:"CSR path missing"}"
     shift
     openssl req \
@@ -142,7 +142,7 @@ cert-view-csr(){
 ##
 ## @param    $1  Cert path
 ##########################
-cert-view-cert(){
+cert-view-cert() {
     local cert="${1?:"Certificate path missing"}"
     shift
     openssl x509 \

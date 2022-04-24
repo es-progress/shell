@@ -23,7 +23,7 @@ block_count_large=1024
 
 ## Clean up after tests
 #######################
-_clean-up(){
+_clean-up() {
     rm -f "${test_file_name}"
     exit
 }
@@ -33,7 +33,7 @@ _clean-up(){
 ## @param    $1  Block size
 ## @param    $2  Number of blocks to write
 ##########################################
-_test-block-size(){
+_test-block-size() {
     local bs="${1?:"Block size missing"}"
     local count="${2?:"Number of blocks missing"}"
 
