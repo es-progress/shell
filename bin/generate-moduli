@@ -65,7 +65,7 @@ echo "# Time Type Tests Tries Size Generator Modulus" > "${results_file}"
 
 for bit in "${bits[@]}"; do
     # Parallel processing
-    for i in {1..3}; do
+    for _ in {1..3}; do
         (
             primes=$(mktemp --tmpdir DH_primes.XXXXXXXX)
             _generate-DH-primes "${bit}" "${primes}"
