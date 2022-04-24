@@ -21,7 +21,7 @@
 ##########
 _version() {
     cat <<"VERSION"
-Backup v2.0.0
+Backup v2.0.1
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -78,7 +78,6 @@ check-root || exit 1
 # Parse options
 ###############
 date_format="%F"
-date_action_format="YMD"
 backup_mode="archive"
 archive_dir="archive"
 exclusion=()
@@ -131,18 +130,9 @@ while :; do
         --format)
             shift
             case "${1}" in
-                YMD)
-                    date_format="%F"
-                    date_action_format="YMD"
-                    ;;
-                24H)
-                    date_format="%T"
-                    date_action_format="24H"
-                    ;;
-                FULL)
-                    date_format="%F_%T"
-                    date_action_format="FULL"
-                    ;;
+                YMD) date_format="%F" ;;
+                24H) date_format="%T" ;;
+                FULL) date_format="%F_%T" ;;
             esac
             ;;
         --debug) set -x ;;
