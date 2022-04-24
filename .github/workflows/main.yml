@@ -3,9 +3,9 @@ on:
   pull_request:
     branches:
       - main
-    # paths:
-    #   - 'bin/**'
-    #   - 'lib/**'
+    paths:
+      - "bin/**"
+      - "lib/**"
 jobs:
   code-style:
     name: Check code style (beautysh)
