@@ -3,16 +3,28 @@ on:
   pull_request:
     branches:
       - main
-    # paths:
-    #   - 'bin/**'
-    #   - 'lib/**'
+    paths:
+      - "bin/**"
+      - "lib/**"
 jobs:
   code-style:
     name: Check code style (beautysh)
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      # - name: Run beautysh
-      #   uses: illvart/beautysh-action@latest
-      #   with:
-      #     args: '--force-function-style paronly --check bin/* lib/*'
+      - name: Run beautysh
+        uses: illvart/beautysh-action@latest
+        with:
+          args: "--force-function-style paronly --check bin/* lib/*"
+  linter:
+    name: Linting
+    runs-on: ubuntu-20.04
+    needs: code-style
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS: --external-sources --enable add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces --shell bash
+        with:
+          severity: warning

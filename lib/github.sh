@@ -10,13 +10,13 @@
 
 ## Check connection
 ###################
-gh-check-connection(){
+gh-check-connection() {
     curl -w "\nStatus code: %{http_code}\n" https://api.github.com/zen
 }
 
 ## Check authentication
 #######################
-gh-check-auth(){
+gh-check-auth() {
     : "${GH_USER:?"GH_USER missing"}"
     : "${GH_TOKEN:?"GH_TOKEN missing"}"
     status_code=$(curl -s -o /dev/null -w "%{http_code}" -u "${GH_USER}:${GH_TOKEN}" https://api.github.com/user)
@@ -29,7 +29,7 @@ gh-check-auth(){
 ## @param    $2  Repo name
 ## @param    $3  Label name
 ###########################
-gh-labels-get(){
+gh-labels-get() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
@@ -44,7 +44,7 @@ gh-labels-get(){
 ## @param    $2  Repo name
 ## @param    $3  Label name
 ###########################
-gh-labels-exists(){
+gh-labels-exists() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
@@ -57,7 +57,7 @@ gh-labels-exists(){
 ## @param    $1  Repo owner
 ## @param    $2  Repo name
 #############################
-gh-labels-list(){
+gh-labels-list() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
 
@@ -73,7 +73,7 @@ gh-labels-list(){
 ## @param    $2  Repo name
 ## @param    $3  Label data JSON
 ################################
-gh-labels-add(){
+gh-labels-add() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local labels="${3:?"Label data JSON missing"}"
@@ -104,7 +104,7 @@ gh-labels-add(){
 ## @param    $2  Repo name
 ## @param    $3  Labels JSON file
 #######################################
-gh-labels-add-multiple(){
+gh-labels-add-multiple() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local labels_file="${3:?"Labels file missing"}"
@@ -122,7 +122,7 @@ gh-labels-add-multiple(){
 ## @param    $2  Repo name
 ## @param    $3  Label name
 ###########################
-gh-labels-delete(){
+gh-labels-delete() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
@@ -137,7 +137,7 @@ gh-labels-delete(){
 ## @param    $1  Repo owner
 ## @param    $2  Repo name
 ###############################
-gh-labels-delete-all(){
+gh-labels-delete-all() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
 
@@ -150,7 +150,7 @@ gh-labels-delete-all(){
 
 ## List public SSH keys for user
 ################################
-gh-sshkeys-list(){
+gh-sshkeys-list() {
     curl \
         --silent -u "${GH_USER}:${GH_TOKEN}" \
         --url https://api.github.com/user/keys | jq .[]
@@ -163,7 +163,7 @@ gh-sshkeys-list(){
 ##
 ## @return   Value of filter field or all fields
 ################################################
-gh-sshkeys-get(){
+gh-sshkeys-get() {
     local title="${1?:"Title missing"}"
     local filter="${2:-}"
     gh-sshkeys-list "${title}" | jq -r "select(.title == \"${title}\") | .${filter}"
@@ -173,7 +173,7 @@ gh-sshkeys-get(){
 ##
 ## @param    $1  Key ID
 ########################
-gh-sshkeys-delete(){
+gh-sshkeys-delete() {
     local key_id="${1?:"Key ID missing"}"
     curl \
         --silent -u "${GH_USER}:${GH_TOKEN}" \
@@ -186,7 +186,7 @@ gh-sshkeys-delete(){
 ## @param    $1  Title of key
 ## @param    $2  Public key
 #############################
-gh-sshkeys-create(){
+gh-sshkeys-create() {
     local title="${1?:"Title missing"}"
     local key="${2?:"Key missing"}"
     curl \

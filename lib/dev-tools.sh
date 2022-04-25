@@ -10,7 +10,7 @@
 ## @param    $1  Domain
 ## @param    $2  DKIM selector
 #####################################
-debug-dns-mail(){
+debug-dns-mail() {
     local domain="${1?:"Domain missing"}"
     local selector="${2?:"DKIM selector missing"}"
 
@@ -26,7 +26,7 @@ debug-dns-mail(){
 ##
 ## @param    $1  Remote host
 ###################################
-debug-tunnel-open(){
+debug-tunnel-open() {
     local remote="${1?:"Remote missing"}"
     ssh-tunnel-open -fqN -R 9003:localhost:9003 "${remote}"
 }
@@ -35,7 +35,7 @@ debug-tunnel-open(){
 ##
 ## @param    $1  Remote host
 ####################################
-debug-tunnel-close(){
+debug-tunnel-close() {
     local remote="${1?:"Remote missing"}"
     ssh-tunnel-close -fqN -R 9003:localhost:9003 "${remote}"
 }
@@ -45,7 +45,7 @@ debug-tunnel-close(){
 ## @param    $1  mkdocs config file path
 ## @param    $2  Build destination
 ########################################
-build-mkdocs(){
+build-mkdocs() {
     local config_file="${1?:"mkdocs config file missing"}"
     local destination="${2?:"Build destination missing"}"
 
@@ -59,7 +59,7 @@ build-mkdocs(){
 ##
 ## @param    $1  IP address
 ###############################
-iplocation(){
+iplocation() {
     : "${1?:"IP address missing"}"
     for arg in "${@}"; do
         curl -s -w"\n" "http://api.ipstack.com/${arg}?access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1" | jq
@@ -70,7 +70,7 @@ iplocation(){
 ##
 ## @param   $1  Serial string
 #####################################
-dev-pretty-php(){
+dev-pretty-php() {
     local serial="${1?:"Serialized data missing"}"
     php <<EOF
 <?php

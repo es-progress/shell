@@ -12,7 +12,7 @@
 ## @param    $2  Branch to merge into
 ## @default      main
 ###############################################
-ggit-merge(){
+ggit-merge() {
     local branch="${1?:"Source branch missing"}"
     local into="${2:-"main"}"
 
@@ -32,7 +32,7 @@ ggit-merge(){
 
 ## Check git repo status
 ########################
-ggit-report(){
+ggit-report() {
     print-header "Git status"
     git status || return 1
     print-header "Branches"
@@ -45,7 +45,7 @@ ggit-report(){
 ##
 ## @param    $1  How many commits from HEAD
 ###########################################
-ggit-fix(){
+ggit-fix() {
     local commits="${1?:"Commits missing"}"
     git rebase -i "HEAD~${commits}"
 }
@@ -55,7 +55,7 @@ ggit-fix(){
 ## @param    $1  Branch
 ## @default      main
 #######################
-ggit-pull(){
+ggit-pull() {
     local branch="${1:-"main"}"
     print-header "Switch to ${branch}"
     git checkout "${branch}" || return 1
@@ -69,7 +69,7 @@ ggit-pull(){
 ## @param    $1  Branch A
 ## @param    $2  Branch B
 #########################
-ggit-diff(){
+ggit-diff() {
     local branch_a="${1?:"Branch A missing"}"
     local branch_b="${2?:"Branch B missing"}"
     git diff --stat "${branch_a}" "${branch_b}"
@@ -79,7 +79,7 @@ ggit-diff(){
 ##
 ## @param   $*  Extension dirs
 ##############################
-ggit-commit(){
+ggit-commit() {
     local version key
     for arg in "${@}"; do
         key=$(sed -n '/extension key/ p' "${arg}/info.xml"| sed -r 's@^<extension key="(.*)" type="module">$@\1@')
@@ -94,7 +94,7 @@ ggit-commit(){
 ## @param    $2  Rebase onto this branch
 ## @default      main
 ########################################
-ggit-base(){
+ggit-base() {
     local branch_src="${1?:"Branch to rebase missing"}"
     local branch_onto="${2:-"main"}"
     print-header "Switch to ${branch_src}"
@@ -109,15 +109,16 @@ ggit-base(){
 
 ## Show log graphically
 #######################
-ggit-adog(){
+ggit-adog() {
     git log --all --decorate --oneline --graph
 }
 
 ## Statistics
 ## Daily commits
 ################
-ggit-stat-daily(){
-    local user=$(git config --get --global user.name)
+ggit-stat-daily() {
+    local user
+    user=$(git config --get --global user.name)
 
     echo "Commits | Hour of day"
     echo "--------+------------"
@@ -133,8 +134,9 @@ ggit-stat-daily(){
 ## Statistics
 ## Weekly commits
 #################
-ggit-stat-weekly(){
-    local user=$(git config --get --global user.name)
+ggit-stat-weekly() {
+    local user
+    user=$(git config --get --global user.name)
 
     echo "Commits | Weekday (1=Monday)"
     echo "--------+-------------------"
@@ -150,8 +152,9 @@ ggit-stat-weekly(){
 ## Statistics
 ## Monthly commits
 ##################
-ggit-stat-monthly(){
-    local user=$(git config --get --global user.name)
+ggit-stat-monthly() {
+    local user
+    user=$(git config --get --global user.name)
 
     echo "Commits | Day of month"
     echo "--------+-------------"

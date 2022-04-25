@@ -10,7 +10,7 @@
 ## @param    $1  Dir to check
 ## @default      Current working dir
 ####################################
-anal-disk-usage(){
+anal-disk-usage() {
     local dir="${1:-"."}"
     shift
     du "${dir}" -hd1 "${@}" 2>/dev/null | sort -h

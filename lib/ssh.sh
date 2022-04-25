@@ -10,10 +10,11 @@
 ## @param    $1  Path to SSH key
 ## @param    $2  Path to password
 #################################
-unlock-key(){
+unlock-key() {
     local key="${1?:"Path to SSH key missing"}"
     local pass_path="${2?:"Path to password missing"}"
-    local password="$(pass-man retrieve "${pass_path}")"
+    local password
+    password="$(pass-man retrieve "${pass_path}")"
 
     # Add key to ssh-agent
     if ! grep -qs "$(cat "${key}.pub")" <<<"$(ssh-add -L || return 0)"; then
@@ -25,7 +26,7 @@ unlock-key(){
 ##
 ## @param    $@  Args to SSH
 ############################
-ssh-tunnel-open(){
+ssh-tunnel-open() {
     # Check if already opened
     if proc-is-running "ssh ${*}"; then
         return 0
@@ -45,7 +46,7 @@ ssh-tunnel-open(){
 ##
 ## @param    $@  Args to SSH
 ############################
-ssh-tunnel-close(){
+ssh-tunnel-close() {
     # Check if already closed
     if ! proc-is-running "ssh ${*}"; then
         return 0
@@ -66,7 +67,7 @@ ssh-tunnel-close(){
 ## @param    $1  Remote host
 ## @param    $2  Local port
 ############################
-socks5-tunnel-open(){
+socks5-tunnel-open() {
     local remote="${1?:"Remote missing"}"
     local port="${2?:"Local port missing"}"
     ssh-tunnel-open -fqN -D "${port}" "${remote}"
@@ -77,7 +78,7 @@ socks5-tunnel-open(){
 ## @param    $1  Remote host
 ## @param    $2  Local port
 ############################
-socks5-tunnel-close(){
+socks5-tunnel-close() {
     local remote="${1?:"Remote missing"}"
     local port="${2?:"Local port missing"}"
     ssh-tunnel-close -fqN -D "${port}" "${remote}"
@@ -88,7 +89,7 @@ socks5-tunnel-close(){
 ## @param    $1  Name of key
 ## @param    $2  Comment for key
 ################################
-ssh-create-key(){
+ssh-create-key() {
     local key_name="${1?:"Key name missing"}"
     local comment="${2?:"Key comment missing"}"
     shift 2
@@ -109,7 +110,7 @@ ssh-create-key(){
 ## @param    $5  Certificate serial number
 ## @param    $6  Path to user public key - this will be signed
 ##############################################################
-ssh-sign-user(){
+ssh-sign-user() {
     local validity="${1?:"Validity interval missing"}"
     local ca_key_path="${2?:"Path to CA key missing"}"
     local identity="${3?:"Key identity missing"}"
@@ -130,7 +131,7 @@ ssh-sign-user(){
 ##
 ## @param    $1  Path to certificate
 ####################################
-ssh-view-cert(){
+ssh-view-cert() {
     local cert="${1?:"Certificate path missing"}"
     shift
     ssh-keygen -L -f "${cert}" "${@}"

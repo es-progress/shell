@@ -18,7 +18,7 @@ timer=6h
 
 ## Usage
 ########
-_usage(){
+_usage() {
     cat <<HELP
 
 pass-man v1.1.0
@@ -35,7 +35,7 @@ HELP
 
 ## Check if tomb is opened
 ##########################
-_check-tomb-open(){
+_check-tomb-open() {
     if tomb list >/dev/null 2>&1; then
         return 0
     else
@@ -45,7 +45,7 @@ _check-tomb-open(){
 
 ## Open vault
 #############
-_vault-open(){
+_vault-open() {
     if ! _check-tomb-open; then
         pass open -f --timer="${timer}"
 
@@ -58,7 +58,7 @@ _vault-open(){
 
 ## Close vault
 ##############
-_vault-close(){
+_vault-close() {
     if _check-tomb-open; then
         pass close
 
@@ -71,7 +71,7 @@ _vault-close(){
 
 ## Generate new password
 ########################
-_vault-generate(){
+_vault-generate() {
     _vault-open
     pass generate -f aaa_tmp "${@}"
 }
@@ -81,7 +81,7 @@ _vault-generate(){
 ## @param    $1  Path to password
 ## @param    $@  Extra arguments to 'pass'
 ##########################################
-_vault-retrieve(){
+_vault-retrieve() {
     local path="${1?:"Path to password missing"}"
     shift
     _vault-open

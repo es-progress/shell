@@ -29,10 +29,11 @@ test_run_time_deep=60
 # Run parameters in semicolon limited string
 # Threads ; Max prime number
 # Quick benchmark
-runs_cpu_quick[0]="1;10000"
+runs_cpu_quick=("1;10000")
 # Deep benchmark
-runs_cpu_deep[0]="1;30000"
-runs_cpu_deep[1]="16;30000"
+runs_cpu_deep=()
+runs_cpu_deep+=("1;30000")
+runs_cpu_deep+=("16;30000")
 
 # CPU test file size in MB
 # Quick benchmark
@@ -46,12 +47,13 @@ cpu_test_file_size_deep=50
 # Run parameters in semicolon limited string
 # Threads ; Memory block size ; Memory total size ; Memory access mode
 # Quick benchmark
-runs_memory_quick[0]="1;1M;10G;seq"
+runs_memory_quick=("1;1M;10G;seq")
 # Deep benchmark
-runs_memory_deep[0]="1;512;30G;rnd"
-runs_memory_deep[1]="16;4K;50G;rnd"
-runs_memory_deep[2]="1;1M;100G;rnd"
-runs_memory_deep[3]="1;1M;100G;seq"
+runs_memory_deep=()
+runs_memory_deep+=("1;512;30G;rnd")
+runs_memory_deep+=("16;4K;50G;rnd")
+runs_memory_deep+=("1;1M;100G;rnd")
+runs_memory_deep+=("1;1M;100G;seq")
 
 ## Disk
 #######
@@ -59,12 +61,13 @@ runs_memory_deep[3]="1;1M;100G;seq"
 # Run parameters in semicolon limited string
 # Threads ; Number of files ; Block size ; Test mode ; fsync after every request ; Read/write ratio ; Total files size
 # Quick benchmark
-runs_disk_quick[0]="1;1;1M;seqrd;off;3;1G"
+runs_disk_quick=("1;1;1M;seqrd;off;3;1G")
 # Deep benchmark
-runs_disk_deep[0]="1;64;4K;rndrw;on;3;4G"
-runs_disk_deep[1]="16;64;64K;rndrw;off;3;4G"
-runs_disk_deep[2]="1;1;1M;seqrd;off;3;4G"
-runs_disk_deep[3]="1;1;1M;seqwr;off;3;4G"
+runs_disk_deep=()
+runs_disk_deep+=("1;64;4K;rndrw;on;3;4G")
+runs_disk_deep+=("16;64;64K;rndrw;off;3;4G")
+runs_disk_deep+=("1;1;1M;seqrd;off;3;4G")
+runs_disk_deep+=("1;1;1M;seqwr;off;3;4G")
 
 ## Download Bandwidth
 #####################
@@ -72,20 +75,21 @@ runs_disk_deep[3]="1;1;1M;seqwr;off;3;4G"
 # Run parameters in semicolon limited string
 # Name ; Location ; URL
 # Quick benchmark
-runs_download_quick[0]="CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test"
+runs_download_quick=("CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test")
 # Deep benchmark
-runs_download_deep[0]="CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test"
-runs_download_deep[1]="Fibernet;Hungary;http://fibernet-bwt.loom.hu/downfile/mega.down"
-runs_download_deep[2]="Vultr;London;https://lon-gb-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[3]="Vultr;Frankfurt;https://fra-de-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[4]="Vultr;Paris;https://par-fr-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[5]="Vultr;Amsterdam;https://ams-nl-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[6]="Otenet;Athens;http://speedtest.ftp.otenet.gr/files/test1Gb.db"
-runs_download_deep[7]="Vultr;New York;https://nj-us-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[8]="Vultr;Dallas;https://tx-us-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[9]="Vultr;Los Angeles;https://lax-ca-us-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[10]="Vultr;Tokyo;https://hnd-jp-ping.vultr.com/vultr.com.1000MB.bin"
-runs_download_deep[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.bin"
+runs_download_deep=()
+runs_download_deep+=("CacheFly;Cloud;http://cachefly.cachefly.net/100mb.test")
+runs_download_deep+=("Fibernet;Hungary;http://fibernet-bwt.loom.hu/downfile/mega.down")
+runs_download_deep+=("Vultr;London;https://lon-gb-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Vultr;Frankfurt;https://fra-de-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Vultr;Paris;https://par-fr-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Vultr;Amsterdam;https://ams-nl-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Otenet;Athens;http://speedtest.ftp.otenet.gr/files/test1Gb.db")
+runs_download_deep+=("Vultr;New York;https://nj-us-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Vultr;Dallas;https://tx-us-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Vultr;Los Angeles;https://lax-ca-us-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Vultr;Tokyo;https://hnd-jp-ping.vultr.com/vultr.com.1000MB.bin")
+runs_download_deep+=("Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.1000MB.bin")
 
 ###############
 ## FUNCTIONS ##
@@ -93,16 +97,16 @@ runs_download_deep[11]="Vultr;Sydney;https://syd-au-ping.vultr.com/vultr.com.100
 
 ## Version
 ##########
-_version(){
+_version() {
     cat <<EOF
-Benchmark v1.1.0
+Benchmark v1.1.2
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 EOF
 }
 
 ## Usage
 ########
-_usage(){
+_usage() {
     cat <<EOF
 
 Usage: benchmark [OPTIONS]...
@@ -130,20 +134,20 @@ EOF
 ##
 ## @param    $1  Command
 ##########################
-_command-exists(){
+_command-exists() {
     command -v "${@}" >/dev/null 2>&1
 }
 
 ## Clean up after tests
 #######################
-_clean-up(){
+_clean-up() {
     rm -f test_file.*
     exit
 }
 
 ## Test CPU with real use cases
 ###############################
-_cpu-app-test(){
+_cpu-app-test() {
     local time_sha time_bzip time_aes
 
     dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
@@ -164,7 +168,7 @@ _cpu-app-test(){
 ## @param    $1  Type of benchmark
 ## @param    $@  Params for benchmark
 #####################################
-_run-benchmark(){
+_run-benchmark() {
     local type="${1?:"Benchmark type missing"}"
     local params=("--time=${test_run_time}")
 
@@ -196,7 +200,7 @@ _run-benchmark(){
 ## @param    $1  Name of benchmark
 ## @param    $2  Raw results
 #######################################
-_filter-results(){
+_filter-results() {
     local type="${1?:"Benchmark type missing"}"
     local raw="${2?:"Raw results missing"}"
     local filter
@@ -221,10 +225,10 @@ _filter-results(){
 
 ## Print test header with system info
 #####################################
-_print-sysinfo(){
+_print-sysinfo() {
     cat <<EOF
 --------------------------------------------------------
- Benchmark v1.1.0
+ Benchmark v1.1.2
 
  ${hostname}
 --------------------------------------------------------
@@ -264,7 +268,7 @@ EOF
 
 ## Print summary header
 #######################
-_print-summary-header(){
+_print-summary-header() {
     cat <<EOF
 ========================================================
                       TEST RESULTS
@@ -281,16 +285,16 @@ EOF
 ##
 ## @param    $1  Name of benchmark
 ##################################
-_print-summary(){
+_print-summary() {
     local testname="${1}"
-    run_data="runs_${testname}[@]"
+    local run_param params
 
     # Header
     printf "\n%30s\n********************************************************\n" "${testname^^}"
 
     # Parallel runs
     i=0
-    for run_param in "${!run_data}"; do
+    for run_param in ${all_test_param[${type}]}; do
         selector="${type}_${i}"
         IFS=";" read -r -a params <<<"${run_param}"
 
@@ -346,6 +350,7 @@ IFS=$'\n\t'
 trap _clean-up EXIT INT TERM
 
 tests=()
+declare -A all_test_param
 declare -A summary
 
 # Parse options
@@ -369,20 +374,20 @@ while :; do
         -q | --quick)
             benchmark_depth=quick
             test_run_time="${test_run_time_quick}"
-            runs_cpu=("${runs_cpu_quick[@]}")
+            all_test_param[cpu]="${runs_cpu_quick[*]}"
             cpu_test_file_size="${cpu_test_file_size_quick}"
-            runs_memory=("${runs_memory_quick[@]}")
-            runs_disk=("${runs_disk_quick[@]}")
-            runs_download=("${runs_download_quick[@]}")
+            all_test_param[memory]="${runs_memory_quick[*]}"
+            all_test_param[disk]="${runs_disk_quick[*]}"
+            all_test_param[download]="${runs_download_quick[*]}"
             ;;
         --deep)
             benchmark_depth=deep
             test_run_time="${test_run_time_deep}"
-            runs_cpu=("${runs_cpu_deep[@]}")
+            all_test_param[cpu]="${runs_cpu_deep[*]}"
             cpu_test_file_size="${cpu_test_file_size_deep}"
-            runs_memory=("${runs_memory_deep[@]}")
-            runs_disk=("${runs_disk_deep[@]}")
-            runs_download=("${runs_download_deep[@]}")
+            all_test_param[memory]="${runs_memory_deep[*]}"
+            all_test_param[disk]="${runs_disk_deep[*]}"
+            all_test_param[download]="${runs_download_deep[*]}"
             ;;
         -h | --help)
             _version
@@ -463,8 +468,6 @@ _print-sysinfo | tee "${output_file}"
 # Run Benchmarks
 echo "Start Benchmarking..."
 for type in "${tests[@]}"; do
-    run_data="runs_${type}[@]"
-
     if [[ "${type}" == "cpu" ]]; then
         echo "Running CPU application test..."
         results=$(_cpu-app-test)
@@ -473,7 +476,7 @@ for type in "${tests[@]}"; do
 
     # Parallel runs
     i=0
-    for run_param in "${!run_data}"; do
+    for run_param in ${all_test_param[${type}]}; do
         selector="${type}_${i}"
         IFS=";" read -r -a params <<<"${run_param}"
 
