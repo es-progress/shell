@@ -13,7 +13,8 @@
 unlock-key() {
     local key="${1?:"Path to SSH key missing"}"
     local pass_path="${2?:"Path to password missing"}"
-    local password="$(pass-man retrieve "${pass_path}")"
+    local password
+    password="$(pass-man retrieve "${pass_path}")"
 
     # Add key to ssh-agent
     if ! grep -qs "$(cat "${key}.pub")" <<<"$(ssh-add -L || return 0)"; then

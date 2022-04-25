@@ -117,7 +117,8 @@ ggit-adog() {
 ## Daily commits
 ################
 ggit-stat-daily() {
-    local user=$(git config --get --global user.name)
+    local user
+    user=$(git config --get --global user.name)
 
     echo "Commits | Hour of day"
     echo "--------+------------"
@@ -134,7 +135,8 @@ ggit-stat-daily() {
 ## Weekly commits
 #################
 ggit-stat-weekly() {
-    local user=$(git config --get --global user.name)
+    local user
+    user=$(git config --get --global user.name)
 
     echo "Commits | Weekday (1=Monday)"
     echo "--------+-------------------"
@@ -151,7 +153,8 @@ ggit-stat-weekly() {
 ## Monthly commits
 ##################
 ggit-stat-monthly() {
-    local user=$(git config --get --global user.name)
+    local user
+    user=$(git config --get --global user.name)
 
     echo "Commits | Day of month"
     echo "--------+-------------"

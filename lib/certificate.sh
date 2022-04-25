@@ -80,9 +80,10 @@ cert-sign-csr() {
     local csr="${3?:"CSR path missing"}"
     local cert="${4?:"Certificate path missing"}"
     local validity="${5?:"Valid days missing"}"
+    local tmp_config
     shift 5
 
-    local tmp_config=$(mktemp)
+    tmp_config=$(mktemp)
     cat <<EOF >>"${tmp_config}"
 basicConstraints=critical,CA:false
 keyUsage=critical,digitalSignature,keyEncipherment
@@ -119,8 +120,9 @@ cert-create-certificate() {
     local ca_cert="${4?:"CA cert path missing"}"
     local cert="${5?:"Certificate path missing"}"
     local validity="${6?:"Valid days missing"}"
+    local csr
 
-    local csr=$(mktemp)
+    csr=$(mktemp)
     cert-create-csr "${priv_key}" "${csr}" "${subject}"
     cert-sign-csr "${ca_priv_key}" "${ca_cert}" "${csr}" "${cert}" "${validity}"
 }
