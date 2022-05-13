@@ -18,7 +18,7 @@
 ############
 
 # Version
-version="1.1.5"
+version="1.1.6"
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -146,8 +146,11 @@ _cpu-app-test() {
 
     dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
 
+    # shellcheck disable=SC2312
     time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"test_file.cpu"; } 2>&1)
+    # shellcheck disable=SC2312
     time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"test_file.cpu"; } 2>&1)
+    # shellcheck disable=SC2312
     time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"test_file.cpu"; } 2>&1)
 
     printf "%-20s %s\n" "SHA256-hashing:" "${time_sha}"
@@ -263,12 +266,14 @@ EOF
 ## Print summary header
 #######################
 _print-summary-header() {
+    local date
+    date=$(date +"%F %R")
     cat <<EOF
 ========================================================
                       TEST RESULTS
 
  ${hostname}
- $(date +"%F %R")
+ ${date}
 
  Total run time: $((SECONDS / 60)) min $((SECONDS % 60)) sec
 ========================================================
