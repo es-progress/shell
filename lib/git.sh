@@ -82,7 +82,9 @@ ggit-diff() {
 ggit-commit() {
     local version key
     for arg in "${@}"; do
+        # shellcheck disable=SC2312
         key=$(sed -n '/extension key/ p' "${arg}/info.xml"| sed -r 's@^<extension key="(.*)" type="module">$@\1@')
+        # shellcheck disable=SC2312
         version=$(sed -n '/<version>/ p' "${arg}/info.xml"| sed -r 's@^\s*<version>(.*)</version>@\1@')
         git commit -m "${key} v${version}" "${arg}"
     done
@@ -122,6 +124,7 @@ ggit-stat-daily() {
 
     echo "Commits | Hour of day"
     echo "--------+------------"
+    # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
         --format="%ad" \
@@ -140,6 +143,7 @@ ggit-stat-weekly() {
 
     echo "Commits | Weekday (1=Monday)"
     echo "--------+-------------------"
+    # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
         --format="%ad" \
@@ -158,6 +162,7 @@ ggit-stat-monthly() {
 
     echo "Commits | Day of month"
     echo "--------+-------------"
+    # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
         --format="%ad" \

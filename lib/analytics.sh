@@ -13,5 +13,6 @@
 anal-disk-usage() {
     local dir="${1:-"."}"
     shift
+    # shellcheck disable=SC2312
     du "${dir}" -hd1 "${@}" 2>/dev/null | sort -h
 }

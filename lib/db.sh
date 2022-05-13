@@ -99,7 +99,8 @@ db-dump-data-tables() {
 db-list-tables() {
     local db="${1:?'DB name missing'}"
     local pattern="${2:?'Pattern missing'}"
-    db-query "${db}" "SHOW TABLES LIKE '${pattern}'" -B | sed '1d'
+    # shellcheck disable=SC2312
+    db-query "${db}" --kutya "SHOW TABLES LIKE '${pattern}'" -B | sed '1d'
 }
 
 ## Run single query
