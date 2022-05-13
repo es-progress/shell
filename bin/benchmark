@@ -18,7 +18,7 @@
 ############
 
 # Version
-version="1.1.4"
+version="1.1.5"
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -130,14 +130,6 @@ OPTIONS:
 -v, --version          Print version
 EOF
     exit 0
-}
-
-## Check if command exists
-##
-## @param    $1  Command
-##########################
-_command-exists() {
-    command -v "${@}" >/dev/null 2>&1
 }
 
 ## Clean up after tests
@@ -427,7 +419,7 @@ fi
 if [[ -z "${sys_check}" ]]; then
     required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
     for cmd in "${required_commands[@]}"; do
-        if ! _command-exists "${cmd}"; then
+        if ! command -v "${cmd}" >/dev/null 2>&1; then
             echo "Missing dependency: ${cmd}" >&2
             exit 1
         fi
