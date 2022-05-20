@@ -11,6 +11,8 @@
 
 # Aborted
 export _E_ABORT=10
+# Missing
+export _E_MISSING=11
 
 ###############
 ## FUNCTIONS ##
