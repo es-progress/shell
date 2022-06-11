@@ -11,8 +11,8 @@
 ## CONFIG ##
 ############
 bits_generate=(4096 6144 7680 8192)
-tmp_file_prefix="DH_prime"
-results_file="DH_moduli"
+tmp_file_prefix=DH_prime
+results_file=DH_moduli
 
 ###############
 ## FUNCTIONS ##

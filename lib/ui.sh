@@ -66,7 +66,7 @@ print-status() {
 ## @default      Done
 ########################
 print-finish() {
-    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-"Done."}${TXT_NORM}"
+    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
 }
 
 ## Script running time
@@ -88,7 +88,7 @@ print-run-time() {
 #######################
 confirm() {
     read -r -p "Are you sure? (y/n) "
-    [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && return 0 || return 1
+    [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && return 0 || return 1
 }
 
 ## Clear console screen

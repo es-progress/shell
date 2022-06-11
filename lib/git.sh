@@ -14,7 +14,7 @@
 ###############################################
 ggit-merge() {
     local branch="${1?:"Source branch missing"}"
-    local into="${2:-"main"}"
+    local into="${2:-main}"
 
     print-header "Pull remote changes for ${branch}"
     git checkout "${branch}"
@@ -24,7 +24,7 @@ ggit-merge() {
     git pull origin "${into}" || return 1
     print-header "Merge and push"
     git merge --no-ff "${branch}" -m "Merge branch '${branch}' into ${into}" || return 1
-    git push "origin" "${into}" || return 1
+    git push origin "${into}" || return 1
     print-header "Delete branches"
     git branch -d "${branch}"
     git branch -d -r "origin/${branch}"
@@ -35,9 +35,9 @@ ggit-merge() {
 ggit-report() {
     print-header "Git status"
     git status || return 1
-    print-header "Branches"
+    print-header Branches
     git branch -a -l -vv
-    print-header "Remotes"
+    print-header Remotes
     git remote -v
 }
 
@@ -56,7 +56,7 @@ ggit-fix() {
 ## @default      main
 #######################
 ggit-pull() {
-    local branch="${1:-"main"}"
+    local branch="${1:-main}"
     print-header "Switch to ${branch}"
     git checkout "${branch}" || return 1
     print-header "Pull remote changes for ${branch}"
@@ -98,7 +98,7 @@ ggit-commit() {
 ########################################
 ggit-base() {
     local branch_src="${1?:"Branch to rebase missing"}"
-    local branch_onto="${2:-"main"}"
+    local branch_onto="${2:-main}"
     print-header "Switch to ${branch_src}"
     git switch "${branch_src}" || return 1
     print-header "Rebase ${branch_src} onto ${branch_onto}"
@@ -127,7 +127,7 @@ ggit-stat-daily() {
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
-        --format="%ad" \
+        --format=%ad \
         --date="format:%H" \
         | sort \
         | uniq -c \
@@ -146,7 +146,7 @@ ggit-stat-weekly() {
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
-        --format="%ad" \
+        --format=%ad \
         --date="format:%u" \
         | sort \
         | uniq -c \
@@ -165,7 +165,7 @@ ggit-stat-monthly() {
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
-        --format="%ad" \
+        --format=%ad \
         --date="format:%d" \
         | sort \
         | uniq -c \

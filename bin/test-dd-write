@@ -9,7 +9,7 @@
 ############
 ## CONFIG ##
 ############
-test_file_name="dd_test"
+test_file_name=dd_test
 block_sizes_small=(1k 2k 4k 8k 16k 32k)
 block_sizes_medium=(64k 128k 256k 512k)
 block_sizes_large=(1M 2M 4M 8M)

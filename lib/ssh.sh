@@ -18,7 +18,7 @@ unlock-key() {
 
     # Add key to ssh-agent
     if ! grep -qs "$(cat "${key}.pub")" <<<"$(ssh-add -L || return 0)"; then
-        ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS="wrecho" ssh-add -t 6h "${key}" </dev/null
+        ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS=wrecho ssh-add -t 6h "${key}" </dev/null
     fi
 }
 

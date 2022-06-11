@@ -8,7 +8,7 @@
 ##############################
 
 # Config
-journal_retention="2w"
+journal_retention=2w
 
 # Strict mode
 set -euo pipefail
