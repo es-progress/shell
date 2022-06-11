@@ -48,8 +48,10 @@ gh-labels-exists() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
+    local result
 
-    gh-labels-get "${owner}" "${repo}" "${label}" | jq -e .id >/dev/null
+    result=$(gh-labels-get "${owner}" "${repo}" "${label}")
+    jq -e '.id' >/dev/null <<<"${result}"
 }
 
 ## List all labels for a repo
@@ -60,10 +62,10 @@ gh-labels-exists() {
 gh-labels-list() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
+    local result
 
-    curl \
-        --silent -u "${GH_USER}:${GH_TOKEN}" \
-        --url "https://api.github.com/repos/${owner}/${repo}/labels" | jq .
+    result=$(curl --silent -u "${GH_USER}:${GH_TOKEN}" --url "https://api.github.com/repos/${owner}/${repo}/labels")
+    jq '.' <<<"${result}"
 }
 
 ## Add a label to repo
@@ -140,8 +142,10 @@ gh-labels-delete() {
 gh-labels-delete-all() {
     local owner="${1:?"Owner missing"}"
     local repo="${2:?"Repo missing"}"
+    local result labels
 
-    labels=$(gh-labels-list "${owner}" "${repo}" | jq -rM .[].name)
+    result=$(gh-labels-list "${owner}" "${repo}")
+    labels=$(jq -rM '.[].name' <<<"${result}")
 
     for label in $labels; do
         gh-labels-delete "${owner}" "${repo}" "${label}"
@@ -151,9 +155,10 @@ gh-labels-delete-all() {
 ## List public SSH keys for user
 ################################
 gh-sshkeys-list() {
-    curl \
-        --silent -u "${GH_USER}:${GH_TOKEN}" \
-        --url https://api.github.com/user/keys | jq .[]
+    local result
+
+    result=$(curl --silent -u "${GH_USER}:${GH_TOKEN}" --url "https://api.github.com/user/keys")
+    jq '.[]' <<<"${result}"
 }
 
 ## Get public SSH key
@@ -166,7 +171,10 @@ gh-sshkeys-list() {
 gh-sshkeys-get() {
     local title="${1?:"Title missing"}"
     local filter="${2:-}"
-    gh-sshkeys-list "${title}" | jq -r "select(.title == \"${title}\") | .${filter}"
+    local result
+
+    result=$(gh-sshkeys-list "${title}")
+    jq -r "select(.title == \"${title}\") | .${filter}" <<<"${result}"
 }
 
 ## Delete public SSH key
