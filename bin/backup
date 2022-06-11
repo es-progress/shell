@@ -21,7 +21,7 @@
 ##########
 _version() {
     cat <<VERSION
-Backup v2.1.1
+Backup v2.1.2
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -125,6 +125,11 @@ while :; do
                 QUICK) backup_mode=quick ;;
                 SNAPSHOT) backup_mode=snapshot ;;
                 ARCHIVE) backup_mode=archive ;;
+                *)
+                    echo "Not supported mode: ${1}"
+                    _usage
+                    exit 1
+                    ;;
             esac
             ;;
         --format)
@@ -133,6 +138,11 @@ while :; do
                 YMD) date_format=%F ;;
                 24H) date_format=%T ;;
                 FULL) date_format=%F_%T ;;
+                *)
+                    echo "Not supported format: ${1}"
+                    _usage
+                    exit 1
+                    ;;
             esac
             ;;
         --debug) set -x ;;
@@ -227,6 +237,10 @@ case "${backup_mode}" in
             done
             print-finish
         fi
+        ;;
+    *)
+        print-error "Invalid mode: ${backup_mode}"
+        exit 1
         ;;
 esac
 
