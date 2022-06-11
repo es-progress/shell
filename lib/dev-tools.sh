@@ -14,11 +14,11 @@ debug-dns-mail() {
     local domain="${1?:"Domain missing"}"
     local selector="${2?:"DKIM selector missing"}"
 
-    print-header "SPF"
+    print-header SPF
     dig TXT "${domain}"
-    print-header "DMARC"
+    print-header DMARC
     dig TXT "_dmarc.${domain}"
-    print-header "DKIM"
+    print-header DKIM
     dig TXT "${selector}._domainkey.${domain}"
 }
 

@@ -66,7 +66,7 @@ print-status() {
 ## @default      Done
 ########################
 print-finish() {
-    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-"Done."}${TXT_NORM}"
+    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
 }
 
 ## Script running time

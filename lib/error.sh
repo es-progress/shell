@@ -34,6 +34,6 @@ error-exit() {
 ## Abort program
 ################
 abort() {
-    print-error "Aborted."
-    exit ${_E_ABORT}
+    print-error Aborted.
+    exit "${_E_ABORT}"
 }
