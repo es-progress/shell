@@ -57,7 +57,7 @@ urlencode() {
 
     # Encode each individual chars sequentially
     for (( pos=0 ; pos<${#string} ; pos++ )); do
-        char="${string:$pos:1}"
+        char="${string:${pos}:1}"
         case "${char}" in
             [-_.~a-zA-Z0-9]) enc_char="${char}" ;;
             *) printf -v enc_char "%%%02x" "'${char}" ;;
