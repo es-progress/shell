@@ -113,7 +113,7 @@ gh-labels-add-multiple() {
 
     labels=$(read-file-json "${labels_file}")
     local IFS=$'\n\t'
-    for row in $labels; do
+    for row in ${labels}; do
         gh-labels-add "${owner}" "${repo}" "${row}"
     done
 }
@@ -147,7 +147,7 @@ gh-labels-delete-all() {
     result=$(gh-labels-list "${owner}" "${repo}")
     labels=$(jq -rM '.[].name' <<<"${result}")
 
-    for label in $labels; do
+    for label in ${labels}; do
         gh-labels-delete "${owner}" "${repo}" "${label}"
     done
 }
