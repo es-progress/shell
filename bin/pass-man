@@ -21,7 +21,7 @@ timer=6h
 _usage() {
     cat <<HELP
 
-pass-man v1.1.0
+pass-man v1.1.1
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
 Usage: vault ACTION [TARGET] [OPTIONS]
@@ -36,16 +36,13 @@ HELP
 ## Check if tomb is opened
 ##########################
 _check-tomb-open() {
-    if tomb list >/dev/null 2>&1; then
-        return 0
-    else
-        return 1
-    fi
+    tomb list >/dev/null 2>&1
 }
 
 ## Open vault
 #############
 _vault-open() {
+    # shellcheck disable=SC2310
     if ! _check-tomb-open; then
         pass open -f --timer="${timer}"
 
@@ -59,6 +56,7 @@ _vault-open() {
 ## Close vault
 ##############
 _vault-close() {
+    # shellcheck disable=SC2310
     if _check-tomb-open; then
         pass close
 

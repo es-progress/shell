@@ -61,8 +61,14 @@ build-mkdocs() {
 ###############################
 iplocation() {
     : "${1?:"IP address missing"}"
+    local params result
+    params="access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1"
+
     for arg in "${@}"; do
-        curl -s -w"\n" "http://api.ipstack.com/${arg}?access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1" | jq
+        if ! result=$(curl --no-progress-meter -w"\n" "http://api.ipstack.com/${arg}?${params}"); then
+            return 1
+        fi
+        jq '.' <<<"${result}"
     done
 }
 

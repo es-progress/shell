@@ -14,7 +14,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-if [[ $(id -u) -ne 0 ]]; then
+user_id=$(id -u)
+if [[ "${user_id}" -ne 0 ]]; then
     echo "Run as root!"
     exit 1
 fi
@@ -23,7 +24,10 @@ module="${1?:"Kernel module missing"}"
 priv_key="${2?:"MOK private key missing"}"
 cert_key="${3?:"MOK certificate missing"}"
 
-for modfile in "$(dirname "$(modinfo -n "${module}")")"/*.ko; do
+module_file=$(modinfo -n "${module}")
+module_dir=$(dirname "${module_file}")
+modfiles=$(find "${module_dir}" -name "*.ko" | sort)
+for modfile in ${modfiles}; do
     echo "Signing ${modfile}"
     "/usr/src/linux-headers-$(uname -r)/scripts/sign-file" sha256 "${priv_key}" "${cert_key}" "${modfile}"
 done
