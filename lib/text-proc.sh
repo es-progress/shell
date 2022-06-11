@@ -60,7 +60,7 @@ urlencode() {
         char="${string:$pos:1}"
         case "${char}" in
             [-_.~a-zA-Z0-9]) enc_char="${char}" ;;
-            *) printf -v enc_char '%%%02x' "'${char}" ;;
+            *) printf -v enc_char "%%%02x" "'${char}" ;;
         esac
         encoded+="${enc_char}"
     done
