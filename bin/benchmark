@@ -175,7 +175,7 @@ _run-benchmark() {
         memory) params=("${params[@]}" "--threads=${2}" "--memory-block-size=${3}" "--memory-total-size=${4}" "--memory-access-mode=${5}" memory) ;;
         disk) params=("${params[@]}" "--threads=${2}" "--file-num=${3}" "--file-block-size=${4}" "--file-test-mode=${5}" "--file-fsync-all=${6}" "--file-rw-ratio=${7}" "--file-total-size=${8}" fileio) ;;
         download)
-            curl -4 --max-time 10 -so /dev/null -w '%{speed_download}\n' --url "${4}"
+            curl -4 --max-time 60 --no-progress-meter -o /dev/null -w '%{speed_download}\n' --url "${4}"
             return 0
             ;;
         *)
