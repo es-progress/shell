@@ -11,7 +11,7 @@
 ## @param    $1  File
 ##########################
 dir-file() {
-    local file="${1:?'File missing'}"
+    local file="${1:?"File missing"}"
 
     if [[ ! -f "${file}" ]]; then
         print-error "Not a file"
@@ -33,7 +33,7 @@ dir-script() {
 ## @param    $1  Directory
 ####################################
 dir-parents() {
-    local dir="${1:?'Directory missing'}"
+    local dir="${1:?"Directory missing"}"
     local parents=()
 
     # Convert to absolute path
@@ -60,8 +60,8 @@ dir-parents() {
 ## @param   $2  Directory
 #############################################
 give() {
-    local user="${1:?'User missing'}"
-    local dir="${2:?'Directory missing'}"
+    local user="${1:?"User missing"}"
+    local dir="${2:?"Directory missing"}"
     shift 2
     sudo chgrp -R "${user}" "${dir}" "${@}"
     sudo chmod -R o-rwx "${dir}" "${@}"

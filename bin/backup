@@ -156,10 +156,10 @@ while :; do
 done
 
 # Check required options
-: "${file_system:?'Filesystem missing'}"
-: "${mount_point:?'Mounting point missing'}"
-: "${source_dir:?'Source missing'}"
-: "${dest_dir:?'Destination missing'}"
+: "${file_system:?"Filesystem missing"}"
+: "${mount_point:?"Mounting point missing"}"
+: "${source_dir:?"Source missing"}"
+: "${dest_dir:?"Destination missing"}"
 
 if ! findmnt "${mount_point}" >/dev/null; then
     print-status "Mount backup filesystem..."

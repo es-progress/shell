@@ -147,11 +147,11 @@ _cpu-app-test() {
     dd if=/dev/urandom of=test_file.cpu bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
 
     # shellcheck disable=SC2312
-    time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <test_file.cpu; } 2>&1)
+    time_sha=$({ TIME="%e seconds" time sha256sum >/dev/null <test_file.cpu; } 2>&1)
     # shellcheck disable=SC2312
-    time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <test_file.cpu; } 2>&1)
+    time_bzip=$({ TIME="%e seconds" time bzip2 >/dev/null <test_file.cpu; } 2>&1)
     # shellcheck disable=SC2312
-    time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <test_file.cpu; } 2>&1)
+    time_aes=$({ TIME="%e seconds" time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <test_file.cpu; } 2>&1)
 
     printf "%-20s %s\n" "SHA256-hashing:" "${time_sha}"
     printf "%-20s %s\n" "bzip2-compressing:" "${time_bzip}"
@@ -175,7 +175,7 @@ _run-benchmark() {
         memory) params=("${params[@]}" "--threads=${2}" "--memory-block-size=${3}" "--memory-total-size=${4}" "--memory-access-mode=${5}" memory) ;;
         disk) params=("${params[@]}" "--threads=${2}" "--file-num=${3}" "--file-block-size=${4}" "--file-test-mode=${5}" "--file-fsync-all=${6}" "--file-rw-ratio=${7}" "--file-total-size=${8}" fileio) ;;
         download)
-            curl -4 --max-time 60 --no-progress-meter -o /dev/null -w '%{speed_download}\n' --url "${4}"
+            curl -4 --max-time 60 --no-progress-meter -o /dev/null -w "%{speed_download}\n" --url "${4}"
             return 0
             ;;
         *)
