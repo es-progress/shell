@@ -11,7 +11,7 @@
 ## Check connection
 ###################
 gh-check-connection() {
-    curl -w "\nStatus code: %{http_code}\n" https://api.github.com/zen
+    curl --no-progress-meter -w "\nStatus code: %{http_code}\n" https://api.github.com/zen
 }
 
 ## Check authentication
@@ -19,8 +19,8 @@ gh-check-connection() {
 gh-check-auth() {
     : "${GH_USER:?"GH_USER missing"}"
     : "${GH_TOKEN:?"GH_TOKEN missing"}"
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" -u "${GH_USER}:${GH_TOKEN}" https://api.github.com/user)
-    [[ "${status_code}" == "200" ]] && return 0 || return 1
+    status_code=$(curl --no-progress-meter -o /dev/null -w "%{http_code}" -u "${GH_USER}:${GH_TOKEN}" https://api.github.com/user)
+    [[ "${status_code}" == "200" ]]
 }
 
 ## Get label
@@ -34,7 +34,7 @@ gh-labels-get() {
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
     curl \
-        --silent -u "${GH_USER}:${GH_TOKEN}" \
+        --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" \
         --url "https://api.github.com/repos/${owner}/${repo}/labels/${label}"
 }
 
@@ -64,7 +64,7 @@ gh-labels-list() {
     local repo="${2:?"Repo missing"}"
     local result
 
-    result=$(curl --silent -u "${GH_USER}:${GH_TOKEN}" --url "https://api.github.com/repos/${owner}/${repo}/labels")
+    result=$(curl --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" --url "https://api.github.com/repos/${owner}/${repo}/labels")
     jq '.' <<<"${result}"
 }
 
@@ -86,14 +86,14 @@ gh-labels-add() {
     if gh-labels-exists "${owner}" "${repo}" "${name}"; then
         echo "Update ${name}"
         curl \
-            --silent -u "${GH_USER}:${GH_TOKEN}" \
+            --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" \
             -X PATCH \
             -d "${labels}" \
             --url "https://api.github.com/repos/${owner}/${repo}/labels/${name}"
     else
         echo "Create ${name}"
         curl \
-            --silent -u "${GH_USER}:${GH_TOKEN}" \
+            --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" \
             -X POST \
             -d "${labels}" \
             --url "https://api.github.com/repos/${owner}/${repo}/labels"
@@ -129,7 +129,7 @@ gh-labels-delete() {
     local repo="${2:?"Repo missing"}"
     local label="${3:?"Label name missing"}"
     curl \
-        --silent -u "${GH_USER}:${GH_TOKEN}" \
+        --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" \
         -X DELETE \
         --url "https://api.github.com/repos/${owner}/${repo}/labels/${label}"
 }
@@ -157,7 +157,7 @@ gh-labels-delete-all() {
 gh-sshkeys-list() {
     local result
 
-    result=$(curl --silent -u "${GH_USER}:${GH_TOKEN}" --url "https://api.github.com/user/keys")
+    result=$(curl --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" --url https://api.github.com/user/keys)
     jq '.[]' <<<"${result}"
 }
 
@@ -184,7 +184,7 @@ gh-sshkeys-get() {
 gh-sshkeys-delete() {
     local key_id="${1?:"Key ID missing"}"
     curl \
-        --silent -u "${GH_USER}:${GH_TOKEN}" \
+        --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" \
         -X DELETE \
         --url "https://api.github.com/user/keys/${key_id}"
 }
@@ -198,7 +198,7 @@ gh-sshkeys-create() {
     local title="${1?:"Title missing"}"
     local key="${2?:"Key missing"}"
     curl \
-        --silent -u "${GH_USER}:${GH_TOKEN}" \
+        --no-progress-meter -u "${GH_USER}:${GH_TOKEN}" \
         -X POST \
         -d "$(printf '{"title":"%s","key":"%s"}' "${title}" "${key}")" \
         --url https://api.github.com/user/keys
