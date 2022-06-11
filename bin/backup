@@ -20,8 +20,8 @@
 ## Version
 ##########
 _version() {
-    cat <<"VERSION"
-Backup v2.1.0
+    cat <<VERSION
+Backup v2.1.1
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -29,7 +29,7 @@ VERSION
 ## Usage
 ########
 _usage() {
-    cat <<"HELP"
+    cat <<HELP
 
 Usage: backup REQUIRED_OPTIONS... [OPTIONS...]
 
@@ -77,9 +77,9 @@ check-root || exit 1
 
 # Parse options
 ###############
-date_format="%F"
-backup_mode="archive"
-archive_dir="archive"
+date_format=%F
+backup_mode=archive
+archive_dir=archive
 exclusion=()
 expire_date=""
 archive_prefix=""
@@ -122,17 +122,17 @@ while :; do
         --mode)
             shift
             case "${1}" in
-                QUICK) backup_mode="quick" ;;
-                SNAPSHOT) backup_mode="snapshot" ;;
-                ARCHIVE) backup_mode="archive" ;;
+                QUICK) backup_mode=quick ;;
+                SNAPSHOT) backup_mode=snapshot ;;
+                ARCHIVE) backup_mode=archive ;;
             esac
             ;;
         --format)
             shift
             case "${1}" in
-                YMD) date_format="%F" ;;
-                24H) date_format="%T" ;;
-                FULL) date_format="%F_%T" ;;
+                YMD) date_format=%F ;;
+                24H) date_format=%T ;;
+                FULL) date_format=%F_%T ;;
             esac
             ;;
         --debug) set -x ;;
@@ -191,7 +191,7 @@ rsync -aAXHEh --info=stats1 --info=progress2 "${opt[@]}" "${exclusion[@]}" "${so
 
 # Post backup steps
 case "${backup_mode}" in
-    "snapshot")
+    snapshot)
         print-status "Manage links for snapshots..."
         # Remove symlink to previous snapshot
         rm -f "${last}"
@@ -208,7 +208,7 @@ case "${backup_mode}" in
             print-finish
         fi
         ;;
-    "archive")
+    archive)
         if [[ ! -e "${destination}/${archive_dir}" ]]; then
             print-status "Create archive dir..."
             mkdir -p "${destination}/${archive_dir}"
@@ -216,7 +216,7 @@ case "${backup_mode}" in
         fi
 
         print-status "Compress files..."
-        tar -C "${destination}" -I "pigz --fast" --sort=name -cf "${destination}/${archive_dir}/${archive_prefix}${now}.tar.gz" "actual/"
+        tar -C "${destination}" -I "pigz --fast" --sort=name -cf "${destination}/${archive_dir}/${archive_prefix}${now}.tar.gz" actual/
         print-finish
 
         if [[ -n "${expire_date}" ]]; then

@@ -18,7 +18,7 @@
 ############
 
 # Version
-version="1.1.6"
+version=1.1.7
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -144,20 +144,20 @@ _clean-up() {
 _cpu-app-test() {
     local time_sha time_bzip time_aes
 
-    dd if=/dev/urandom of="test_file.cpu" bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
+    dd if=/dev/urandom of=test_file.cpu bs=1M count="${cpu_test_file_size}" >/dev/null 2>&1
 
     # shellcheck disable=SC2312
-    time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <"test_file.cpu"; } 2>&1)
+    time_sha=$({ TIME='%e seconds' time sha256sum >/dev/null <test_file.cpu; } 2>&1)
     # shellcheck disable=SC2312
-    time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <"test_file.cpu"; } 2>&1)
+    time_bzip=$({ TIME='%e seconds' time bzip2 >/dev/null <test_file.cpu; } 2>&1)
     # shellcheck disable=SC2312
-    time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <"test_file.cpu"; } 2>&1)
+    time_aes=$({ TIME='%e seconds' time openssl enc -e -aes-256-cbc -pass pass:12345678 -pbkdf2 >/dev/null <test_file.cpu; } 2>&1)
 
     printf "%-20s %s\n" "SHA256-hashing:" "${time_sha}"
     printf "%-20s %s\n" "bzip2-compressing:" "${time_bzip}"
     printf "%-20s %s\n" "AES-encrypting:" "${time_aes}"
 
-    rm -f "test_file.cpu"
+    rm -f test_file.cpu
 }
 
 ## Benchmark
@@ -370,10 +370,10 @@ while :; do
             report_file_prefix="${1}"
             create_report=1
             ;;
-        -c | --cpu) tests+=("cpu") ;;
-        -m | --memory) tests+=("memory") ;;
-        -d | --disk) tests+=("disk") ;;
-        --download) tests+=("download") ;;
+        -c | --cpu) tests+=(cpu) ;;
+        -m | --memory) tests+=(memory) ;;
+        -d | --disk) tests+=(disk) ;;
+        --download) tests+=(download) ;;
         -s | --system) sys_check=1 ;;
         -q | --quick)
             benchmark_depth=quick
@@ -436,7 +436,7 @@ fi
 # CPU info
 cpu_info="$(cat /proc/cpuinfo)"
 cpu_model=$(grep -m 1 "model name" <<<"${cpu_info}" | cut -d ":" -f 2)
-cpu_vendor=$(grep -m 1 "vendor_id" <<<"${cpu_info}" | cut -d ":" -f 2)
+cpu_vendor=$(grep -m 1 vendor_id <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_freq=$(grep -m 1 "cpu MHz" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_cache=$(grep -m 1 "cache size" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_cores=$(awk -F: '/model name/ {core++} END {print core}' <<<"${cpu_info}")
@@ -450,9 +450,9 @@ ram_swap=$(grep "Swap:" <<<"${ram_info}" | awk '{print $2}')
 # OS info
 host=$(hostnamectl)
 hostname=$(hostname)
-os=$(grep -m 1 "Operating" <<<"${host}" | cut -d ":" -f 2)
-kernel=$(grep -m 1 "Kernel" <<<"${host}" | cut -d ":" -f 2)
-arch=$(grep -m 1 "Architecture" <<<"${host}" | cut -d ":" -f 2)
+os=$(grep -m 1 Operating <<<"${host}" | cut -d ":" -f 2)
+kernel=$(grep -m 1 Kernel <<<"${host}" | cut -d ":" -f 2)
+arch=$(grep -m 1 Architecture <<<"${host}" | cut -d ":" -f 2)
 
 # Disks
 disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,7,11 | sort | awk '{if ($3 == 0) {$3="SSD"} else {$3="HDD"}; printf("%-10s%-12s%-3s\n", $1, $2, $3)}')
@@ -460,7 +460,7 @@ disks=$(lsblk --nodeps --noheadings --output NAME,SIZE,ROTA --exclude 1,2,7,11 |
 # If we need to save report to file --> set filename
 # else: discard report (only output to terminal)
 if [[ -n "${create_report}" ]]; then
-    output_file="${report_file_prefix}${hostname}_$(date +"%F_%H_%M")"
+    output_file="${report_file_prefix}${hostname}_$(date +%F_%H_%M)"
 else
     output_file=/dev/null
 fi
