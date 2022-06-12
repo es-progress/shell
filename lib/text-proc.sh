@@ -82,3 +82,16 @@ urldecode() {
     # Print escaped chars e.g. \x3A => :
     printf "\n'%b'\n" "${encoded}"
 }
+
+## Total lines of files in a dir
+##
+## @param   $1  Dir to count
+## @param   $@  Extra args to 'wc'
+##################################
+lines-dir(){
+    local dir="${1:?"Directory missing"}"
+    shift
+
+    # shellcheck disable=SC2312
+    find "${dir}" -type f -print0 | xargs -0 cat | wc -l "${@}"
+}
