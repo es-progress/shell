@@ -76,7 +76,7 @@ iplocation() {
 ##
 ## @param   $1  Serial string
 #####################################
-dev-pretty-php() {
+ppretty-php() {
     local serial="${1?:"Serialized data missing"}"
     php <<EOF
 <?php
