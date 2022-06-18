@@ -80,8 +80,11 @@ cert-sign-csr() {
     local csr="${3?:"CSR path missing"}"
     local cert="${4?:"Certificate path missing"}"
     local validity="${5?:"Valid days missing"}"
-    local tmp_config
+    local subject site tmp_config
     shift 5
+
+    subject=$(openssl req -noout -subject -in "${csr}")
+    site=$(sed -r 's/^.*CN = (.*)$/\1/' <<<"${subject}")
 
     tmp_config=$(mktemp)
     cat <<EOF >>"${tmp_config}"
@@ -90,6 +93,7 @@ keyUsage=critical,digitalSignature,keyEncipherment
 extendedKeyUsage=serverAuth,clientAuth
 subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer
+subjectAltName=DNS:${site}
 EOF
 
     openssl x509 \
