@@ -88,7 +88,7 @@ urldecode() {
 ## @param   $1  Dir to count
 ## @param   $@  Extra args to 'wc'
 ##################################
-lines-dir(){
+lines-dir() {
     local dir="${1:?"Directory missing"}"
     shift
 
