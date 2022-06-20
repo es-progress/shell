@@ -10,7 +10,7 @@
 ##
 ## @param    $1  Key path
 #########################
-cert-create-key() {
+cert-key() {
     local key="${1?:"Key path missing"}"
     shift
     openssl genpkey \
@@ -27,7 +27,7 @@ cert-create-key() {
 ## @param    $3  Validity in days
 ## @param    $4  Certificate subject
 ####################################
-cert-create-selfsigned() {
+cert-selfsigned() {
     local priv_key="${1?:"Private key path missing"}"
     local cert="${2?:"Certificate path missing"}"
     local validity="${3?:"Valid days missing"}"
@@ -51,7 +51,7 @@ cert-create-selfsigned() {
 ## @param    $2  CSR path
 ## @param    $3  CSR subject
 ###########################################
-cert-create-csr() {
+csr-create() {
     local priv_key="${1?:"Private key path missing"}"
     local csr="${2?:"CSR path missing"}"
     local subject="${3?:"CSR subject missing"}"
@@ -74,7 +74,7 @@ cert-create-csr() {
 ## @param    $4  Certificate path
 ## @param    $5  Validity in days
 ###########################################
-cert-sign-csr() {
+csr-sign() {
     local ca_priv_key="${1?:"CA private key path missing"}"
     local ca_cert="${2?:"CA cert path missing"}"
     local csr="${3?:"CSR path missing"}"
@@ -117,7 +117,7 @@ EOF
 ## @param    $5  Certificate path
 ## @param    $6  Validity in days
 ####################################
-cert-create-certificate() {
+cert-create() {
     local priv_key="${1?:"Private key path missing"}"
     local subject="${2?:"CSR subject missing"}"
     local ca_priv_key="${3?:"CA private key path missing"}"
@@ -127,15 +127,15 @@ cert-create-certificate() {
     local csr
 
     csr=$(mktemp)
-    cert-create-csr "${priv_key}" "${csr}" "${subject}"
-    cert-sign-csr "${ca_priv_key}" "${ca_cert}" "${csr}" "${cert}" "${validity}"
+    csr-create "${priv_key}" "${csr}" "${subject}"
+    csr-sign "${ca_priv_key}" "${ca_cert}" "${csr}" "${cert}" "${validity}"
 }
 
 ## Check CSR
 ##
 ## @param    $1  CSR path
 #########################
-cert-view-csr() {
+csr-view() {
     local csr="${1?:"CSR path missing"}"
     shift
     openssl req \
@@ -148,7 +148,7 @@ cert-view-csr() {
 ##
 ## @param    $1  Cert path
 ##########################
-cert-view-cert() {
+cert-view() {
     local cert="${1?:"Certificate path missing"}"
     shift
     openssl x509 \
