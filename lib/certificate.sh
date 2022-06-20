@@ -6,45 +6,6 @@
 ## Wrapper for openssl           ##
 ###################################
 
-## Create private key
-##
-## @param    $1  Key path
-#########################
-cert-key() {
-    local key="${1?:"Key path missing"}"
-    shift
-    openssl genpkey \
-        -aes-256-cbc \
-        -algorithm rsa \
-        -pkeyopt rsa_keygen_bits:4096 \
-        -out "${key}" "${@}"
-}
-
-## Create self-signed certificate
-##
-## @param    $1  Private key path
-## @param    $2  Certificate path
-## @param    $3  Validity in days
-## @param    $4  Certificate subject
-####################################
-cert-selfsigned() {
-    local priv_key="${1?:"Private key path missing"}"
-    local cert="${2?:"Certificate path missing"}"
-    local validity="${3?:"Valid days missing"}"
-    local subject="${4?:"Certificate subject missing"}"
-    shift 4
-    openssl req \
-        -new \
-        -x509 \
-        -sha512 \
-        -extensions v3_ca \
-        -addext "keyUsage=critical,keyCertSign,cRLSign" \
-        -key "${priv_key}" \
-        -out "${cert}" \
-        -days "${validity}" \
-        -subj "${subject}" "${@}"
-}
-
 ## Create Certificate Signing Request (CSR)
 ##
 ## @param    $1  Private key path
@@ -108,6 +69,58 @@ EOF
         -days "${validity}" "${@}"
 }
 
+## Check CSR
+##
+## @param    $1  CSR path
+#########################
+csr-view() {
+    local csr="${1?:"CSR path missing"}"
+    shift
+    openssl req \
+        -noout \
+        -text \
+        -in "${csr}" "${@}"
+}
+
+## Create private key
+##
+## @param    $1  Key path
+#########################
+cert-key() {
+    local key="${1?:"Key path missing"}"
+    shift
+    openssl genpkey \
+        -aes-256-cbc \
+        -algorithm rsa \
+        -pkeyopt rsa_keygen_bits:4096 \
+        -out "${key}" "${@}"
+}
+
+## Create self-signed certificate
+##
+## @param    $1  Private key path
+## @param    $2  Certificate path
+## @param    $3  Validity in days
+## @param    $4  Certificate subject
+####################################
+cert-selfsigned() {
+    local priv_key="${1?:"Private key path missing"}"
+    local cert="${2?:"Certificate path missing"}"
+    local validity="${3?:"Valid days missing"}"
+    local subject="${4?:"Certificate subject missing"}"
+    shift 4
+    openssl req \
+        -new \
+        -x509 \
+        -sha512 \
+        -extensions v3_ca \
+        -addext "keyUsage=critical,keyCertSign,cRLSign" \
+        -key "${priv_key}" \
+        -out "${cert}" \
+        -days "${validity}" \
+        -subj "${subject}" "${@}"
+}
+
 ## Create site certificate
 ##
 ## @param    $1  Private key path
@@ -129,19 +142,6 @@ cert-create() {
     csr=$(mktemp)
     csr-create "${priv_key}" "${csr}" "${subject}"
     csr-sign "${ca_priv_key}" "${ca_cert}" "${csr}" "${cert}" "${validity}"
-}
-
-## Check CSR
-##
-## @param    $1  CSR path
-#########################
-csr-view() {
-    local csr="${1?:"CSR path missing"}"
-    shift
-    openssl req \
-        -noout \
-        -text \
-        -in "${csr}" "${@}"
 }
 
 ## Check Certificate
