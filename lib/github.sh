@@ -22,7 +22,7 @@ ghub-list() {
 #################################
 ghub-get() {
     for owner in "${@}"; do
-        gh repo list "${owner}" --json nameWithOwner --jq ".[].nameWithOwner"
+        gh repo list "${owner}" --json nameWithOwner --jq ".[].nameWithOwner" | sort
     done
 }
 
