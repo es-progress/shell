@@ -72,7 +72,6 @@ ghub-sync() {
     shift 2
 
     gh repo edit "${repo}" \
-        --default-branch main \
         --delete-branch-on-merge \
         --enable-auto-merge=false \
         --enable-rebase-merge=false \
