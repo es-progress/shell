@@ -101,10 +101,14 @@ ghub-topic() {
     local repo="${1?:"Repo missing"}"
     local topics=()
     shift
+
     for topic in "${@}"; do
         topics+=(--add-topic "${topic}")
     done
-    gh repo edit "${repo}" "${topics[@]}"
+
+    if [[ -n "${topics[*]}" ]]; then
+        gh repo edit "${repo}" "${topics[@]}"
+    fi
 }
 
 ## Create new repo from template
