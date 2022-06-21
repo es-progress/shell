@@ -111,15 +111,15 @@ ghub-topic() {
 ##
 ## @param    $1  Repo
 ## @param    $1  Template repo
-## @param    $@  Extra args to gh
-#################################
+## @param    $@  Topics
+################################
 ghub-repo-template() {
     local repo="${1?:"Repo missing"}"
     local template="${2?:"Template missing"}"
     shift 2
 
-    ghub-repo-new "${repo}" --private --template "${template}" "${@}"
+    ghub-repo-new "${repo}" --private --template "${template}"
     ghub-sync "${repo}" "${template}"
-    ghub-topic "${repo}" kulapapa
+    ghub-topic "${repo}" "${@}"
     ghub-open "${repo}"
 }
