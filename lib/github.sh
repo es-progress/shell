@@ -22,6 +22,7 @@ ghub-list() {
 #################################
 ghub-get() {
     for owner in "${@}"; do
+        # shellcheck disable=SC2312
         gh repo list "${owner}" --json nameWithOwner --jq ".[].nameWithOwner" | sort
     done
 }
