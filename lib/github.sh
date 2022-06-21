@@ -21,11 +21,9 @@ ghub-list() {
 ## @param    $@  Owners (account)
 #################################
 ghub-get() {
-    local repos
     for owner in "${@}"; do
-        repos="${repos}$(gh repo list "${owner}" --json nameWithOwner --jq ".[].nameWithOwner")"
+        gh repo list "${owner}" --json nameWithOwner --jq ".[].nameWithOwner"
     done
-    echo "${repos}"
 }
 
 ## Open repo in browser
