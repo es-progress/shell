@@ -18,13 +18,14 @@ ghub-list() {
 
 ## Get repo names
 ##
-## @param    $@  Owners (account)
+## @param    $1  Owner (account)
+## @param    $@  Extra args to gh
 #################################
 ghub-get() {
-    for owner in "${@}"; do
-        # shellcheck disable=SC2312
-        gh repo list "${owner}" --json nameWithOwner --jq ".[].nameWithOwner" | sort
-    done
+    local owner="${1?:"Owner missing"}"
+    shift
+    # shellcheck disable=SC2312
+    gh repo list "${owner}" --limit 100 --json nameWithOwner --jq ".[].nameWithOwner" "${@}" | sort
 }
 
 ## Open repo in browser
