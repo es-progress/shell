@@ -63,7 +63,7 @@ ghub-repo-new() {
 ## Sync repo config from template
 ##
 ## @param    $1  Repo
-## @param    $1  Template repo
+## @param    $2  Template repo
 ## @param    $@  Extra args to gh
 #################################
 ghub-sync() {
@@ -114,7 +114,7 @@ ghub-topic() {
 ## Create new repo from template
 ##
 ## @param    $1  Repo
-## @param    $1  Template repo
+## @param    $2  Template repo
 ## @param    $@  Topics
 ################################
 ghub-repo-template() {
