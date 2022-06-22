@@ -60,25 +60,34 @@ ghub-repo-new() {
     gh repo create "${repo}" "${@}"
 }
 
-## Sync repo config from template
+## Config repo
 ##
 ## @param    $1  Repo
-## @param    $2  Template repo
 ## @param    $@  Extra args to gh
 #################################
-ghub-sync() {
+ghub-sync-config() {
     local repo="${1?:"Repo missing"}"
-    local template="${2?:"Template missing"}"
-    local label labels_current labels_template exist_in_template
-    shift 2
-
+    shift
     gh repo edit "${repo}" \
         --delete-branch-on-merge \
         --enable-auto-merge=false \
         --enable-rebase-merge=false \
         --enable-squash-merge=false \
         --enable-projects=false \
-        --enable-wiki=false || return 1
+        --enable-wiki=false "${@}"
+}
+
+## Sync labels from template
+##
+## @param    $1  Repo
+## @param    $2  Template repo
+## @param    $@  Extra args to gh
+#################################
+ghub-sync-labels() {
+    local repo="${1?:"Repo missing"}"
+    local template="${2?:"Template missing"}"
+    local label labels_current labels_template exist_in_template
+    shift 2
 
     # Sync labels
     labels_current=$(gh label list --repo "${repo}" --json name --jq '.[].name')
@@ -123,7 +132,8 @@ ghub-repo-template() {
     shift 2
 
     ghub-repo-new "${repo}" --private --template "${template}"
-    ghub-sync "${repo}" "${template}"
+    ghub-sync-config "${repo}"
+    ghub-sync-labels "${repo}" "${template}"
     ghub-topic "${repo}" "${@}"
     ghub-open "${repo}"
 }
