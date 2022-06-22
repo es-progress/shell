@@ -127,3 +127,21 @@ ghub-repo-template() {
     ghub-topic "${repo}" "${@}"
     ghub-open "${repo}"
 }
+
+## Run command for each repo of owner
+##
+## @param    $1  Owner
+## @param    $2  Command
+## @param    $@  Extra args to command
+######################################
+ghub-foreach-owner() {
+    local owner="${1?:"Owner missing"}"
+    local command="${2?:"Command missing"}"
+    local repo repos
+    shift 2
+
+    repos=$(ghub-get "${owner}")
+    for repo in ${repos}; do
+        "${command}" "${repo}" "${@}"
+    done
+}
