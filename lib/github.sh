@@ -78,7 +78,7 @@ ghub-sync() {
         --enable-rebase-merge=false \
         --enable-squash-merge=false \
         --enable-projects=false \
-        --enable-wiki=false
+        --enable-wiki=false || return 1
 
     # Sync labels
     labels_current=$(gh label list --repo "${repo}" --json name --jq '.[].name')
