@@ -156,3 +156,24 @@ ghub-foreach-owner() {
         "${command}" "${repo}" "${@}"
     done
 }
+
+## Run command for each repo of owner
+## Repos filtered by topic
+##
+## @param    $1  Owner
+## @param    $2  Topic
+## @param    $3  Command
+## @param    $@  Extra args to command
+######################################
+ghub-foreach-topic() {
+    local owner="${1?:"Owner missing"}"
+    local topic="${2?:"Topic missing"}"
+    local command="${3?:"Command missing"}"
+    local repo repos
+    shift 3
+
+    repos=$(ghub-get "${owner}" --topic "${topic}")
+    for repo in ${repos}; do
+        "${command}" "${repo}" "${@}"
+    done
+}
