@@ -15,7 +15,7 @@ jobs:
       - name: Run beautysh
         uses: illvart/beautysh-action@latest
         with:
-          args: "--force-function-style paronly --check bin/* lib/*"
+          args: --force-function-style paronly --check bin/* lib/*
   linter:
     name: Linting
     runs-on: ubuntu-20.04
