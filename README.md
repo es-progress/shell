@@ -1,5 +1,7 @@
 # Bash Shell scripts & functions
 
+[![CI](https://github.com/es-progress/shell/actions/workflows/main.yml/badge.svg)](https://github.com/es-progress/shell/actions/workflows/main.yml)
+
 ## Overview
 This is a collection of utility scripts and helper functions.
 
