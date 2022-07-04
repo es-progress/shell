@@ -13,6 +13,8 @@
 export _E_ABORT=10
 # Missing
 export _E_MISSING=11
+# Not changed
+export _E_NO_CHANGE=32
 
 ###############
 ## FUNCTIONS ##
