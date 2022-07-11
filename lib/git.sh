@@ -57,6 +57,7 @@ ggit-fix() {
 #######################
 ggit-pull() {
     local branch="${1:-main}"
+
     print-header "Switch to ${branch}"
     git checkout "${branch}" || return 1
     print-header "Pull remote changes for ${branch}"
@@ -73,6 +74,20 @@ ggit-diff() {
     local branch_a="${1?:"Branch A missing"}"
     local branch_b="${2?:"Branch B missing"}"
     git diff --stat "${branch_a}" "${branch_b}"
+}
+
+## Create new branch
+##
+## @param    $1  New branch name
+## @param    $2  Branch from this
+## @default      main
+#################################
+ggit-switch() {
+    local branch_new="${1?:"New branch missing"}"
+    local branch_from="${2:-main}"
+
+    git switch "${branch_from}"
+    git switch -c "${branch_new}"
 }
 
 ## Commit CiviCRM extension
@@ -99,6 +114,7 @@ ggit-commit() {
 ggit-base() {
     local branch_src="${1?:"Branch to rebase missing"}"
     local branch_onto="${2:-main}"
+
     print-header "Switch to ${branch_src}"
     git switch "${branch_src}" || return 1
     print-header "Rebase ${branch_src} onto ${branch_onto}"
