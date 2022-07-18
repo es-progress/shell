@@ -34,7 +34,11 @@ ghub-get() {
 ## @param    $@  Extra args to gh
 #################################
 ghub-open() {
-    local repo="${1?:"Repo missing"}"
+    local repo="${1:-}"
+    if [[ -z "${repo}" ]]; then
+        gh browse
+        return 0
+    fi
     shift
     gh browse --repo "${repo}" "${@}"
 }
@@ -45,9 +49,13 @@ ghub-open() {
 ## @param    $@  Extra args to gh
 #################################
 ghub-settings() {
-    local repo="${1?:"Repo missing"}"
+    local repo="${1:-}"
+    if [[ -z "${repo}" ]]; then
+        gh browse --settings
+        return 0
+    fi
     shift
-    ghub-open "${repo}" --settings "${@}"
+    gh browse --repo "${repo}" --settings "${@}"
 }
 
 ## Create new repo
