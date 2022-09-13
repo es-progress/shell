@@ -185,3 +185,18 @@ ghub-foreach-topic() {
         "${command}" "${repo}" "${@}"
     done
 }
+
+## Create issue in browser
+##
+## @param    $1  Repo
+## @param    $@  Extra args to gh
+#################################
+ghub-issue() {
+    local repo="${1:-}"
+    if [[ -z "${repo}" ]]; then
+        gh issue create --web
+        return 0
+    fi
+    shift
+    gh issue create --web --repo "${repo}" "${@}"
+}
