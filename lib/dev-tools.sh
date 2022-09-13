@@ -86,3 +86,37 @@ echo "\n";
 ?>
 EOF
 }
+
+## Bump version (for semantic versioning)
+##
+## @param   $1  Current version
+## @param   $2  Which part to bump (major, minor, patch)
+########################################################
+bump-version() {
+    local version="${1?:"Version missing"}"
+    local part="${2?:"Version part missing"}"
+    local major minor patch
+
+    IFS=$'.' read -r major minor patch <<< "${version}"
+
+    case "${part}" in
+        major)
+            major=$((major + 1))
+            minor=0
+            patch=0
+            ;;
+        minor)
+            minor=$((minor + 1))
+            patch=0
+            ;;
+        patch)
+            patch=$((patch + 1))
+            ;;
+        *)
+            print-error "Invalid part"
+            return 1
+            ;;
+    esac
+
+    echo "${major}.${minor}.${patch}"
+}
