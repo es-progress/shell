@@ -7,11 +7,13 @@ on:
       - "bin/**"
       - "lib/**"
 jobs:
-  code-style:
-    name: Check code style (beautysh)
+  format:
+    name: Check format
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - name: Self checkout
+        uses: actions/checkout@v3
+
       - name: Run beautysh
         uses: illvart/beautysh-action@latest
         with:
@@ -19,9 +21,11 @@ jobs:
   linter:
     name: Linting
     runs-on: ubuntu-20.04
-    needs: code-style
+    needs: format
     steps:
-      - uses: actions/checkout@v3
+      - name: Self checkout
+        uses: actions/checkout@v3
+
       - name: Run shellcheck
         uses: ludeeus/action-shellcheck@master
         env:
