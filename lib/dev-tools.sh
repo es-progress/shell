@@ -98,6 +98,18 @@ bump-version() {
     local major minor patch
 
     IFS=$'.' read -r major minor patch <<< "${version}"
+    if [[ ! "${major}" =~ ^[0-9]+$ ]]; then
+        print-error "Invalid version"
+        return 1
+    fi
+    if [[ ! "${minor}" =~ ^[0-9]+$ ]]; then
+        print-error "Invalid version"
+        return 1
+    fi
+    if [[ ! "${patch}" =~ ^[0-9]+$ ]]; then
+        print-error "Invalid version"
+        return 1
+    fi
 
     case "${part}" in
         major)
