@@ -18,7 +18,7 @@
 ############
 
 # Version
-version=1.1.7
+version=1.1.8
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6

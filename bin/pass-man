@@ -21,7 +21,7 @@ timer=6h
 _usage() {
     cat <<HELP
 
-pass-man v1.1.1
+pass-man v1.1.2
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
 Usage: vault ACTION [TARGET] [OPTIONS]
