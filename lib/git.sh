@@ -90,21 +90,6 @@ ggit-switch() {
     git switch -c "${branch_new}"
 }
 
-## Commit CiviCRM extension
-##
-## @param   $*  Extension dirs
-##############################
-ggit-commit() {
-    local version key
-    for arg in "${@}"; do
-        # shellcheck disable=SC2312
-        key=$(sed -n '/extension key/ p' "${arg}/info.xml"| sed -r 's@^<extension key="(.*)" type="module">$@\1@')
-        # shellcheck disable=SC2312
-        version=$(sed -n '/<version>/ p' "${arg}/info.xml"| sed -r 's@^\s*<version>(.*)</version>@\1@')
-        git commit -m "${key} v${version}" "${arg}"
-    done
-}
-
 ## Rebase branch
 ##
 ## @param    $1  Branch to rebase
