@@ -156,11 +156,10 @@ ghub-repo-template() {
 ghub-foreach-owner() {
     local owner="${1?:"Owner missing"}"
     local command="${2?:"Command missing"}"
-    local repo repos
+    local repo
     shift 2
 
-    repos=$(ghub-get "${owner}")
-    for repo in ${repos}; do
+    for repo in $(ghub-get "${owner}"); do
         "${command}" "${repo}" "${@}"
     done
 }
@@ -177,11 +176,10 @@ ghub-foreach-topic() {
     local owner="${1?:"Owner missing"}"
     local topic="${2?:"Topic missing"}"
     local command="${3?:"Command missing"}"
-    local repo repos
+    local repo
     shift 3
 
-    repos=$(ghub-get "${owner}" --topic "${topic}")
-    for repo in ${repos}; do
+    for repo in $(ghub-get "${owner}" --topic "${topic}"); do
         "${command}" "${repo}" "${@}"
     done
 }
