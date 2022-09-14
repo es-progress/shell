@@ -18,7 +18,7 @@ if [[ -z "${lib_dir}" ]]; then
 fi
 
 # Import lib files
-files=$(find "${lib_dir}" -type f)
-for file in ${files}; do
+# shellcheck disable=SC2312
+while IFS= read -r -d '' file; do
     source "${file}"
-done
+done < <(find "${lib_dir}" -type f -print0)
