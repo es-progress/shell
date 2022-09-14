@@ -135,7 +135,7 @@ EOF
 ## Clean up after tests
 #######################
 _clean-up() {
-    rm -f test_file.*
+    find . -name "test_file.*" -delete
     exit
 }
 

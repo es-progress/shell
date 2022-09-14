@@ -34,7 +34,7 @@ done
 journalctl --flush --rotate --vacuum-time="${journal_retention}"
 
 # cache
-rm -rf /var/cache/*
-rm -rf /var/lib/snapd/cache/*
+find /var/cache -mindepth 1 -delete
+find /var/lib/snapd/cache -mindepth 1 -delete
 
 exit 0
