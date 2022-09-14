@@ -35,14 +35,13 @@ check-not-root() {
 ####################################
 foreach-subdir() {
     # shellcheck disable=SC2312
-    dirs=$(find . -mindepth 1 -maxdepth 1 -type d | sort)
-    for dir in ${dirs}; do
+    while IFS= read -r -d '' dir; do
         print-section "${dir}"
         (
             cd "${dir}" || return 1
             "${@}"
         )
-    done
+    done < <(find . -mindepth 1 -maxdepth 1 -type d -print0 | sort -z)
 }
 
 ## Run command in each sub directory
@@ -54,15 +53,14 @@ foreach-subdir-pipe() {
     local command="${1?:"Command missing"}"
     local pipe="${2?:"Pipe command missing"}"
     # shellcheck disable=SC2312
-    dirs=$(find . -mindepth 1 -maxdepth 1 -type d | sort)
-    for dir in ${dirs}; do
+    while IFS= read -r -d '' dir; do
         print-section "${dir}"
         (
             cd "${dir}" || return 1
             # shellcheck disable=SC2312
             ${command} | ${pipe}
         )
-    done
+    done < <(find . -mindepth 1 -maxdepth 1 -type d -print0 | sort -z)
 }
 
 ## Check if a command is running
