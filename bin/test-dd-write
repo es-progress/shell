@@ -47,7 +47,7 @@ _test-block-size() {
 ##################
 
 # Strict mode
-set -euo pipefail
+set -eufo pipefail
 IFS=$'\n\t'
 
 # Make sure test files are always deleted, even when the script is interrupted

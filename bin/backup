@@ -21,7 +21,7 @@
 ##########
 _version() {
     cat <<VERSION
-Backup v2.1.3
+Backup v2.1.4
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -69,7 +69,7 @@ HELP
 ##################
 
 # Strict mode
-set -euo pipefail
+set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PATH_SOURCER}"
