@@ -346,7 +346,7 @@ _print-summary() {
 ##################
 
 # Strict mode + inherit
-set -euo pipefail
+set -eufo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 

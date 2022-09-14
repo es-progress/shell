@@ -15,7 +15,7 @@
 #################################################
 
 # Strict mode
-set -euo pipefail
+set -eufo pipefail
 IFS=$'\n\t'
 
 # Echo special env variable

@@ -38,7 +38,7 @@ _generate-DH-primes() {
 ##################
 
 # Strict mode
-set -euo pipefail
+set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PATH_SOURCER}"
