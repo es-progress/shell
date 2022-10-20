@@ -74,8 +74,60 @@ proc-is-running() {
 }
 
 ## Check if command exists
+##
 ## @param    $@  Command
 ##########################
 command-exists() {
     command -v "${@}" >/dev/null 2>&1
+}
+
+## Monitor memory usage of a process
+##
+## @param    $*  Command (with args)
+####################################
+monitor-proc-memory() {
+    local pid date rss rss_print max max_print counter height
+
+    max=0
+    counter=1
+    height=$(tput lines)
+    while :; do
+        date=$(date +"%F %T")
+
+        # Print header
+        if [[ "${counter}" -eq 1 ]]; then
+            printf "%20s %20s %20s\n" "Date" "RSS (KiB)" "MAX RSS (KiB)"
+            for ((i = 0 ; i < 62 ; i++)); do
+                echo -n "-"
+            done
+            echo
+        fi
+
+        pid=$(pgrep -f "${*}")
+        case "${?}" in
+            0)
+                if rss=$(ps -p"${pid}" -orss=); then
+                    [[ "${rss}" -gt "${max}" ]] && max="${rss}"
+                    rss_print=$(numfmt --grouping <<<"${rss}")
+                    max_print=$(numfmt --grouping <<<"${max}")
+                    printf "%20s %20s %20s\n" "${date}" "${rss_print}" "${max_print}"
+                else
+                    print-error "ps error (propably more than 1 process matched command)"
+                    return 1
+                fi
+                ;;
+            1)
+                max=0
+                printf "%20s ${TXT_RED}%41s${TXT_NORM}\n" "${date}" "Process not running"
+                ;;
+            *)
+                print-error pgrep error
+                return 1
+                ;;
+        esac
+
+        counter=$(( counter + 1))
+        [[ "${counter}" -eq "${height}" ]] && counter=1
+        sleep 1
+    done
 }
