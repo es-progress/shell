@@ -198,3 +198,18 @@ ghub-issue() {
     shift
     gh issue create --web --repo "${repo}" "${@}"
 }
+
+## Set repository secret for actions
+##
+## @param    $1  Repo
+## @param    $2  Secret name
+## @param    $3  Secret value
+## @param    $@  Extra args to gh
+####################################
+ghub-secret-set() {
+    local repo="${1?:"Repo missing"}"
+    local name="${2?:"Secret name missing"}"
+    local value="${3?:"Secret value missing"}"
+    shift 3
+    gh secret set "${name}" --body "${value}" --app actions --repo "${repo}" "${@}"
+}
