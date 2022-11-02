@@ -1,1 +1,2 @@
 -   [Home](index.md)
+-   [Installation](install.md)
