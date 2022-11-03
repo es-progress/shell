@@ -32,7 +32,8 @@ DIR_SHELL_LIB=/path/to/lib/dir . /path/to/sourcer
 
 Tip: you can put the `sourcer` in your `.bashrc`, so the functions will be available for you on the command line.
 
-_NOTE_:
+## NOTE
 
 This project is licensed under the MIT license, so feel free to copy or use for inspirations! :heart:
+
 Also patches and PRs are always welcomed!
