@@ -3,7 +3,7 @@
 ## Analytics Functions Library                ##
 ##                                            ##
 ## Bash functions for statistics and analysis ##
-#################################################
+################################################
 
 ## Analyze disk-usage
 ##
