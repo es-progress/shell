@@ -8,7 +8,7 @@ This is a collection of utility scripts and helper functions.
 
 You can find the scripts in the `bin/` directory and the function libraries in the `lib/` dir.
 
-For details please check the documentation.
+For details please check the [documentation](https://shell.es-progress.hu/).
 
 ## Usage
 
