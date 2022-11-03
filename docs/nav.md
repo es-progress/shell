@@ -1,1 +1,5 @@
 -   [Home](index.md)
+-   [Installation](install.md)
+-   Reference
+    -   Lib
+        -   [Analytics](lib/analytics.md)
