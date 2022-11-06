@@ -213,3 +213,23 @@ ghub-secret-set() {
     shift 3
     gh secret set "${name}" --body "${value}" --app actions --repo "${repo}" "${@}"
 }
+
+## Create PR in browser
+##
+## @param    $1  Title
+## @param    $2  PR body: string or path to file
+## @param    $@  Extra args to gh
+################################################
+ghub-pr() {
+    local title="${1?:"Title missing"}"
+    local body="${2?:"PR body missing"}"
+    shift 2
+
+    if [[ -r "${body}" ]]; then
+        param_body=(--body-file "${body}")
+    else
+        param_body=(--body "${body}")
+    fi
+
+    gh pr create --assignee @me --web --title "${title}" "${param_body[@]}" "${@}"
+}
