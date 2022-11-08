@@ -81,7 +81,7 @@ ppretty-php() {
     php <<EOF
 <?php
 echo "\n";
-var_export(unserialize('${serial}'));
+print_r(unserialize('${serial}'));
 echo "\n";
 ?>
 EOF
