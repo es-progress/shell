@@ -38,3 +38,15 @@ iplocation() {
         jq '.' <<<"${result}"
     done
 }
+
+## Return my external IPv4 address
+##################################
+whatsmyip4() {
+    dig -r4 +short @ns1.google.com. o-o.myaddr.l.google.com. TXT
+}
+
+## Return my external IPv6 address
+##################################
+whatsmyip6() {
+    dig -r6 +short @ns1.google.com. o-o.myaddr.l.google.com. TXT
+}
