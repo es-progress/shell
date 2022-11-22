@@ -116,6 +116,16 @@ ggit-adog() {
     git log --all --decorate --oneline --graph
 }
 
+## Create patch from commit and apply
+##
+## @param   $1  Commit SHA
+#####################################
+ggit-patch() {
+    local commit="${1?:"Commit missing"}"
+    # shellcheck disable=SC2312
+    git format-patch --stdout -1 "${commit}" | git am
+}
+
 ## Statistics
 ## Daily commits
 ################

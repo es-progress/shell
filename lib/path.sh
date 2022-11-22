@@ -54,7 +54,7 @@ dir-parents() {
 }
 
 ## Recursively set group on directory to user
-## remove world permissions
+## And remove world permissions
 ##
 ## @param   $1  Group
 ## @param   $2  Directory
