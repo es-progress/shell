@@ -14,5 +14,5 @@ Analyze disk usage. Prints the total disk space used by each sub-directory in an
 anal-disk-usage [DIR]
 
 Params:
-DIR           Directory to check. Defaults to current working dir.
+DIR                Directory to check. Defaults to current working dir.
 ```

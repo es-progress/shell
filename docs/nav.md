@@ -3,3 +3,4 @@
 -   Reference
     -   Lib
         -   [Analytics](lib/analytics.md)
+        -   [Certificates](lib/certificate.md)
