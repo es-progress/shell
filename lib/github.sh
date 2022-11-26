@@ -25,7 +25,7 @@ ghub-get() {
     local owner="${1?:"Owner missing"}"
     shift
     # shellcheck disable=SC2312
-    gh repo list "${owner}" --limit 100 --json nameWithOwner --jq ".[].nameWithOwner" "${@}" | sort
+    gh repo list "${owner}" --limit 100 --json nameWithOwner --jq ".[].nameWithOwner" "${@}" | LC_COLLATE=C sort
 }
 
 ## Open repo in browser
@@ -89,14 +89,12 @@ ghub-sync-config() {
 ## Sync labels from template
 ##
 ## @param    $1  Repo
-## @param    $2  Template repo
-## @param    $@  Extra args to gh
-#################################
+## @param    $2  Master repo
+############################
 ghub-sync-labels() {
     local repo="${1?:"Repo missing"}"
     local template="${2?:"Template missing"}"
     local label labels_current labels_template exist_in_template
-    shift 2
 
     # Sync labels
     labels_current=$(gh label list --repo "${repo}" --json name --jq '.[].name')
@@ -129,7 +127,7 @@ ghub-topic() {
     fi
 }
 
-## Create new repo from template
+## Create new private repo from template
 ##
 ## @param    $1  Repo
 ## @param    $2  Template repo

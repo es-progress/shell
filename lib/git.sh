@@ -11,23 +11,26 @@
 ## @param    $1  Branch to be merged
 ## @param    $2  Branch to merge into
 ## @default      main
+## @param    $3  Remote
+## @default      origin
 ###############################################
 ggit-merge() {
     local branch="${1?:"Source branch missing"}"
     local into="${2:-main}"
+    local remote="${3:-origin}"
 
-    print-header "Pull remote changes for ${branch}"
+    print-header "Pull remote changes for ${branch} from ${remote}"
     git checkout "${branch}"
-    git pull origin "${branch}" || return 1
-    print-header "Pull remote changes for ${into}"
+    git pull "${remote}" "${branch}" || return 1
+    print-header "Pull remote changes for ${into} from ${remote}"
     git checkout "${into}"
-    git pull origin "${into}" || return 1
+    git pull "${remote}" "${into}" || return 1
     print-header "Merge and push"
     git merge --no-ff "${branch}" -m "Merge branch '${branch}' into ${into}" || return 1
-    git push origin "${into}" || return 1
+    git push "${remote}" "${into}" || return 1
     print-header "Delete branches"
     git branch -d "${branch}"
-    git branch -d -r "origin/${branch}"
+    git branch -d -r "${remote}/${branch}"
 }
 
 ## Check git repo status
@@ -54,14 +57,17 @@ ggit-fix() {
 ##
 ## @param    $1  Branch
 ## @default      main
+## @param    $2  Remote
+## @default      origin
 #######################
 ggit-pull() {
     local branch="${1:-main}"
+    local remote="${2:-origin}"
 
     print-header "Switch to ${branch}"
     git checkout "${branch}" || return 1
-    print-header "Pull remote changes for ${branch}"
-    git pull origin "${branch}" || return 1
+    print-header "Pull remote changes for ${branch} from ${remote}"
+    git pull "${remote}" "${branch}" || return 1
     git submodule update --init
 }
 
@@ -76,36 +82,25 @@ ggit-diff() {
     git diff --stat "${branch_a}" "${branch_b}"
 }
 
-## Create new branch
-##
-## @param    $1  New branch name
-## @param    $2  Branch from this
-## @default      main
-#################################
-ggit-switch() {
-    local branch_new="${1?:"New branch missing"}"
-    local branch_from="${2:-main}"
-
-    git switch "${branch_from}"
-    git switch -c "${branch_new}"
-}
-
 ## Rebase branch
 ##
 ## @param    $1  Branch to rebase
 ## @param    $2  Rebase onto this branch
 ## @default      main
+## @param    $3  Remote
+## @default      origin
 ########################################
 ggit-base() {
     local branch_src="${1?:"Branch to rebase missing"}"
     local branch_onto="${2:-main}"
+    local remote="${3:-origin}"
 
     print-header "Switch to ${branch_src}"
     git switch "${branch_src}" || return 1
     print-header "Rebase ${branch_src} onto ${branch_onto}"
     git rebase "${branch_onto}" || return 1
     print-header "Push ${branch_src}"
-    git push origin "+${branch_src}" || return 1
+    git push "${remote}" "+${branch_src}" || return 1
     print-header "Switch to ${branch_onto}"
     git switch "${branch_onto}" || return 1
 }
