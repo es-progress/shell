@@ -12,9 +12,11 @@ The following variables holds error codes that are exported so they can be used 
 _E_ABORT           Program aborted
 _E_MISSING         Missing argument
 _E_NO_CHANGE       Report no change. This can be used for idempotent scripts.
+```
 
-Usage:
+**Usage**
 
+```
 exit "${_E_ABORT}"
 ```
 
