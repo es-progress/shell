@@ -5,3 +5,4 @@
         -   [Analytics](lib/analytics.md)
         -   [Certificates](lib/certificate.md)
         -   [DataBase](lib/db.md)
+        -   [Dev Tools](lib/dev.md)
