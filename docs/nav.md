@@ -8,3 +8,4 @@
         -   [Dev Tools](lib/dev.md)
         -   [Error handling](lib/error.md)
         -   [Git](lib/git.md)
+        -   [GitHub CLI](lib/github.md)
