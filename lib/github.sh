@@ -89,14 +89,12 @@ ghub-sync-config() {
 ## Sync labels from template
 ##
 ## @param    $1  Repo
-## @param    $2  Template repo
-## @param    $@  Extra args to gh
-#################################
+## @param    $2  Master repo
+############################
 ghub-sync-labels() {
     local repo="${1?:"Repo missing"}"
     local template="${2?:"Template missing"}"
     local label labels_current labels_template exist_in_template
-    shift 2
 
     # Sync labels
     labels_current=$(gh label list --repo "${repo}" --json name --jq '.[].name')
