@@ -5,7 +5,7 @@
 ## Utilities for networking ##
 ##############################
 
-## Retrieve Email related DNS records
+## Retrieve email related DNS records
 ##
 ## @param    $1  Domain
 ## @param    $2  DKIM selector
@@ -24,10 +24,9 @@ dns-mail() {
 
 ## Query ipstack for GeoIP data
 ##
-## @param    $1  IP address
+## @param    $*  IP address
 ###############################
 iplocation() {
-    : "${1?:"IP address missing"}"
     local params result
     params="access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1"
 
