@@ -4,3 +4,4 @@
     -   Lib
         -   [Analytics](lib/analytics.md)
         -   [Certificates](lib/certificate.md)
+        -   [DataBase](lib/db.md)
