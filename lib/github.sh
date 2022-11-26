@@ -25,7 +25,7 @@ ghub-get() {
     local owner="${1?:"Owner missing"}"
     shift
     # shellcheck disable=SC2312
-    gh repo list "${owner}" --limit 100 --json nameWithOwner --jq ".[].nameWithOwner" "${@}" | sort
+    gh repo list "${owner}" --limit 100 --json nameWithOwner --jq ".[].nameWithOwner" "${@}" | LC_COLLATE=C sort
 }
 
 ## Open repo in browser
@@ -127,7 +127,7 @@ ghub-topic() {
     fi
 }
 
-## Create new repo from template
+## Create new private repo from template
 ##
 ## @param    $1  Repo
 ## @param    $2  Template repo
