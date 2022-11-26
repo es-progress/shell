@@ -7,3 +7,4 @@
         -   [DataBase](lib/db.md)
         -   [Dev Tools](lib/dev.md)
         -   [Error handling](lib/error.md)
+        -   [Git](lib/git.md)
