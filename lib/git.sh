@@ -82,20 +82,6 @@ ggit-diff() {
     git diff --stat "${branch_a}" "${branch_b}"
 }
 
-## Create new branch
-##
-## @param    $1  New branch name
-## @param    $2  Branch from this
-## @default      main
-#################################
-ggit-switch() {
-    local branch_new="${1?:"New branch missing"}"
-    local branch_from="${2:-main}"
-
-    git switch "${branch_from}"
-    git switch -c "${branch_new}"
-}
-
 ## Rebase branch
 ##
 ## @param    $1  Branch to rebase
