@@ -95,7 +95,7 @@ Create patch from any commit and apply to HEAD.
 **Usage**
 
 ```
-ggit-patch SHA
+ggit-patch SHA...
 
 Params:
 SHA                Create patch from this commit specified by SHA
