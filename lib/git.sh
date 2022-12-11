@@ -21,12 +21,12 @@ ggit-merge() {
 
     print-header "Pull remote changes for ${branch} from ${remote}"
     git checkout "${branch}"
-    git pull "${remote}" "${branch}" || return 1
+    git pull --stat "${remote}" "${branch}" || return 1
     print-header "Pull remote changes for ${into} from ${remote}"
     git checkout "${into}"
-    git pull "${remote}" "${into}" || return 1
+    git pull --stat "${remote}" "${into}" || return 1
     print-header "Merge and push"
-    git merge --no-ff "${branch}" -m "Merge branch '${branch}' into ${into}" || return 1
+    git merge --stat --no-ff "${branch}" -m "Merge branch '${branch}' into ${into}" || return 1
     git push "${remote}" "${into}" || return 1
     print-header "Delete branches"
     git branch -d "${branch}"
