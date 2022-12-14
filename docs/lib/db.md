@@ -148,3 +148,27 @@ DB                 DataBase name
 QUERY              Query to execute
 EXTRA              Optional extra params to 'mysql'
 ```
+
+---
+
+## db-replace
+
+Replace all occurences of a string in a Database table. This is basically an ETL (extract-transform-load) operation.
+Table is dumped first, then `sed` substition and changed data imported finally. Import means dropping and recreating table with new data.
+
+Basic Regular Expressions (BRE; no `-r` switch) is used for `sed` so `+`, `?,` and `(`, `)` treated literal.
+Delimiter for `sed` substition command can be changed as well, it defaults to `@` so strings can't contain `@` character.
+If your string contains that character you can select a different delimiter that is not found in search or replace strings.
+
+**Usage**
+
+```
+db-replace DB TABLE SEARCH REPLACE [DELIMITER]
+
+Params:
+DB                 DataBase name
+TABLE              Table name
+SEARCH             Search string
+REPLACE            Replace string
+DELIMITER          Delimiter for 'sed', defaults to '@'
+```

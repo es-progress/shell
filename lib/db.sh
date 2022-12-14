@@ -115,3 +115,27 @@ db-query() {
     shift 2
     sudo mysql -D "${db}" -e "${query}" "${@}"
 }
+
+## Replace string in table
+##
+## @param    $1  DB name
+## @param    $2  Table name
+## @param    $3  Search string
+## @param    $4  Replace string
+## @param    $5  Delimiter
+################################
+db-replace() {
+    local db="${1:?"DB name missing"}"
+    local table="${2:?"Table missing"}"
+    local search="${3:?"Search string missing"}"
+    local replace="${4:?"Replace string missing"}"
+    local delim="${5:-@}"
+    local tmp
+
+    tmp=$(mktemp)
+    db-dump-full-tables "${db}" "${table}" >"${tmp}"
+    sed -i "s${delim}${search}${delim}${replace}${delim}g" "${tmp}"
+    # shellcheck disable=SC2002,SC2312
+    cat "${tmp}" | sudo mysql -D "${db}"
+    rm "${tmp}"
+}
