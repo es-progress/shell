@@ -121,7 +121,8 @@ db-query() {
 ## @param    $1  DB name
 ## @param    $2  Table name
 ## @param    $3  Search string
-## @param    $2  Replace string
+## @param    $4  Replace string
+## @param    $5  Delimiter
 ################################
 db-replace() {
     local db="${1:?"DB name missing"}"
