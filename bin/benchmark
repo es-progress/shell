@@ -129,11 +129,11 @@ OPTIONS:
 -h, --help             Display this help
 -v, --version          Print version
 EOF
-    exit 0
 }
 
 ## Clean up after tests
 #######################
+# shellcheck disable=SC2317
 _clean-up() {
     find . -name "test_file.*" -delete
     exit
