@@ -73,13 +73,13 @@ REMOTE             Remote host
 
 ## ppretty-php
 
-Pretty-prints a serialized PHP object/array.
+Pretty-prints a serialized PHP object/array. Can accept serial string from stdin also so it's great to use in a pipe.
 
 **Usage**
 
 ```
-ppretty-php SERIAL
+ppretty-php [SERIAL]
 
 Params:
-SERIAL             Serialized string
+SERIAL             Serialized string. If not supplied read from stdin.
 ```

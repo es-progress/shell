@@ -43,7 +43,9 @@ build-mkdocs() {
 ## @param   $1  Serial string
 #####################################
 ppretty-php() {
-    local serial="${1?:"Serialized data missing"}"
+    local serial="${1:-}"
+    [[ -z "${serial}" ]] && read -r serial
+
     php <<EOF
 <?php
 echo "\n";
