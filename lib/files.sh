@@ -1,9 +1,9 @@
 # shellcheck shell=bash
 ###################################
-## Path Functions Library        ##
+## Files Functions Library       ##
 ##                               ##
 ## Bash functions                ##
-## Involving paths & permissions ##
+## Involving files & permissions ##
 ###################################
 
 ## Get directory of a file
