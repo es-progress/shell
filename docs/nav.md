@@ -7,6 +7,7 @@
         -   [DataBase](lib/db.md)
         -   [Dev Tools](lib/dev.md)
         -   [Error handling](lib/error.md)
+        -   [Files](lib/files.md)
         -   [Git](lib/git.md)
         -   [GitHub CLI](lib/github.md)
         -   [Network](lib/network.md)
