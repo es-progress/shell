@@ -11,3 +11,4 @@
         -   [Git](lib/git.md)
         -   [GitHub CLI](lib/github.md)
         -   [Network](lib/network.md)
+        -   [Process](lib/process.md)
