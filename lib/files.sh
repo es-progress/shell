@@ -1,9 +1,9 @@
 # shellcheck shell=bash
 ###################################
-## Path Functions Library        ##
+## Files Functions Library       ##
 ##                               ##
 ## Bash functions                ##
-## Involving paths & permissions ##
+## Involving files & permissions ##
 ###################################
 
 ## Get directory of a file
@@ -31,9 +31,11 @@ dir-script() {
 ## Get all parent directory of a dir
 ##
 ## @param    $1  Directory
+## @param    $2  Separator character
 ####################################
 dir-parents() {
-    local dir="${1:?"Directory missing"}"
+    local dir="${1:-.}"
+    local separator="${2:- }"
     local parents=()
 
     # Convert to absolute path
@@ -45,12 +47,12 @@ dir-parents() {
     fi
 
     while :; do
-        dir=${dir%/*}
+        dir=$(dirname "${dir}")
         parents+=("${dir}")
-        [[ -z "${dir}" ]] && break
+        [[ "${dir}" == / ]] && break
     done
 
-    echo "${parents[@]}"
+    implode "${separator}" "${parents[@]}"
 }
 
 ## Recursively set group on directory to user
