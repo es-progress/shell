@@ -41,11 +41,13 @@ iplocation() {
 ## Return my external IPv4 address
 ##################################
 whatsmyip4() {
-    dig -r4 +short @ns1.google.com. o-o.myaddr.l.google.com. TXT
+    # shellcheck disable=SC2312
+    dig -r4 +short @ns1.google.com. o-o.myaddr.l.google.com. TXT | tr -d '"'
 }
 
 ## Return my external IPv6 address
 ##################################
 whatsmyip6() {
-    dig -r6 +short @ns1.google.com. o-o.myaddr.l.google.com. TXT
+    # shellcheck disable=SC2312
+    dig -r6 +short @ns1.google.com. o-o.myaddr.l.google.com. TXT | tr -d '"'
 }
