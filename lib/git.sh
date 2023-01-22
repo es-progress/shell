@@ -20,10 +20,10 @@ ggit-merge() {
     local remote="${3:-origin}"
 
     print-header "Pull remote changes for ${branch} from ${remote}"
-    git checkout "${branch}"
+    git checkout "${branch}" || return 1
     git pull --stat "${remote}" "${branch}" || return 1
     print-header "Pull remote changes for ${into} from ${remote}"
-    git checkout "${into}"
+    git checkout "${into}" || return 1
     git pull --stat "${remote}" "${into}" || return 1
     print-header "Merge and push"
     git merge --stat --no-ff "${branch}" -m "Merge branch '${branch}' into ${into}" || return 1
@@ -36,7 +36,7 @@ ggit-merge() {
 ## Check git repo status
 ########################
 ggit-report() {
-    print-header "Git status"
+    print-header Git status
     git status || return 1
     print-header Branches
     git branch -a -l -vv
@@ -69,6 +69,26 @@ ggit-pull() {
     print-header "Pull remote changes for ${branch} from ${remote}"
     git pull "${remote}" "${branch}" || return 1
     git submodule update --init
+}
+
+## Update local branch from remote
+##
+## @param    $1  Branch
+## @param    $2  Remote
+## @default      origin
+##################################
+ggit-update() {
+    local branch="${1?:"Branch missing"}"
+    local remote="${2:-origin}"
+
+    print-header "Fetch ${remote}"
+    git fetch --prune "${remote}" || return 1
+    print-header "Delete old ${branch}"
+    git checkout -b "${branch}-temp" "${branch}" || return 1
+    git branch -D "${branch}" || return 1
+    print-header "Checkout new ${branch} from ${remote}"
+    git checkout -b "${branch}" --recurse-submodules --track "${remote}/${branch}" || return 1
+    git branch -D "${branch}-temp"
 }
 
 ## Diff stat
