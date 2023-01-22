@@ -164,3 +164,24 @@ Show commit statistics: number of commits grouped by day of the week.
 ```
 ggit-stat-weekly
 ```
+
+---
+
+## ggit-update
+
+**WARNING**: this is a forced operation, local branch will be deleted!
+
+Update local branch from remote.
+It deletes and recreates the branch from remote, rather than doing a rebase or some merge/pull.
+This comes handy if a branch was rebased on remote and a simple pull is not working.
+This way you can have the same commits (and history) as remote.
+
+**Usage**
+
+```
+ggit-update BRANCH REMOTE
+
+Params:
+BRANCH             Branch to update
+REMOTE             Remote repository, defaults to 'origin'.
+```
