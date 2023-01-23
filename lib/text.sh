@@ -16,16 +16,6 @@ implode() {
     echo "${*}"
 }
 
-## Read JSON file
-##
-## @param    $1  JSON File
-##########################
-read-file-json() {
-    local file="${1:?"File missing"}"
-    shift
-    jq -rcM "${@}" '.[]' "${file}"
-}
-
 ## Read config file
 ##
 ## @param    $1  Config File
@@ -86,12 +76,12 @@ urldecode() {
 ## Total lines of files in a dir
 ##
 ## @param   $1  Dir to count
-## @param   $@  Extra args to 'wc'
-##################################
+## @param   $@  Extra args to 'find'
+####################################
 lines-dir() {
     local dir="${1:?"Directory missing"}"
     shift
 
     # shellcheck disable=SC2312
-    find "${dir}" -type f -print0 | xargs -0 cat | wc -l "${@}"
+    find "${dir}" "${@}" -type f -print0 | xargs -0 cat | wc -l
 }

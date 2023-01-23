@@ -16,6 +16,7 @@ export TXT_GREEN="\e[32m"
 export TXT_YELLOW="\e[33m"
 export TXT_BLUE="\e[34m"
 export TXT_PURPLE="\e[35m"
+export BACK_BLUE="\e[44m"
 
 ###############
 ## FUNCTIONS ##
@@ -36,9 +37,9 @@ print-error() {
 print-section() {
     local msg="${*}"
     echo
-    echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
+    echo -e "${BACK_BLUE}${msg}${TXT_NORM}"
     for ((i = 0 ; i < ${#msg} ; i++)); do
-        echo -ne "${TXT_BLUE}${TXT_BOLD}=${TXT_NORM}"
+        echo -ne "${BACK_BLUE}=${TXT_NORM}"
     done
     echo
 }
@@ -57,7 +58,7 @@ print-header() {
 ## @param    $*  Message
 ########################
 print-status() {
-    echo -n -e "${TXT_YELLOW}${*}${TXT_NORM}"
+    echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
 ## Print OK message
@@ -81,13 +82,16 @@ print-run-time() {
     sec=$((sec % 60))
 
     echo "Running time:"
-    printf "%d hours %02d mins %02d secs\n" "${hour}" "${min}" "${sec}"
+    printf "%d hour(s) %02d min(s) %02d second(s)\n" "${hour}" "${min}" "${sec}"
 }
 
 ## Ask for confirmation
-#######################
+##
+## @param    $*  Prompt
+## @default      Are you sure? (y/n)
+####################################
 confirm() {
-    read -r -p "Are you sure? (y/n) "
+    read -r -p "${*:-Are you sure? (y/n) }"
     [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && return 0 || return 1
 }
 
