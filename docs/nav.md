@@ -12,3 +12,4 @@
         -   [GitHub CLI](lib/github.md)
         -   [Network](lib/network.md)
         -   [Process](lib/process.md)
+        -   [SSH](lib/ssh.md)
