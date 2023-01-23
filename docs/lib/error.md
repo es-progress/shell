@@ -36,7 +36,7 @@ abort
 
 ## error-exit
 
-Print error message and exit program. Use this in standalone scripts. If used on the commandline it exits your shell.
+Print error message and exit program. Use this in standalone scripts. If used on the command line it exits your shell.
 
 **Usage**
 
