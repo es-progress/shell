@@ -16,16 +16,6 @@ implode() {
     echo "${*}"
 }
 
-## Read JSON file
-##
-## @param    $1  JSON File
-##########################
-read-file-json() {
-    local file="${1:?"File missing"}"
-    shift
-    jq -rcM "${@}" '.[]' "${file}"
-}
-
 ## Read config file
 ##
 ## @param    $1  Config File
