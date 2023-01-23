@@ -57,7 +57,7 @@ print-header() {
 ## @param    $*  Message
 ########################
 print-status() {
-    echo -n -e "${TXT_YELLOW}${*}${TXT_NORM}"
+    echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
 ## Print OK message
@@ -85,9 +85,12 @@ print-run-time() {
 }
 
 ## Ask for confirmation
-#######################
+##
+## @param    $*  Prompt
+## @default      Are you sure? (y/n)
+####################################
 confirm() {
-    read -r -p "Are you sure? (y/n) "
+    read -r -p "${*:-Are you sure? (y/n) }"
     [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && return 0 || return 1
 }
 
