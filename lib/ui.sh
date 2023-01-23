@@ -16,6 +16,7 @@ export TXT_GREEN="\e[32m"
 export TXT_YELLOW="\e[33m"
 export TXT_BLUE="\e[34m"
 export TXT_PURPLE="\e[35m"
+export BACK_BLUE="\e[44m"
 
 ###############
 ## FUNCTIONS ##
@@ -36,9 +37,9 @@ print-error() {
 print-section() {
     local msg="${*}"
     echo
-    echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
+    echo -e "${BACK_BLUE}${msg}${TXT_NORM}"
     for ((i = 0 ; i < ${#msg} ; i++)); do
-        echo -ne "${TXT_BLUE}${TXT_BOLD}=${TXT_NORM}"
+        echo -ne "${BACK_BLUE}=${TXT_NORM}"
     done
     echo
 }
