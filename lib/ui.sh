@@ -82,7 +82,7 @@ print-run-time() {
     sec=$((sec % 60))
 
     echo "Running time:"
-    printf "%d hours %02d mins %02d secs\n" "${hour}" "${min}" "${sec}"
+    printf "%d hour(s) %02d min(s) %02d second(s)\n" "${hour}" "${min}" "${sec}"
 }
 
 ## Ask for confirmation
