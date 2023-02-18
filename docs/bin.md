@@ -208,3 +208,22 @@ MODULE             Module to sign (e.g. vboxdrv)
 KEY                MOK private key file
 CERT               MOK certificate file
 ```
+
+---
+
+## sourcer
+
+Helper script to bootstrap libraries. This script sources all library files so functions will be available to use.
+Basically you need to source this file in any script where you want to use library functions:
+
+```
+# Source sourcer
+. /path/to/sourcer
+# Now functions are defined
+check-root
+error-exit "Nothing to do"
+```
+
+!!! tip
+    Put sourcer in your `.bashrc` and all functions are ready to use in your terminal.
+    Actually some of them are meant for interactive use on the command line!
