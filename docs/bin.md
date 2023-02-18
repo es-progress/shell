@@ -6,7 +6,8 @@ Various shell scrits that can be used as "binaries".
 
 ## backup
 
-A wrapper for `rsync`. Backups source directory to a different filesystem (drive) as backing up on the same drive defies the goal of backup.
+A wrapper for `rsync`.
+Backups source directory to a different filesystem (drive) as backing up on the same drive sort of defies the goal of backup.
 In archive mode backups are compressed to save disk space.
 This compression is done by `pigz` which creates standard `gzip` files but spreads the work over multiple processors and cores when compressing so it can utilize modern hardware.
 
@@ -16,7 +17,7 @@ Modes:
     1. Copy files to destination dir (`rsync`)
     1. Create single archive file from backed up files (`tar` & `pigz`)
     1. Rotate (delete) old archives (`find`)
--   Quick: only copying files to destination.
+-   Quick: only copy files to destination.
 -   Snapshot: backup only changed files from last backup.
     Not changed files get hard-linked from previous run so you can access normally & restore easily but using way less disk space.
     This is a quick and efficient way to create many backups.
@@ -24,7 +25,7 @@ Modes:
 **Usage**
 
 ```
-backup REQUIRED_OPTIONS... [OPTIONS...]
+backup REQUIRED_OPTIONS... [OPTIONS]...
 
 OPTIONS
 
@@ -70,12 +71,11 @@ in a single script.
 
 Default test parameters are provided but you can override them in a params file.
 This file is sourced so you can change parameters by setting new values to config variables found in "CONFIG" section.
-For parameter formats check said section in script.
+For parameter formats check said section in the script.
 
 An example params file:
 
 ```
-# You can have comments
 # Let's have bit longer tests
 test_run_time_quick=20
 # Run only one deep memory benchmark
@@ -138,7 +138,7 @@ Regenerate Diffie-Hellman groups used for the "Diffie-Hellman Group Exchange" ke
 This can be used for OpenSSH server (`/etc/ssh/moduli`).
 
 !!! warning
-    This can be a long running process!
+    This is possibly a long running process!
 
 **Usage**
 
@@ -146,8 +146,10 @@ This can be used for OpenSSH server (`/etc/ssh/moduli`).
 Usage: generate-moduli [BITS] [OUTPUT]
 
 Params:
-BITS               Comma-separated list of size of prime in bits to generate. Defaults to 4096,6144,7680,8192
-OUTPUT             Output generated primes to this file, defaults to "DH_moduli" in current dir
+BITS               Comma-separated list of size of prime in bits to generate.
+                   Defaults to 4096,6144,7680,8192
+OUTPUT             Output generated primes to this file.
+                   Defaults to "DH_moduli" in current dir
 ```
 
 ---
@@ -223,6 +225,8 @@ Basically you need to source this file in any script where you want to use libra
 check-root
 error-exit "Nothing to do"
 ```
+
+You can find more details about bootstrapping in the [Installation instructions](install.md).
 
 !!! tip
     Put sourcer in your `.bashrc` and all functions are ready to use in your terminal.
