@@ -129,3 +129,23 @@ Clean-up temporary and other not needed files to free up disk space:
 ```
 Usage: clean
 ```
+
+---
+
+## generate-moduli
+
+Regenerate Diffie-Hellman groups used for the "Diffie-Hellman Group Exchange" key exchange method.
+This can be used for OpenSSH server (`/etc/ssh/moduli`).
+
+!!! warning
+    This can be a long running process!
+
+**Usage**
+
+```
+Usage: generate-moduli [BITS] [OUTPUT]
+
+Params:
+BITS               Comma-separated list of size of prime in bits to generate. Defaults to 4096,6144,7680,8192
+OUTPUT             Output generated primes to this file, defaults to "DH_moduli" in current dir
+```
