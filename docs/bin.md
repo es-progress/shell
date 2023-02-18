@@ -109,3 +109,23 @@ OPTIONS
 -h, --help             Display this help
 -v, --version          Print version
 ```
+
+---
+
+## clean
+
+Clean-up temporary and other not needed files to free up disk space:
+
+-   Remove unused `apt` packages
+-   Remove old snaps
+-   Rotate system journal (keep 2 weeks of logs)
+-   Delete caches
+
+!!! info
+    This script is completely standalone, no bootstrapping is required!
+
+**Usage**
+
+```
+Usage: clean
+```
