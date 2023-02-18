@@ -18,7 +18,7 @@
 ############
 
 # Version
-version=1.1.9
+version=1.2.0
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -119,12 +119,14 @@ OPTIONS:
 -m, --memory
 -d, --disk
     --download
-                       Run appropriate test. If no test specified, all will run. Ignored if '-s' given.
+                       Run appropriate test. If no test specified, all will run.
+                       Ignored if '-s' given.
 -s, --system           Run only a system check
 -r, --report           Save test report to file
     --report-prefix    Report file prefix, implies '-r'
 -q, --quick            Do a quick benchmark. Ignored if '-s' given.
     --deep             Deep benchmarking. Ignored if '-s' given.
+-p, --params           Config file to override test parameters
 
 -h, --help             Display this help
 -v, --version          Print version
@@ -359,6 +361,7 @@ create_report=""
 report_file_prefix=""
 sys_check=""
 benchmark_depth=""
+params_file=""
 while :; do
     case "${1:-}" in
         -r | --report) create_report=1 ;;
@@ -372,23 +375,11 @@ while :; do
         -d | --disk) tests+=(disk) ;;
         --download) tests+=(download) ;;
         -s | --system) sys_check=1 ;;
-        -q | --quick)
-            benchmark_depth=quick
-            test_run_time="${test_run_time_quick}"
-            all_test_param[cpu]="${runs_cpu_quick[*]}"
-            cpu_test_file_size="${cpu_test_file_size_quick}"
-            all_test_param[memory]="${runs_memory_quick[*]}"
-            all_test_param[disk]="${runs_disk_quick[*]}"
-            all_test_param[download]="${runs_download_quick[*]}"
-            ;;
-        --deep)
-            benchmark_depth=deep
-            test_run_time="${test_run_time_deep}"
-            all_test_param[cpu]="${runs_cpu_deep[*]}"
-            cpu_test_file_size="${cpu_test_file_size_deep}"
-            all_test_param[memory]="${runs_memory_deep[*]}"
-            all_test_param[disk]="${runs_disk_deep[*]}"
-            all_test_param[download]="${runs_download_deep[*]}"
+        -q | --quick) benchmark_depth=quick ;;
+        --deep) benchmark_depth=deep ;;
+        -p | --params)
+            shift
+            params_file="${1}"
             ;;
         -h | --help)
             _version
@@ -413,6 +404,35 @@ if [[ -z "${sys_check}" && -z "${benchmark_depth}" ]]; then
     echo "Benchmark depth missing (quick or full)" >&2
     exit 1
 fi
+
+# Read params file & select tests
+if [[ -n "${params_file}" && -r "${params_file}" ]]; then
+    # shellcheck disable=SC1090
+    source "${params_file}"
+fi
+case "${benchmark_depth}" in
+    quick)
+        test_run_time="${test_run_time_quick}"
+        all_test_param[cpu]="${runs_cpu_quick[*]}"
+        cpu_test_file_size="${cpu_test_file_size_quick}"
+        all_test_param[memory]="${runs_memory_quick[*]}"
+        all_test_param[disk]="${runs_disk_quick[*]}"
+        all_test_param[download]="${runs_download_quick[*]}"
+        ;;
+    deep)
+        test_run_time="${test_run_time_deep}"
+        all_test_param[cpu]="${runs_cpu_deep[*]}"
+        cpu_test_file_size="${cpu_test_file_size_deep}"
+        all_test_param[memory]="${runs_memory_deep[*]}"
+        all_test_param[disk]="${runs_disk_deep[*]}"
+        all_test_param[download]="${runs_download_deep[*]}"
+        ;;
+    *)
+        echo "Not supported depth: ${1}" >&2
+        _usage
+        exit 1
+        ;;
+esac
 
 # If no test specified --> run all
 [[ -z "${tests[*]}" ]] && tests=(cpu memory disk download)
