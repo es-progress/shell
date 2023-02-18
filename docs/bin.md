@@ -53,3 +53,59 @@ OPTIONAL
 -h, --help                 display this help
 -v, --version              print version info
 ```
+
+---
+
+## benchmark
+
+A wrapper and runner for `sysbench`.
+You can design multiple test runs with different test parameters, so you can benchmark the system for:
+
+-   CPU
+-   Memory
+-   Disks
+-   Download speed
+
+in a single script.
+
+Default test parameters are provided but you can override them in a params file.
+This file is sourced so you can change parameters by setting new values to config variables found in "CONFIG" section.
+For parameter formats check said section in script.
+
+An example params file:
+
+```
+# You can have comments
+# Let's have bit longer tests
+test_run_time_quick=20
+# Run only one deep memory benchmark
+runs_memory_deep=()
+runs_memory_deep+=("1;512;30G;rnd")
+```
+
+!!! info
+    This script is completely standalone, no bootstrapping is required, just copy to target system and start benchmarking! :metal:
+
+**Usage**
+
+```
+Usage: benchmark [OPTIONS]...
+
+OPTIONS
+
+-c, --cpu
+-m, --memory
+-d, --disk
+    --download
+                       Run appropriate test. If no test specified, all will run.
+                       Ignored if '-s' given.
+-s, --system           Run only a system check
+-r, --report           Save test report to file
+    --report-prefix    Report file prefix, implies '-r'
+-q, --quick            Do a quick benchmark. Ignored if '-s' given.
+    --deep             Deep benchmarking. Ignored if '-s' given.
+-p, --params           Config file to override test parameters
+
+-h, --help             Display this help
+-v, --version          Print version
+```
