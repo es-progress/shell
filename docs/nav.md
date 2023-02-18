@@ -1,6 +1,7 @@
 -   [Home](index.md)
 -   [Installation](install.md)
 -   Reference
+    -   [Bin](bin.md)
     -   Lib
         -   [Analytics](lib/analytics.md)
         -   [Certificates](lib/certificate.md)
