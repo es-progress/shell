@@ -17,7 +17,8 @@ ghub-foreach-owner OWNER COMMAND [ARGS]...
 Params:
 OWNER              Owner, GitHub user or organization
 COMMAND            Command to run for each repo
-ARGS               Optional extra params to COMMAND. REPO is always passed to COMMAND as first argument.
+ARGS               Optional extra params to COMMAND.
+                   REPO is always passed to COMMAND as first argument.
 ```
 
 ---
@@ -36,7 +37,8 @@ Params:
 OWNER              Owner, GitHub user or organization
 TOPIC              Match repos only with this topic
 COMMAND            Command to run for each matched repo
-ARGS               Optional extra params to COMMAND. REPO is always passed to COMMAND as first argument.
+ARGS               Optional extra params to COMMAND.
+                   REPO is always passed to COMMAND as first argument.
 ```
 
 ---
@@ -68,7 +70,8 @@ Create issue for repository and open in browser.
 ghub-issue REPO [EXTRA]...
 
 Params:
-REPO               GitHub repository, given as "owner/repo-name". Default to repository in current working dir.
+REPO               GitHub repository, given as "owner/repo-name".
+                   Default to repository in current working dir.
 EXTRA              Optional extra params to 'gh'
 ```
 
@@ -100,7 +103,8 @@ Open GitHub repository page in web browser.
 ghub-open REPO [EXTRA]...
 
 Params:
-REPO               GitHub repository, given as "owner/repo-name". Default to repository in current working dir.
+REPO               GitHub repository, given as "owner/repo-name".
+                   Default to repository in current working dir.
 EXTRA              Optional extra params to 'gh'
 ```
 
@@ -184,7 +188,8 @@ Open GitHub repository settings page in web browser.
 ghub-settings REPO [EXTRA]...
 
 Params:
-REPO               GitHub repository, given as "owner/repo-name". Default to repository in current working dir.
+REPO               GitHub repository, given as "owner/repo-name".
+                   Default to repository in current working dir.
 EXTRA              Optional extra params to 'gh'
 ```
 

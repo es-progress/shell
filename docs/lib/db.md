@@ -129,7 +129,8 @@ db-list-tables DB PATTERN
 
 Params:
 DB                 DataBase name
-PATTERN            Pattern to filter tables. SQL wildcards are allowed, e.g. '%cache%'.
+PATTERN            Pattern to filter tables.
+                   SQL wildcards are allowed, e.g. '%cache%'.
 ```
 
 ---
