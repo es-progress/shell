@@ -18,7 +18,7 @@
 ############
 
 # Version
-version=1.1.8
+version=1.1.9
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -119,12 +119,12 @@ OPTIONS:
 -m, --memory
 -d, --disk
     --download
-                       Run appropriate test. If no test specified, all will run.
+                       Run appropriate test. If no test specified, all will run. Ignored if '-s' given.
 -s, --system           Run only a system check
 -r, --report           Save test report to file
     --report-prefix    Report file prefix, implies '-r'
--q, --quick            Do a quick benchmark
-    --deep             Deep benchmarking
+-q, --quick            Do a quick benchmark. Ignored if '-s' given.
+    --deep             Deep benchmarking. Ignored if '-s' given.
 
 -h, --help             Display this help
 -v, --version          Print version
@@ -350,9 +350,6 @@ set -eufo pipefail
 shopt -s inherit_errexit
 IFS=$'\n\t'
 
-# Make sure test files are always deleted, even when the script is interrupted
-trap _clean-up EXIT INT TERM
-
 tests=()
 declare -A all_test_param
 declare -A summary
@@ -412,7 +409,7 @@ while :; do
     shift
 done
 
-if [[ -z "${benchmark_depth}" ]]; then
+if [[ -z "${sys_check}" && -z "${benchmark_depth}" ]]; then
     echo "Benchmark depth missing (quick or full)" >&2
     exit 1
 fi
@@ -468,6 +465,9 @@ fi
 # Sysinfo
 _print-sysinfo | tee "${output_file}"
 [[ -n "${sys_check}" ]] && exit 0
+
+# Make sure test files are always deleted, even when the script is interrupted
+trap _clean-up EXIT INT TERM
 
 # Run Benchmarks
 echo "Start Benchmarking..."
