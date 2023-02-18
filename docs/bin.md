@@ -149,3 +149,27 @@ Params:
 BITS               Comma-separated list of size of prime in bits to generate. Defaults to 4096,6144,7680,8192
 OUTPUT             Output generated primes to this file, defaults to "DH_moduli" in current dir
 ```
+
+---
+
+## pass-man
+
+Manages a `pass` password store which is inside a `tomb`.
+
+Available actions:
+
+-   open: open password store in tomb
+-   close: close password store
+-   generate: generate a password but not save as a pass. Useful if you just need a strong key.
+-   retrieve: get password from store
+
+**Usage**
+
+```
+Usage: pass-man ACTION [TARGET] [EXTRA]...
+
+Params:
+ACTION             Action to perform (open, close, generate, retrieve)
+TARGET             Path to password in password store (mandatory for 'retrieve' action)
+EXTRA              Extra arguments to 'pass'
+```
