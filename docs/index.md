@@ -14,8 +14,7 @@ some of them use functions from the library ("lib") and bootstrapping may not be
 
 Then you can find the reference documentation for each script and function.
 
-_NOTE_:
+!!! note
+    This project is licensed under the MIT license, so feel free to copy or use for inspirations! :heart:
 
-This project is licensed under the MIT license, so feel free to copy or use for inspirations! :heart:
-
-Also patches and PRs are always welcomed!
+    Also PRs are always welcomed!
