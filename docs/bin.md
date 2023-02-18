@@ -1,6 +1,6 @@
 # Bin
 
-Various shell scrits that can be used as "binaries".
+Various shell scripts that can be used as "binaries".
 
 ---
 
@@ -19,7 +19,7 @@ Modes:
     1. Rotate (delete) old archives (`find`)
 -   Quick: only copy files to destination.
 -   Snapshot: backup only changed files from last backup.
-    Not changed files get hard-linked from previous run so you can access normally & restore easily but using way less disk space.
+    Not changed files get hard-linked from previous run so you can access them normally & restore easily but using way less disk space.
     This is a quick and efficient way to create many backups.
 
 **Usage**
@@ -70,8 +70,8 @@ You can design multiple test runs with different test parameters, so you can ben
 in a single script.
 
 Default test parameters are provided but you can override them in a params file.
-This file is sourced so you can change parameters by setting new values to config variables found in "CONFIG" section.
-For parameter formats check said section in the script.
+This file is sourced during execution so you can change parameters by setting new values to config variables found in "CONFIG" section.
+For parameter formats check said section in the script (Bash syntax).
 
 An example params file:
 
@@ -123,6 +123,7 @@ Clean-up temporary and other not needed files to free up disk space:
 
 !!! info
     This script is completely standalone, no bootstrapping is required!
+    Perfect to run weekly by cron.
 
 **Usage**
 
