@@ -227,3 +227,15 @@ error-exit "Nothing to do"
 !!! tip
     Put sourcer in your `.bashrc` and all functions are ready to use in your terminal.
     Actually some of them are meant for interactive use on the command line!
+
+---
+
+## test-dd-write
+
+Test 'dd' write speed with different block sizes. This way you can optimize block size for fastest write operation.
+
+**Usage**
+
+```
+Usage: test-dd-write
+```
