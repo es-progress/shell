@@ -84,6 +84,7 @@ runs_memory_deep+=("1;512;30G;rnd")
 ```
 
 !!! info
+
     This script is completely standalone, no bootstrapping is required, just copy to target system and start benchmarking! :metal:
 
 **Usage**
@@ -122,6 +123,7 @@ Clean-up temporary and other not needed files to free up disk space:
 -   Delete caches
 
 !!! info
+
     This script is completely standalone, no bootstrapping is required!
     Perfect to run weekly by cron.
 
@@ -139,6 +141,7 @@ Regenerate Diffie-Hellman groups used for the "Diffie-Hellman Group Exchange" ke
 This can be used for OpenSSH server (`/etc/ssh/moduli`).
 
 !!! warning
+
     This is possibly a long running process!
 
 **Usage**
@@ -230,6 +233,7 @@ error-exit "Nothing to do"
 You can find more details about bootstrapping in the [Installation instructions](install.md).
 
 !!! tip
+
     Put sourcer in your `.bashrc` and all functions are ready to use in your terminal.
     Actually some of them are meant for interactive use on the command line!
 
