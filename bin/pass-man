@@ -2,7 +2,7 @@
 #####################################
 ## pass-man                        ##
 ##                                 ##
-## Manages a 'pass' password-store ##
+## Manages a 'pass' password store ##
 ## which is inside a tomb.         ##
 #####################################
 
@@ -21,14 +21,15 @@ timer=6h
 _usage() {
     cat <<HELP
 
-pass-man v1.1.2
+pass-man v1.2.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
-Usage: vault ACTION [TARGET] [OPTIONS]
+Usage: pass-man ACTION [TARGET] [EXTRA]...
 
-ACTION:     open, close, generate, retrieve
-TARGET:     Path to password (mandatory for 'retrieve' action)
-OPTIONS:    Extra arguments to 'pass'
+Params:
+ACTION             Action to perform (open, close, generate, retrieve)
+TARGET             Path to password in password store (mandatory for 'retrieve' action)
+EXTRA              Extra arguments to 'pass'
 HELP
     exit 1
 }
@@ -47,8 +48,7 @@ _vault-open() {
         pass open -f --timer="${timer}"
 
         if ! _check-tomb-open; then
-            echo "Failed to open tomb." >&2
-            exit 1
+            error-exit "Failed to open tomb."
         fi
     fi
 }
@@ -61,8 +61,7 @@ _vault-close() {
         pass close
 
         if _check-tomb-open; then
-            echo "Failed to close tomb." >&2
-            exit 1
+            error-exit "Failed to close tomb."
         fi
     fi
 }
@@ -94,6 +93,9 @@ _vault-retrieve() {
 set -eufo pipefail
 IFS=$'\n\t'
 
+# shellcheck disable=SC1090
+source "${PATH_SOURCER}"
+
 # Parse options
 action="${1:-}"
 [[ -n "${action}" ]] && shift
@@ -108,13 +110,13 @@ case "${action}" in
         if [[ -n "${pass_path}" ]]; then
             shift
         else
-            echo "Path to password missing" >&2
+            print-error "Path to password missing"
             _usage
         fi
         _vault-retrieve "${pass_path}" "${@}"
         ;;
-    "") echo "Action missing" >&2 && _usage ;;
-    *) echo "Invalid action" >&2 && _usage ;;
+    "") print-error "Action missing" && _usage ;;
+    *) print-error "Invalid action" && _usage ;;
 esac
 
 exit 0
