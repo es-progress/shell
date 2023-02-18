@@ -1,34 +1,32 @@
 #!/usr/bin/env bash
-#####################################################################
-## Sign kernel modules                                             ##
-##                                                                 ##
-## This needs a MOK key and certificate                            ##
-## And this key needs to be enrolled in EFI                        ##
-## $ mokutil --import <PRIVATE_KEY>                                ##
-##                                                                 ##
-## @see                                                            ##
-## https://stegard.net/2016/10/virtualbox-secure-boot-ubuntu-fail/ ##
-#####################################################################
+####################################################################
+## Sign kernel modules                                            ##
+##                                                                ##
+## This needs a MOK key and certificate                           ##
+## And this key needs to be enrolled in EFI                       ##
+## $ mokutil --import MOK_CERTIFICATE                             ##
+##                                                                ##
+## @see                                                           ##
+## https://stegard.net/2016/10/virtualbox-secure-boot-ubuntu-fail ##
+####################################################################
 
 # Strict mode
 set -eufo pipefail
 IFS=$'\n\t'
 
-user_id=$(id -u)
-if [[ "${user_id}" -ne 0 ]]; then
-    echo "Run as root!"
-    exit 1
-fi
+# shellcheck disable=SC1090
+source "${PATH_SOURCER}"
+check-root
 
 module="${1?:"Kernel module missing"}"
-priv_key="${2?:"MOK private key missing"}"
-cert_key="${3?:"MOK certificate missing"}"
+key="${2?:"MOK private key missing"}"
+cert="${3?:"MOK certificate missing"}"
 
 module_file=$(modinfo -n "${module}")
 module_dir=$(dirname "${module_file}")
 kernel_version=$(uname -r)
 find "${module_dir}" -name "*.ko" \
     -exec echo Signing {} \; \
-    -exec "/usr/src/linux-headers-${kernel_version}/scripts/sign-file" sha256 "${priv_key}" "${cert_key}" {} \;
+    -exec "/usr/src/linux-headers-${kernel_version}/scripts/sign-file" sha256 "${key}" "${cert}" {} \;
 
 exit 0

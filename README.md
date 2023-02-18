@@ -36,4 +36,4 @@ Tip: you can put the `sourcer` in your `.bashrc`, so the functions will be avail
 
 This project is licensed under the MIT license, so feel free to copy or use for inspirations! :heart:
 
-Also patches and PRs are always welcomed!
+Also PRs are always welcomed!

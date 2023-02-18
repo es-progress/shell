@@ -1,18 +1,10 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090
 #############################
-## generate_moduli         ##
+## generate-moduli         ##
 ##                         ##
 ## Regenerate moduli for   ##
 ## Diffie-Hellman protocol ##
 #############################
-
-############
-## CONFIG ##
-############
-bits_generate=(4096 6144 7680 8192)
-tmp_file_prefix=DH_prime
-results_file=DH_moduli
 
 ###############
 ## FUNCTIONS ##
@@ -41,17 +33,12 @@ _generate-DH-primes() {
 set -eufo pipefail
 IFS=$'\n\t'
 
+# shellcheck disable=SC1090
 source "${PATH_SOURCER}"
 
 # Parse options
-IFS=$' \t' read -r -a bits <<<"${1:-}"
-output="${2:-}"
-prefix="${3:-}"
-
-# Defaults
-[[ -z "${bits[*]}" ]] && bits=("${bits_generate[@]}")
-[[ -z "${output}" ]] && output="${tmp_file_prefix}"
-[[ -z "${prefix}" ]] && prefix="${results_file}"
+IFS=$',' read -r -a bits <<<"${1:-4096,6144,7680,8192}"
+results_file="${2:-DH_moduli}"
 
 # Validate bits
 for bit in "${bits[@]}"; do

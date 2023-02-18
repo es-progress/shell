@@ -33,7 +33,8 @@ E.g. `1.2.3` becomes `2.0.0` after bumping major version.
 bump-version VERSION PART
 
 Params:
-VERSION            Current version. Must be in x.y.z format where x,y and z are integers.
+VERSION            Current version.
+                   Must be in x.y.z format where x,y and z are integers.
 PART               Which part of the version to increase (major, minor, patch)
 ```
 
