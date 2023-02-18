@@ -239,3 +239,24 @@ Test 'dd' write speed with different block sizes. This way you can optimize bloc
 ```
 Usage: test-dd-write
 ```
+
+---
+
+## wrecho
+
+A wrapper for `echo`. All it does is echo the contents of an environment variable: `ECHO_WRAP`.
+Useful if you need to send a string to some application, but it can receive that only from a script.
+
+Example:
+
+```
+export ECHO_WRAP=password
+export SSH_ASKPASS=/path/to/wrecho
+ssh-add SSH_KEY </dev/null
+```
+
+**Usage**
+
+```
+Usage: ECHO_WRAP="some string to echo" wrecho
+```
