@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090
 ########################
 ## sourcer            ##
 ##                    ##
@@ -20,5 +19,6 @@ fi
 # Import lib files
 # shellcheck disable=SC2312
 while IFS= read -r -d '' file; do
+    # shellcheck disable=SC1090
     source "${file}"
 done < <(find "${lib_dir}" -type f -print0)
