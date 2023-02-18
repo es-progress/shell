@@ -173,3 +173,38 @@ ACTION             Action to perform (open, close, generate, retrieve)
 TARGET             Path to password in password store (mandatory for 'retrieve' action)
 EXTRA              Extra arguments to 'pass'
 ```
+
+---
+
+## sign-kernel-modules
+
+Sign kernel modules with a Machine Owner Key (MOK).
+Some modules are not signed by Ubuntu so kernel won't load them.
+After signing they can be loaded with `modprobe`.
+
+For this you need a MOK key and certificate and it needs to be enrolled in EFI:
+
+1. Generate MOK key
+    ```
+    openssl genpkey -algorithm rsa -out MOK_KEY
+    ```
+1. Create MOK certificate
+    ```
+    openssl req -new -x509 -key MOK_KEY -outform DER -out MOK_CERT
+    ```
+1. Enroll MOK certificate
+    ```
+    mokutil --import MOK_CERT
+    ```
+1. Reboot and perform enrolling
+
+**Usage**
+
+```
+Usage: sign-kernel-modules MODULE KEY CERT
+
+Params:
+MODULE             Module to sign (e.g. vboxdrv)
+KEY                MOK private key file
+CERT               MOK certificate file
+```
