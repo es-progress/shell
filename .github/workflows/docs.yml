@@ -13,22 +13,6 @@ jobs:
     with:
       pattern: "**/*.{md,yml}"
   deploy:
-    name: Deploy docs to gh-pages
-    runs-on: ubuntu-20.04
+    name: Deploy docs
+    uses: ./.github/workflows/reuse-mkdocs.yml
     needs: format
-    steps:
-      - name: Self check out
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Setup Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.x
-
-      - name: Install mkdocs
-        run: pip install mkdocs mkdocs-git-revision-date-localized-plugin mkdocs-literate-nav mkdocs-material mkdocs-minify-plugin
-
-      - name: Deploy docs
-        run: mkdocs gh-deploy --force
