@@ -9,19 +9,9 @@ on:
 jobs:
   format:
     name: Check format
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Self checkout
-        uses: actions/checkout@v3
-
-      - name: Install npm v8
-        run: npm i -g npm@8
-
-      - name: Check code-style
-        uses: creyD/prettier_action@v4.2
-        with:
-          dry: true
-          prettier_options: --check **/*.{md,yml}
+    uses: ./.github/workflows/reuse-prettier.yml
+    with:
+      pattern: "**/*.{md,yml}"
   deploy:
     name: Deploy docs to gh-pages
     runs-on: ubuntu-20.04
