@@ -1,4 +1,4 @@
-# ES-Progress Shell Library (test)
+# ES-Progress Shell Library
 
 Hi! :cowboy_hat_face:
 
