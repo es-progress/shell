@@ -6,31 +6,26 @@
 
 This is a collection of utility scripts and helper functions.
 
-You can find the scripts in the `bin/` directory and the function libraries in the `lib/` dir.
-
-For details please check the [documentation](https://shell.es-progress.hu/).
+You can find scripts in `bin/` directory and function libraries in `lib/` dir.
+For details see the [documentation](https://shell.es-progress.hu/).
 
 ## Usage
 
-Most scripts use functions from the libraries, so they need to get sourced inside the scripts, to be available.
-For this there is the `sourcer`. All it does is include every library file from the `lib` dir.
+Most scripts use functions from the libraries, so they need to get sourced inside scripts to be available.
+For this purpose there's a loader: `lib/_loader.sh`. All it does is including every library file from `lib/` dir.
 
-For it to work it uses an environment variable (`DIR_SHELL_LIB`) to get the path of the `lib` directory. If this variable is not found it
-assumes the `lib` is in the same place as in this repo.
-
-So if you need the libraries, simply include (source) the `sourcer` script, and it does the job.
-
-```
-. /path/to/sourcer
-```
-
-Alternatively you can set this env var when sourcing `sourcer`
+So if you need the libraries, simply include (source) the loader, and it does the job.
+In supplied scripts loader is referenced by an environment variable (`ES_SHELL_LOADER`), this means you need to set path to `lib/_loader.sh` in `ES_SHELL_LOADER`.
+It's recommended to use this env var in your scripts also:
 
 ```
-DIR_SHELL_LIB=/path/to/lib/dir . /path/to/sourcer
+# Use absolute path
+. /path/to/shell/lib/_loader.sh
+# Or use the envvar (recommended for maintainabilty & portability)
+. "${ES_SHELL_LOADER}"
 ```
 
-Tip: you can put the `sourcer` in your `.bashrc`, so the functions will be available for you on the command line.
+**Tip**: source loader in your `.bashrc`, so functions will be available for you on the command line!
 
 ## NOTE
 

@@ -217,28 +217,6 @@ CERT               MOK certificate file
 
 ---
 
-## sourcer
-
-Helper script to bootstrap libraries. This script sources all library files so functions will be available to use.
-Basically you need to source this file in any script where you want to use library functions:
-
-```
-# Source sourcer
-. /path/to/sourcer
-# Now functions are defined
-check-root
-error-exit "Nothing to do"
-```
-
-You can find more details about bootstrapping in the [Installation instructions](install.md).
-
-!!! tip
-
-    Put sourcer in your `.bashrc` and all functions are ready to use in your terminal.
-    Actually some of them are meant for interactive use on the command line!
-
----
-
 ## test-dd-write
 
 Test 'dd' write speed with different block sizes. This way you can optimize block size for fastest write operation.

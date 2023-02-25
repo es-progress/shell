@@ -21,7 +21,7 @@ timer=6h
 _usage() {
     cat <<HELP
 
-pass-man v1.2.0
+pass-man v1.3.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 
 Usage: pass-man ACTION [TARGET] [EXTRA]...
@@ -94,7 +94,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 # shellcheck disable=SC1090
-source "${PATH_SOURCER}"
+source "${ES_SHELL_LOADER}"
 
 # Parse options
 action="${1:-}"
