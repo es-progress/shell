@@ -1,0 +1,39 @@
+name: Check formatting (beautysh)
+on:
+  workflow_call:
+    inputs:
+      dir:
+        description: Directories to look for files
+        type: string
+        required: true
+      beautysh_params:
+        description: Extra parameters to beautysh
+        type: string
+        required: false
+jobs:
+  beautysh:
+    name: Run beautysh
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install beautysh
+        run: pip install beautysh
+
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Compile list of files to format
+        run: |
+          # Find files with .sh extension
+          find ${{ inputs.dir }} -type f -name "*.sh" -print0 > ~/beautysh.temp
+          # Find files with Bash shebang
+          grep -r -l -Z "^#!/usr/bin/env bash" ${{ inputs.dir }} >> ~/beautysh.temp
+          # Deduplicate list
+          sort -z ~/beautysh.temp | uniq -z > ~/beautysh.files
+
+      - name: Check code-style
+        run: xargs -0 beautysh --check ${{ inputs.beautysh_params }} < ~/beautysh.files
