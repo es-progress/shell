@@ -9,15 +9,10 @@ on:
 jobs:
   format:
     name: Check format
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Self checkout
-        uses: actions/checkout@v3
-
-      - name: Run beautysh
-        uses: illvart/beautysh-action@latest
-        with:
-          args: --force-function-style paronly --check bin/* lib/*
+    uses: ./.github/workflows/reuse-beautysh.yml
+    with:
+      dir: bin/ lib/
+      beautysh_params: --force-function-style paronly
   linter:
     name: Linting
     runs-on: ubuntu-20.04
