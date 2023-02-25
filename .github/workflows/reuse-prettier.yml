@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       pattern:
-        description: file/dir/glob to check
+        description: File/dir/glob to check
         type: string
         required: true
 jobs:
