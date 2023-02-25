@@ -73,7 +73,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 # shellcheck disable=SC1090
-source "${PATH_SOURCER}"
+source "${ES_SHELL_LOADER}"
 
 # Parse options
 ###############

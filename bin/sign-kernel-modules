@@ -15,7 +15,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 # shellcheck disable=SC1090
-source "${PATH_SOURCER}"
+source "${ES_SHELL_LOADER}"
 check-root
 
 module="${1?:"Kernel module missing"}"
