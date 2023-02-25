@@ -14,15 +14,8 @@ jobs:
       dir: bin/ lib/
   linter:
     name: Linting
-    runs-on: ubuntu-20.04
     needs: format
-    steps:
-      - name: Self checkout
-        uses: actions/checkout@v3
-
-      - name: Run shellcheck
-        uses: ludeeus/action-shellcheck@master
-        env:
-          SHELLCHECK_OPTS: --external-sources --enable add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces --shell bash
-        with:
-          severity: style
+    uses: ./.github/workflows/reuse-shellcheck.yml
+    with:
+      dir: bin/ lib/
+      severity: style
