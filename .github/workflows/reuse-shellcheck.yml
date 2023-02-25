@@ -1,0 +1,44 @@
+name: Linting (shellcheck)
+on:
+  workflow_call:
+    inputs:
+      dir:
+        description: Directories to look for files
+        type: string
+        required: true
+      severity:
+        description: Minimum severity of errors to consider (error, warning, info, style)
+        type: string
+        required: true
+      shellcheck_params:
+        description: Extra parameters to shellcheck
+        type: string
+        required: false
+jobs:
+  shellcheck:
+    name: Run shellcheck
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install shellcheck
+        run: sudo snap install shellcheck
+
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Compile list of files to lint
+        run: |
+          # Find files with .sh extension
+          find ${{ inputs.dir }} -type f -name "*.sh" -print0 > ~/shellcheck.temp
+          # Find files with Bash shebang
+          grep -r -l -Z "^#!/usr/bin/env bash" ${{ inputs.dir }} >> ~/shellcheck.temp
+          # Deduplicate list
+          sort -z ~/shellcheck.temp | uniq -z > ~/shellcheck.files
+
+      - name: Run shellcheck
+        run: |
+          xargs -0 shellcheck \
+            --format gcc \
+            --external-sources \
+            --shell bash \
+            --enable "add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces" \
+            --severity ${{ inputs.severity }} ${{ inputs.shellcheck_params }} < ~/shellcheck.files
