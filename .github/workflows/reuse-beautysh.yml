@@ -36,4 +36,4 @@ jobs:
           sort -z ~/beautysh.temp | uniq -z > ~/beautysh.files
 
       - name: Check code-style
-        run: xargs -0 beautysh --check ${{ inputs.beautysh_params }} < ~/beautysh.files
+        run: xargs -0 beautysh --check --force-function-style paronly ${{ inputs.beautysh_params }} < ~/beautysh.files
