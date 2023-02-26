@@ -109,7 +109,8 @@ HEADER             Header text
 
 ## print-run-time
 
-Print running time of script in a nice summary format. Seconds converted to hours, mins e.g. 3665 seconds => 1 hour(s) 1 min(s) 5 second(s).
+Print running time of script in a nice summary format.
+Seconds converted to hours, mins e.g. 3665 seconds => 1 hour(s) 1 min(s) 5 second(s).
 Could be useful for long-running overnight scripts.
 
 **Usage**

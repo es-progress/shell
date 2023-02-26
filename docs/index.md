@@ -2,7 +2,7 @@
 
 Hi! :cowboy_hat_face:
 
-Here you can find the documentation for [_ES-Progress Shell Library_](https://github.com/es-progress/shell).
+Here you can find the documentation for [_ES-Progress Shell Library_](https://github.com/es-progress/shell){target=_blank}.
 
 There are some standalone shell scripts, called "binaries" (`bin/`) here :wink: and various shell functions (`lib/`).
 Certain functions are useful for interactive use on the command-line, while others makes more sense sourced in scripts.

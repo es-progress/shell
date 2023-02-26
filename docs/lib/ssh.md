@@ -130,7 +130,7 @@ EXTRA              Optional extra params to 'ssh-keygen'
 ## unlock-key
 
 Add a password protected SSH key to `ssh-agent` so it can be used in the next 6 hours without prompting for password.
-Password is retrieved from [`pass` password manager utility](https://www.passwordstore.org/).
+Password is retrieved from [`pass` password manager utility](https://www.passwordstore.org/){target=_blank}.
 
 **Usage**
 

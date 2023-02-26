@@ -8,7 +8,8 @@ If you don't like that you can pass an empty string (`""`) to override that or s
 
 ## reuse-beautysh.yml
 
-Formats Bash shell code with `beautysh`. Currently only reports on bad formatting, no auto-correction and committing formatted code to repo.
+Formats Bash shell code with `beautysh`.
+Currently only reports on bad formatting, no auto-correction and committing formatted code to repo.
 
 **Parameters**
 
