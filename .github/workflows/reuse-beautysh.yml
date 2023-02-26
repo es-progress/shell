@@ -5,7 +5,8 @@ on:
       dir:
         description: Directories to look for files
         type: string
-        required: true
+        required: false
+        default: .
       beautysh_params:
         description: Extra parameters to beautysh
         type: string

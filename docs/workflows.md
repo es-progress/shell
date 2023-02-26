@@ -17,7 +17,8 @@ Currently only reports on bad formatting, no auto-correction.
 dir:
   description: Directories to look for files
   type: string
-  required: true
+  required: false
+  default: .
 beautysh_params:
   description: Extra parameters to beautysh
   type: string
@@ -130,7 +131,8 @@ Checks Bash shell code with `shellcheck` linter.
 dir:
   description: Directories to look for files
   type: string
-  required: true
+  required: false
+  default: .
 severity:
   description: Minimum severity of errors to consider (error, warning, info, style)
   type: string
