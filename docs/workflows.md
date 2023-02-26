@@ -2,14 +2,14 @@
 
 There are reusable workflows you can use in your CI process.
 Some workflows pass default parameters to the tools.
-If you don't like that you can pass an empty string (`""`) to override that or set your preferred parameters instead.
+If you don't like it you can pass an empty string (`""`) to override that or set your preferred parameters instead.
 
 ---
 
 ## reuse-beautysh.yml
 
 Formats Bash shell code with `beautysh`.
-Currently only reports on bad formatting, no auto-correction and committing formatted code to repo.
+Currently only reports on bad formatting, no auto-correction.
 
 **Parameters**
 
@@ -91,7 +91,7 @@ jobs:
 
 ## reuse-prettier.yml
 
-Checks code style with `prettier`.
+Checks code style with `prettier`. Currently only reports on bad formatting, no auto-correction.
 
 **Parameters**
 
