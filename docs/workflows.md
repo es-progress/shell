@@ -88,6 +88,37 @@ jobs:
 
 ---
 
+## reuse-prettier.yml
+
+Checks code style with `prettier`.
+
+**Parameters**
+
+```
+pattern:
+  description: File/dir/glob to check
+  type: string
+  required: true
+```
+
+**Example**
+
+```
+name: CI
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  format:
+    name: Check format with prettier
+    uses: es-progress/shell/.github/workflows/reuse-prettier.yml@main
+    with:
+      pattern: "**/*.{md,yml}"
+```
+
+---
+
 ## reuse-shellcheck.yml
 
 Checks Bash shell code with `shellcheck` linter.
