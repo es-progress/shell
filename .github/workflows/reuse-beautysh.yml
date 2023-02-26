@@ -10,6 +10,7 @@ on:
         description: Extra parameters to beautysh
         type: string
         required: false
+        default: --force-function-style paronly
 jobs:
   beautysh:
     name: Run beautysh
@@ -39,4 +40,4 @@ jobs:
           cat ~/beautysh.files | tr '\0' '\n'
 
       - name: Check code-style
-        run: xargs -0 beautysh --check --force-function-style paronly ${{ inputs.beautysh_params }} < ~/beautysh.files
+        run: xargs -0 beautysh --check ${{ inputs.beautysh_params }} < ~/beautysh.files
