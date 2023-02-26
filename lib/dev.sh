@@ -27,12 +27,14 @@ debug-tunnel-close() {
 ##
 ## @param    $1  mkdocs config file path
 ## @param    $2  Build destination
-########################################
+## @param    $@  Extra args to mkdocs build
+###########################################
 build-mkdocs() {
     local config_file="${1?:"mkdocs config file missing"}"
     local destination="${2?:"Build destination missing"}"
+    shift 2
 
-    mkdocs build -f "${config_file}" -d "${destination}"
+    mkdocs build -f "${config_file}" -d "${destination}" "${@}"
 
     chmod -R g-w,o-rwx "${destination}"
     chgrp -R www-data "${destination}"

@@ -25,7 +25,8 @@ ARGS               Optional extra params to COMMAND.
 
 ## ghub-foreach-topic
 
-Run `gh` command for each repository of user, filtered by topic. Useful to run any other function in this category for each repo.
+Run `gh` command for each repository of user, filtered by topic.
+Useful to run any other function in this category for each repo.
 E.g. Sync labels from master repo: `ghub-foreach-topic OWNER TOPIC ghub-sync-labels TEMPLATE`.
 
 **Usage**
@@ -46,7 +47,8 @@ ARGS               Optional extra params to COMMAND.
 ## ghub-get
 
 Get names of all repos for a GitHub account.
-Names are returned as a list, each repo on a separate line. Useful for completion scripts for other functions in this category.
+Names are returned as a list, each repo on a separate line.
+Useful for completion scripts for other functions in this category.
 
 **Usage**
 

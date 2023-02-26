@@ -24,7 +24,8 @@ exit "${_E_ABORT}"
 
 ## abort
 
-Print error message ("aborted") and exit program with `_E_ABORT` exit code. Use this in standalone scripts. If used on the commandline it exits your shell.
+Print error message ("aborted") and exit program with `_E_ABORT` exit code.
+Use this in standalone scripts. If used on the commandline it exits your shell.
 
 **Usage**
 
@@ -36,7 +37,8 @@ abort
 
 ## error-exit
 
-Print error message and exit program. Use this in standalone scripts. If used on the command line it exits your shell.
+Print error message and exit program. Use this in standalone scripts.
+If used on the command line it exits your shell.
 
 **Usage**
 
