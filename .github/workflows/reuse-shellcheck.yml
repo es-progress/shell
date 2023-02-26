@@ -5,7 +5,8 @@ on:
       dir:
         description: Directories to look for files
         type: string
-        required: true
+        required: false
+        default: .
       severity:
         description: Minimum severity of errors to consider (error, warning, info, style)
         type: string

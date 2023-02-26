@@ -10,11 +10,7 @@ jobs:
   format:
     name: Check format
     uses: ./.github/workflows/reuse-beautysh.yml
-    with:
-      dir: bin/ lib/
   linter:
     name: Linting
     needs: format
     uses: ./.github/workflows/reuse-shellcheck.yml
-    with:
-      dir: bin/ lib/
