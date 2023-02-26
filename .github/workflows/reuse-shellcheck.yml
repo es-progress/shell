@@ -32,7 +32,7 @@ jobs:
           # Find files with .sh extension
           find ${{ inputs.dir }} -type f -name "*.sh" -print0 > ~/shellcheck.temp
           # Find files with Bash shebang
-          grep -r -l -Z '^#!/usr/bin/env bash' ${{ inputs.dir }} >> ~/shellcheck.temp
+          grep -r -l -Z --exclude="*.phar" '^#!/usr/bin/env bash' ${{ inputs.dir }} >> ~/shellcheck.temp
           # Deduplicate list
           sort -z ~/shellcheck.temp | uniq -z > ~/shellcheck.files
           # List files (for debug)
