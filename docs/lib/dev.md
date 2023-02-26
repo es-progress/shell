@@ -12,11 +12,12 @@ Generated site's permission and group changed for serving through Apache (`www-d
 **Usage**
 
 ```
-build-mkdocs CONFIG DESTINATION
+build-mkdocs CONFIG DESTINATION [EXTRA]...
 
 Params:
 CONFIG             MkDocs config file path
 DESTINATION        Destination dir for generated static site
+EXTRA              Optional extra params to 'mkdocs build'
 ```
 
 ---
