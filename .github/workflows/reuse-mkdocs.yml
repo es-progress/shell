@@ -28,7 +28,7 @@ jobs:
           python-version: 3.x
 
       - name: Install mkdocs
-        run: pip install ${{ inputs.plugins }}
+        run: pip install mkdocs ${{ inputs.plugins }}
 
       - name: Deploy docs
         run: mkdocs gh-deploy ${{ inputs.mkdocs_params }}
