@@ -2,7 +2,7 @@
 
 There are reusable workflows you can use in your CI process.
 Some workflows pass default parameters to the tools.
-If you don't like that you can pass an empty string (`""`) to override that or your set of preferred parameters instead.
+If you don't like that you can pass an empty string (`""`) to override that or set your preferred parameters instead.
 
 ---
 
@@ -39,6 +39,51 @@ jobs:
     with:
       dir: bin/
       beautysh_params: --force-function-style fnpar --indent-size 2
+```
+
+---
+
+## reuse-mkdocs.yml
+
+Deploys documentation created by MkDocs to `gh-pages` branch of the repository.
+The deployed site can be accessed using the URL `https://<username>.github.io/<repository>/`, where `<username> `is your GitHub username and `<repository>` is the name of your repo.
+
+You need to have the `mkdocs.yml` file in the root of your repo.
+For details check this repo! :smiley:
+
+**Parameters**
+
+```
+plugins:
+  description: Plugins to install for mkdocs
+  type: string
+  required: false
+  default: mkdocs-literate-nav mkdocs-material mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
+mkdocs_params:
+  description: Extra parameters to 'mkdocs gh-deploy'
+  type: string
+  required: false
+  default: --force --no-history --ignore-version --strict
+```
+
+**Example**
+
+```
+name: Docs
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+jobs:
+  deploy:
+    name: Deploy docs
+    uses: es-progress/shell/.github/workflows/reuse-mkdocs.yml@main
+    with:
+      plugins: mkdocs-literate-nav
+      mkdocs_params: --strict
 ```
 
 ---
@@ -84,4 +129,3 @@ jobs:
       # Don't pass any exra args to shellcheck
       shellcheck_params:
 ```
-
