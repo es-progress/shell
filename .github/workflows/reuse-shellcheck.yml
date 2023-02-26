@@ -33,6 +33,9 @@ jobs:
           grep -r -l -Z "^#!/usr/bin/env bash" ${{ inputs.dir }} >> ~/shellcheck.temp
           # Deduplicate list
           sort -z ~/shellcheck.temp | uniq -z > ~/shellcheck.files
+          # List files (for debug)
+          echo "Files found:"
+          cat ~/shellcheck.files | tr '\0' '\n'
 
       - name: Run shellcheck
         run: |
