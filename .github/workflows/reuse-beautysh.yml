@@ -32,7 +32,7 @@ jobs:
           # Find files with .sh extension
           find ${{ inputs.dir }} -type f -name "*.sh" -print0 > ~/beautysh.temp
           # Find files with Bash shebang
-          grep -r -l -Z "^#!/usr/bin/env bash" ${{ inputs.dir }} >> ~/beautysh.temp
+          grep -r -l -Z '^#!/usr/bin/env bash' ${{ inputs.dir }} >> ~/beautysh.temp
           # Deduplicate list
           sort -z ~/beautysh.temp | uniq -z > ~/beautysh.files
           # List files (for debug)
