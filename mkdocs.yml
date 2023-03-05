@@ -36,6 +36,9 @@ theme:
   features:
     - navigation.sections
     - navigation.top
+    - navigation.instant
+    - search.suggest
+    - search.highlight
 
 markdown_extensions:
   - toc:
