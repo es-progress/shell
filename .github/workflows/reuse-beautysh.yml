@@ -7,8 +7,8 @@ on:
         type: string
         required: false
         default: .
-      beautysh_params:
-        description: Extra parameters to beautysh
+      params:
+        description: Options to beautysh
         type: string
         required: false
         default: --force-function-style paronly
@@ -41,4 +41,4 @@ jobs:
           cat ~/beautysh.files | tr '\0' '\n'
 
       - name: Check code-style
-        run: xargs -0 beautysh --check ${{ inputs.beautysh_params }} < ~/beautysh.files
+        run: xargs -0 beautysh --check ${{ inputs.params }} < ~/beautysh.files

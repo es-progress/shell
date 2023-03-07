@@ -19,8 +19,8 @@ dir:
   type: string
   required: false
   default: .
-beautysh_params:
-  description: Extra parameters to beautysh
+params:
+  description: Options to beautysh
   type: string
   required: false
   default: --force-function-style paronly
@@ -61,8 +61,8 @@ plugins:
   type: string
   required: false
   default: mkdocs-literate-nav mkdocs-material mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
-mkdocs_params:
-  description: Extra parameters to 'mkdocs gh-deploy'
+params:
+  description: Options to 'mkdocs gh-deploy'
   type: string
   required: false
   default: --force --no-history --ignore-version --strict
@@ -138,8 +138,8 @@ severity:
   type: string
   required: false
   default: style
-shellcheck_params:
-  description: Extra parameters to shellcheck
+params:
+  description: Options to shellcheck
   type: string
   required: false
   default: --format gcc --external-sources --shell bash --enable "add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces"

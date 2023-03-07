@@ -7,8 +7,8 @@ on:
         type: string
         required: false
         default: mkdocs-literate-nav mkdocs-material mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
-      mkdocs_params:
-        description: Extra parameters to 'mkdocs gh-deploy'
+      params:
+        description: Options to 'mkdocs gh-deploy'
         type: string
         required: false
         default: --force --no-history --ignore-version --strict
@@ -31,4 +31,4 @@ jobs:
         run: pip install mkdocs ${{ inputs.plugins }}
 
       - name: Deploy docs
-        run: mkdocs gh-deploy ${{ inputs.mkdocs_params }}
+        run: mkdocs gh-deploy ${{ inputs.params }}
