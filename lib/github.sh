@@ -58,6 +58,17 @@ ghub-settings() {
     gh browse --repo "${repo}" --settings "${@}"
 }
 
+## Clone repo
+##
+## @param    $1  Repo
+## @param    $@  Extra args to gh
+#################################
+ghub-repo-clone() {
+    local repo="${1?:"Repo missing"}"
+    shift
+    gh repo clone "${repo}" "${@}"
+}
+
 ## Create new repo
 ##
 ## @param    $1  Repo
