@@ -129,6 +129,22 @@ EXTRA              Optional extra params to 'gh'
 
 ---
 
+## ghub-repo-clone
+
+Clone repository.
+
+**Usage**
+
+```
+ghub-repo-clone REPO [EXTRA]...
+
+Params:
+REPO               Desired GitHub repository name, given as "owner/repo-name"
+EXTRA              Optional extra params to 'gh'
+```
+
+---
+
 ## ghub-repo-new
 
 Create new repository.
