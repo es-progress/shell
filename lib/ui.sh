@@ -37,11 +37,11 @@ print-error() {
 print-section() {
     local msg="${*}"
     echo
-    echo -e "${BACK_BLUE}${msg}${TXT_NORM}"
+    echo -e "${BACK_BLUE}${msg}"
     for ((i = 0 ; i < ${#msg} ; i++)); do
-        echo -ne "${BACK_BLUE}=${TXT_NORM}"
+        echo -n =
     done
-    echo
+    echo -e "${TXT_NORM}"
 }
 
 ## Print header
