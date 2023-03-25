@@ -66,3 +66,8 @@ plugins:
   - literate-nav:
       nav_file: nav.md
   - git-revision-date-localized
+
+extra:
+  analytics:
+    provider: google
+    property: G-TDE6GG4EQV
