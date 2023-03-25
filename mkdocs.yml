@@ -68,6 +68,11 @@ plugins:
   - git-revision-date-localized
 
 extra:
+  consent:
+    title: Cookie consent
+    description: |
+      We use cookies on our website to enhance your browsing experience and to measure the effectiveness of our documentation.<br>
+      With your consent, you're helping us to make our documentation better.
   analytics:
     provider: google
     property: G-TDE6GG4EQV
