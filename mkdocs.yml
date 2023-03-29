@@ -6,7 +6,9 @@
 site_name: Shell Library of ES-Progress
 site_url: https://shell.es-progress.hu
 site_author: Sandor Semsey
-copyright: Copyright © 2021 Sandor Semsey
+copyright: |
+  <a href="#__consent">Change cookie settings</a><br>
+  Copyright © 2021 Sandor Semsey
 repo_url: https://github.com/es-progress/shell
 repo_name: es-progress/shell
 edit_uri: edit/main/docs/
@@ -68,6 +70,14 @@ plugins:
   - git-revision-date-localized
 
 extra:
+  consent:
+    title: Cookie consent
+    description: |
+      We use cookies to enhance your browsing experience and to measure the effectiveness of our documentation.<br>
+      With your consent, you're helping us to make it better!
+    actions:
+      - manage
+      - accept
   analytics:
     provider: google
     property: G-TDE6GG4EQV
