@@ -113,7 +113,7 @@ ghub-sync-labels() {
 
     while IFS=$'\n\t' read -r label; do
         exist_in_template=$(jq -r "map(select(.name == \"${label}\")) | .[].name" <<<"${labels_template}")
-        [[ -z "${exist_in_template}" ]] && gh label delete "${label}" --confirm --repo "${repo}"
+        [[ -z "${exist_in_template}" ]] && gh label delete "${label}" --yes --repo "${repo}"
     done <<<"${labels_current}"
 
     gh label clone "${template}" --force --repo "${repo}"
