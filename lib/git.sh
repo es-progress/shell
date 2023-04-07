@@ -36,7 +36,7 @@ ggit-merge() {
 ## Check git repo status
 ########################
 ggit-report() {
-    print-header Git status
+    print-header "Git status"
     git status || return 1
     print-header Branches
     git branch -a -l -vv
