@@ -125,6 +125,26 @@ ggit-base() {
     git switch "${branch_onto}" || return 1
 }
 
+## Create tag & push
+##
+## @param    $1  Tag name
+## @param    $2  Commit to tag
+## @default      HEAD
+## @param    $3  Tag message
+## @default      same as tag name
+## @param    $4  Remote
+## @default      origin
+#################################
+ggit-tag() {
+    local name="${1?:"Tag name missing"}"
+    local commit="${2:-HEAD}"
+    local message="${3:-${name}}"
+    local remote="${4:-origin}"
+
+    git tag -s -m"${message}" "${name}" "${commit}" || return 1
+    git push "${remote}" "${name}"
+}
+
 ## Show log graphically
 #######################
 ggit-adog() {
