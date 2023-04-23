@@ -125,6 +125,48 @@ ggit-base() {
     git switch "${branch_onto}" || return 1
 }
 
+## Create tag & push
+##
+## @param    $1  Tag name
+## @param    $2  Commit to tag
+## @default      HEAD
+## @param    $3  Tag message
+## @default      same as tag name
+## @param    $4  Remote
+## @default      origin
+#################################
+ggit-tag() {
+    local name="${1?:"Tag name missing"}"
+    local commit="${2:-HEAD}"
+    local message="${3:-${name}}"
+    local remote="${4:-origin}"
+
+    git tag -s -m"${message}" "${name}" "${commit}" || return 1
+    git push "${remote}" "${name}"
+}
+
+## Create bumped version tag (from last tag)
+##
+## @param    $1  Which part to bump (major, minor, patch)
+## @param    $2  Commit to tag
+## @default      HEAD
+## @param    $3  Remote
+## @default      origin
+#########################################################
+ggit-version() {
+    local part="${1?:"Version part missing"}"
+    local commit="${2:-HEAD}"
+    local remote="${3:-origin}"
+    local version
+
+    version=$(git tag --list "v*" --sort=-v:refname | head -n1 | sed -r 's@v(.*)@\1@g' || true)
+    if ! version=$(bump-version "${version}" "${part}"); then
+        return 1
+    fi
+
+    ggit-tag "v${version}" "${commit}" "v${version}" "${remote}"
+}
+
 ## Show log graphically
 #######################
 ggit-adog() {

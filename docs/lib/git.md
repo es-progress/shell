@@ -23,7 +23,7 @@ Rebase source onto target and force-push rebased branch to remote.
 **Usage**
 
 ```
-ggit-base SOURCE TARGET REMOTE
+ggit-base SOURCE [TARGET] [REMOTE]
 
 Params:
 SOURCE             Branch to rebase
@@ -78,7 +78,7 @@ Merge source branch into target branch. This includes several steps:
 **Usage**
 
 ```
-ggit-merge SOURCE TARGET REMOTE
+ggit-merge SOURCE [TARGET] [REMOTE]
 
 Params:
 SOURCE             Branch to be merged
@@ -110,11 +110,11 @@ Pull local branch from remote. Also update submodules.
 **Usage**
 
 ```
-ggit-pull BRANCH REMOTE
+ggit-pull [BRANCH] [REMOTE]
 
 Params:
 BRANCH             Branch to pull. Defaults to 'main'.
-REMOTE             Remote repository to pull and push. Defaults to 'origin'.
+REMOTE             Remote repository to pull. Defaults to 'origin'.
 ```
 
 ---
@@ -167,6 +167,24 @@ ggit-stat-weekly
 
 ---
 
+## ggit-tag
+
+Create a signed tag & push to remote.
+
+**Usage**
+
+```
+ggit-tag NAME [COMMIT] [MESSAGE] [REMOTE]
+
+Params:
+NAME               Tag name
+COMMIT             Commit to tag. Defaults to HEAD.
+MESSAGE            Tag message. Defaults to same as tag name.
+REMOTE             Remote repository to push. Defaults to 'origin'.
+```
+
+---
+
 ## ggit-update
 
 **WARNING**: this is a forced operation, local branch will be deleted!
@@ -179,9 +197,28 @@ This way you can have the same commits (and history) as remote.
 **Usage**
 
 ```
-ggit-update BRANCH REMOTE
+ggit-update BRANCH [REMOTE]
 
 Params:
 BRANCH             Branch to update
 REMOTE             Remote repository, defaults to 'origin'.
+```
+
+---
+
+## ggit-version
+
+Create & push a new version tag to remote.
+Version tag format is: `vx.y.z` (semantic versioning).
+Next version number is deducted from last version tag with specified part bumped (major, minor or patch).
+
+**Usage**
+
+```
+ggit-version PART [COMMIT] [REMOTE]
+
+Params:
+PART               Which part of the version to increase (major, minor, patch)
+COMMIT             Commit to tag. Defaults to HEAD.
+REMOTE             Remote repository to push. Defaults to 'origin'.
 ```
