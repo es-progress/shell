@@ -203,3 +203,22 @@ Params:
 BRANCH             Branch to update
 REMOTE             Remote repository, defaults to 'origin'.
 ```
+
+---
+
+## ggit-version
+
+Create & push a new version tag to remote.
+Version tag format is: `vx.y.z` (semantic versioning).
+Next version number is deducted from last version tag with specified part bumped (major, minor or patch).
+
+**Usage**
+
+```
+ggit-version PART [COMMIT] [REMOTE]
+
+Params:
+PART               Which part of the version to increase (major, minor, patch)
+COMMIT             Commit to tag. Defaults to HEAD.
+REMOTE             Remote repository to push. Defaults to 'origin'.
+```
