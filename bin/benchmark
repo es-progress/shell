@@ -18,7 +18,7 @@
 ############
 
 # Version
-version=1.2.0
+version=1.2.1
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -357,11 +357,11 @@ declare -A all_test_param
 declare -A summary
 
 # Parse options
-create_report=""
-report_file_prefix=""
-sys_check=""
-benchmark_depth=""
-params_file=""
+create_report=
+report_file_prefix=
+sys_check=
+benchmark_depth=
+params_file=
 while :; do
     case "${1:-}" in
         -r | --report) create_report=1 ;;
@@ -428,9 +428,11 @@ case "${benchmark_depth}" in
         all_test_param[download]="${runs_download_deep[*]}"
         ;;
     *)
-        echo "Not supported depth: ${1}" >&2
-        _usage
-        exit 1
+        if [[ -z "${sys_check}" ]]; then
+            echo "Not supported depth: ${benchmark_depth}" >&2
+            _usage
+            exit 1
+        fi
         ;;
 esac
 
