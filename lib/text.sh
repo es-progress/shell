@@ -42,7 +42,7 @@ read-file-cfg() {
 ################################
 urlencode() {
     local string="${1:?"String missing"}"
-    local encoded=""
+    local encoded=
     local pos char enc_char
 
     # Encode each individual chars sequentially
