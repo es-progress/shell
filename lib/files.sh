@@ -18,7 +18,7 @@ dir-file() {
         return 1
     fi
 
-    base_dir="$(builtin cd "$(dirname "${file}")" >/dev/null 2>&1 && pwd)"
+    base_dir=$(builtin cd "$(dirname "${file}")" >/dev/null 2>&1 && pwd)
     echo "${base_dir}"
 }
 
@@ -39,7 +39,7 @@ dir-parents() {
     local parents=()
 
     # Convert to absolute path
-    dir="$(realpath "${dir}")"
+    dir=$(realpath "${dir}")
 
     if [[ ! -d "${dir}" ]]; then
         print-error "Not a directory"
