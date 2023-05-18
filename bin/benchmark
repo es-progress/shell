@@ -18,7 +18,7 @@
 ############
 
 # Version
-version=1.2.1
+version=1.2.2
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -453,7 +453,7 @@ fi
 ## Get System info
 ##################
 # CPU info
-cpu_info="$(cat /proc/cpuinfo)"
+cpu_info=$(cat /proc/cpuinfo)
 cpu_model=$(grep -m 1 "model name" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_vendor=$(grep -m 1 vendor_id <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_freq=$(grep -m 1 "cpu MHz" <<<"${cpu_info}" | cut -d ":" -f 2)
@@ -461,7 +461,7 @@ cpu_cache=$(grep -m 1 "cache size" <<<"${cpu_info}" | cut -d ":" -f 2)
 cpu_cores=$(awk -F: '/model name/ {core++} END {print core}' <<<"${cpu_info}")
 
 # RAM info
-ram_info="$(free -h)"
+ram_info=$(free -h)
 ram_total=$(grep "Mem:" <<<"${ram_info}" | awk '{print $2}')
 ram_free=$(grep "Mem:" <<<"${ram_info}" | awk '{print $4}')
 ram_swap=$(grep "Swap:" <<<"${ram_info}" | awk '{print $2}')
@@ -497,7 +497,7 @@ for type in "${tests[@]}"; do
     if [[ "${type}" == "cpu" ]]; then
         echo "Running CPU application test..."
         results=$(_cpu-app-test)
-        summary[cpu_app]="$(_filter-results cpu_app "${results}")"
+        summary[cpu_app]=$(_filter-results cpu_app "${results}")
     fi
 
     # Parallel runs
