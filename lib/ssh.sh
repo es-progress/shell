@@ -9,10 +9,13 @@
 ##
 ## @param    $1  Path to SSH key
 ## @param    $2  Path to password
+## @param    $3  Cache time
+## @default      12 hours
 #################################
 unlock-key() {
     local key="${1?:"Path to SSH key missing"}"
     local pass_path="${2?:"Path to password missing"}"
+    local cache_time="${3:-12h}"
     local password public_key current_identities
 
     password=$(pass-man retrieve "${pass_path}")
@@ -21,7 +24,7 @@ unlock-key() {
 
     # Add key to ssh-agent
     if ! grep -qs "${public_key}" <<<"${current_identities}"; then
-        ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS=wrecho ssh-add -t 6h "${key}" </dev/null
+        ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS=wrecho ssh-add -t "${cache_time}" "${key}" </dev/null
     fi
 }
 
