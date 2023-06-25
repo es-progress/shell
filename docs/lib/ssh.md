@@ -129,15 +129,18 @@ EXTRA              Optional extra params to 'ssh-keygen'
 
 ## unlock-key
 
-Add a password protected SSH key to `ssh-agent` so it can be used in the next 6 hours without prompting for password.
+Add a password protected SSH key to `ssh-agent` so it can be used without prompting for password until cache time expires.
 Password is retrieved from [`pass` password manager utility](https://www.passwordstore.org/){target=\_blank}.
 
 **Usage**
 
 ```
-unlock-key KEY PASS_PATH
+unlock-key KEY PASS_PATH [CACHE_TIME]
 
 Params:
 KEY                Private key file
 PASS_PATH          Path to password in 'pass'
+CACHE_TIME         Set a maximum lifetime when adding SSH keys to 'ssh-agent'.
+                   Cache time may be specified in seconds or in a time format supported by 'ssh'.
+                   Defaults to 12 hours.
 ```
