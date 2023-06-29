@@ -27,6 +27,7 @@ export BACK_BLUE="\e[44m"
 ## @param    $*  Message
 ########################
 print-error() {
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
     echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
 }
 
@@ -36,6 +37,7 @@ print-error() {
 ########################
 print-section() {
     local msg="${*}"
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
     echo
     echo -e "${BACK_BLUE}${msg}${TXT_NORM}"
     for ((i = 0 ; i < ${#msg} ; i++)); do
@@ -49,6 +51,7 @@ print-section() {
 ## @param    $*  Message
 ########################
 print-header() {
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
     echo
     echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
@@ -58,6 +61,7 @@ print-header() {
 ## @param    $*  Message
 ########################
 print-status() {
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
     echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
@@ -67,6 +71,7 @@ print-status() {
 ## @default      Done
 ########################
 print-finish() {
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
     echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
 }
 
@@ -74,6 +79,7 @@ print-finish() {
 ######################
 print-run-time() {
     local sec min hour
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
 
     sec=${SECONDS}
     hour=$((sec / 3600))
