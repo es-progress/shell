@@ -20,7 +20,7 @@
 ##########
 _version() {
     cat <<VERSION
-Backup v2.3.1
+Backup v2.4.0
 Written by Sandor Semsey, Copyright(C) 2020, License MIT
 VERSION
 }
@@ -58,6 +58,7 @@ OPTIONAL
                                QUICK:    backup only
     --exclude [PATTERN]    exclude files matching PATTERN
     --prefix [STRING]      optional prefix on archive files
+-q, --quiet                suppress non-error messages
     --debug                print commands as executed
 -h, --help                 display this help
 -v, --version              print version info
@@ -83,6 +84,7 @@ archive_dir=archive
 exclusion=()
 expire_date=
 archive_prefix=
+quiet=()
 
 while :; do
     case "${1:-}" in
@@ -145,6 +147,10 @@ while :; do
                     ;;
             esac
             ;;
+        -q | --quiet)
+            quiet=(--quiet)
+            export ES_PRINT_HUSH=1
+            ;;
         --debug) set -x ;;
         -h | --help)
             _version
@@ -199,7 +205,7 @@ else
 fi
 
 print-header "Backup files..."
-rsync -aAXHEh --info=stats1 --info=progress2 "${opt[@]}" "${exclusion[@]}" "${source_dir}" "${target}"
+rsync -aAXHEh --info=stats1 --info=progress2 "${opt[@]}" "${exclusion[@]}" "${quiet[@]}" "${source_dir}" "${target}"
 
 # Post backup steps
 case "${backup_mode}" in

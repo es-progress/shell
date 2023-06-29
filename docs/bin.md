@@ -50,6 +50,7 @@ OPTIONAL
                                QUICK:    backup only
     --exclude [PATTERN]    exclude files matching PATTERN
     --prefix [STRING]      optional prefix on archive files
+-q, --quiet                suppress non-error messages
     --debug                print commands as executed
 -h, --help                 display this help
 -v, --version              print version info

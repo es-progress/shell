@@ -2,6 +2,12 @@
 
 Bash functions to interact with user on the command line.
 
+!!! info
+
+    You can hush the print functions (`print-*`) through the `ES_PRINT_HUSH` environment variable.
+    If this variable is set (any value other than the empty string) nothing will be echoed on terminal.
+    This is useful to create quiet/verbose scripts as printing can be switched on/off easily.
+
 ---
 
 ## Format codes
