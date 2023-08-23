@@ -1,4 +1,4 @@
-# ES-Progress Bash Library!
+# ES-Progress Bash Library
 
 Hi! :cowboy_hat_face:
 
