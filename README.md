@@ -1,4 +1,4 @@
-# Bash Shell scripts & functions
+# Bash scripts & functions
 
 [![CI](https://github.com/es-progress/shell/actions/workflows/shell.yml/badge.svg)](https://github.com/es-progress/shell/actions/workflows/shell.yml)
 
