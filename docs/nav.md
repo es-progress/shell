@@ -17,4 +17,3 @@
         -   [SSH](lib/ssh.md)
         -   [Text Processing](lib/text.md)
         -   [User Interface](lib/ui.md)
-    -   [Workflows](workflows.md)
