@@ -9,10 +9,10 @@ on:
 jobs:
   format:
     name: Check format
-    uses: ./.github/workflows/reuse-prettier.yml
+    uses: es-progress/.github/.github/workflows/prettier.yml@main
     with:
       pattern: "**/*.{md,yml}"
   deploy:
     name: Deploy docs
-    uses: ./.github/workflows/reuse-mkdocs.yml
+    uses: es-progress/.github/.github/workflows/mkdocs.yml@main
     needs: format

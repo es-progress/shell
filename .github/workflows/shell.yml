@@ -9,8 +9,8 @@ on:
 jobs:
   format:
     name: Check format
-    uses: ./.github/workflows/reuse-beautysh.yml
+    uses: es-progress/.github/.github/workflows/beautysh.yml@main
   linter:
     name: Linting
     needs: format
-    uses: ./.github/workflows/reuse-shellcheck.yml
+    uses: es-progress/.github/.github/workflows/shellcheck.yml@main
