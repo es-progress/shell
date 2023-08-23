@@ -3,7 +3,7 @@
 ## mkdocs config ##
 ###################
 ---
-site_name: Shell Library of ES-Progress
+site_name: Bash Library of ES-Progress
 site_url: https://shell.es-progress.hu
 site_author: Sandor Semsey
 copyright: |
