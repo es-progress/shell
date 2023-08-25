@@ -15,7 +15,7 @@ anal-disk-usage() {
     local dir="${1:-.}"
     local total size dir
 
-    total=$(du --summarize --block-size=1 "${dir}" | cut -f1)
+    total=$(du --summarize --block-size=1 "${dir}" 2>/dev/null | cut -f1)
 
     while IFS= read -r -d '' line; do
         read -r size dir <<<"${line}"
