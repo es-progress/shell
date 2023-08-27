@@ -1,7 +1,7 @@
 ###################
 ## Docs          ##
 ## mkdocs config ##
-####################
+###################
 ---
 site_name: Bash Library of ES-Progress
 site_url: https://shell.es-progress.hu
