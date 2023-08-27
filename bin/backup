@@ -10,7 +10,7 @@
 ##      3. Delete old archives (find)        ##
 ##   B) quick (rsync)                        ##
 ##   C) snapshot (rsync snapshot style)      ##
-###############################################
+################################################
 
 ###############
 ## FUNCTIONS ##
