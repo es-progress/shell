@@ -22,14 +22,14 @@ _usage() {
     cat <<HELP
 
 pass-man v1.3.0
-Written by Sandor Semsey, Copyright(C) 2020, License MIT
+Written by Sandor Semsey, Copyright (C) 2020, License MIT
 
 Usage: pass-man ACTION [TARGET] [EXTRA]...
 
 Params:
-ACTION             Action to perform (open, close, generate, retrieve)
-TARGET             Path to password in password store (mandatory for 'retrieve' action)
-EXTRA              Extra arguments to 'pass'
+  ACTION             Action to perform (open, close, generate, retrieve)
+  TARGET             Path to password in password store (mandatory for 'retrieve' action)
+  EXTRA              Extra arguments to 'pass'
 HELP
     exit 1
 }
