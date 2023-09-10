@@ -108,4 +108,25 @@ sudo journalctl --flush --rotate --vacuum-time="${journal_retention}" "${quiet[@
 [[ -d /var/cache ]] && sudo find /var/cache -mindepth 1 -delete
 [[ -d /var/lib/snapd/cache ]] && sudo find /var/lib/snapd/cache -mindepth 1 -delete
 
+# User caches
+for user in "${users[@]}"; do
+    if ! homedir=$(getent passwd "${user}" | cut -d: -f6); then
+        echo "User not exits: ${user}" 1>&2
+        exit 1
+    fi
+
+    # Empty trash bin
+    sudo test -d "${homedir}/.local/share/Trash" && sudo find "${homedir}/.local/share/Trash" -mindepth 1 -delete
+    # General cache
+    sudo test -d "${homedir}/.cache" && sudo find "${homedir}/.cache" -mindepth 1 -delete
+    # Atom cache
+    sudo test -d "${homedir}/.atom/.apm/_cacache" && sudo find "${homedir}/.atom/.apm/_cacache" -mindepth 1 -delete
+    # Chrome cache
+    sudo test -d "${homedir}/.config/google-chrome" && sudo find "${homedir}/.config/google-chrome" -mindepth 1 -delete
+    # gdfuse (Google Drive FS) cache
+    sudo test -d "${homedir}/.gdfuse/${user}/cache" && sudo find "${homedir}/.gdfuse/${user}/cache" -mindepth 1 -delete
+    # Flush Spotify cache
+    sudo test -d "${homedir}/snap/spotify/common/.cache" && sudo find "${homedir}/snap/spotify/common/.cache" -mindepth 1 -delete
+done
+
 exit 0
