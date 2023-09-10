@@ -104,8 +104,8 @@ done
 # Rotate journal
 sudo journalctl --flush --rotate --vacuum-time="${journal_retention}" "${quiet[@]}"
 
-# cache
-sudo find /var/cache -mindepth 1 -delete
-sudo find /var/lib/snapd/cache -mindepth 1 -delete
+# System caches
+[[ -d /var/cache ]] && sudo find /var/cache -mindepth 1 -delete
+[[ -d /var/lib/snapd/cache ]] && sudo find /var/lib/snapd/cache -mindepth 1 -delete
 
 exit 0
