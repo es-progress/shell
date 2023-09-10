@@ -8,34 +8,125 @@
 ## Delete caches            ##
 ##############################
 
-# Config
-journal_retention=2w
+###############
+## FUNCTIONS ##
+###############
+
+## Version
+##########
+_version() {
+    cat <<VERSION
+clean v1.0.0
+Written by Sandor Semsey, Copyright (C) 2023, License MIT
+VERSION
+}
+
+## Usage
+########
+_usage() {
+    cat <<HELP
+
+Usage: clean [OPTIONS]...
+
+Clean-up temporary and other unused files to free up disk space
+
+OPTIONS
+
+  -j, --journal [TIME]       Remove journal older than this time (specified with the usual "s", "m", "h", etc. suffixes).
+                             Defaults to 2 weeks (2w).
+  -u, --user [USER]          Clear temp files in user's HOME also.
+                             Can be specified multiple times to clean more user HOME.
+  -q, --quiet                Suppress non-error messages
+  -h, --help                 Display this help
+  -v, --version              Print version info
+HELP
+}
+
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -eufo pipefail
 IFS=$'\n\t'
 
-user_id=$(id -u)
-if [[ "${user_id}" -ne 0 ]]; then
-    echo "Run as root!"
-    exit 1
-fi
+# Parse options
+###############
+journal_retention=2w
+users=()
+quiet=()
+redirection=/dev/stdout
+
+while :; do
+    case "${1:-}" in
+        -j | --journal)
+            shift
+            journal_retention="${1}"
+            ;;
+        -u | --user)
+            shift
+            users+=("${1}")
+            ;;
+        -q | --quiet)
+            quiet=(--quiet)
+            redirection=/dev/null
+            ;;
+        -h | --help)
+            _version
+            _usage
+            exit 0
+            ;;
+        -v | --version)
+            _version
+            exit 0
+            ;;
+        "") break ;;
+        *)
+            echo "Not supported option: ${1}"
+            _usage
+            exit 1
+            ;;
+    esac
+    shift
+done
 
 # apt
-apt-get autoremove --purge --yes
-apt-get clean --yes
+sudo apt-get autoremove --purge --yes "${quiet[@]}" "${quiet[@]}"
+sudo apt-get clean --yes "${quiet[@]}" "${quiet[@]}"
 
 # snap
 for line in $(snap list --all | awk '/disabled/{print $1, $3}'); do
     IFS=$' \t' read -r snapname revision <<< "${line}"
-    snap remove "${snapname}" --revision="${revision}"
+    # shellcheck disable=SC2024
+    sudo snap remove "${snapname}" --purge --revision="${revision}" > "${redirection}"
 done
 
 # Rotate journal
-journalctl --flush --rotate --vacuum-time="${journal_retention}"
+sudo journalctl --flush --rotate --vacuum-time="${journal_retention}" "${quiet[@]}"
 
-# cache
-find /var/cache -mindepth 1 -delete
-find /var/lib/snapd/cache -mindepth 1 -delete
+# System caches
+[[ -d /var/cache ]] && sudo find /var/cache -mindepth 1 -delete
+[[ -d /var/lib/snapd/cache ]] && sudo find /var/lib/snapd/cache -mindepth 1 -delete
+
+# User caches
+for user in "${users[@]}"; do
+    if ! homedir=$(getent passwd "${user}" | cut -d: -f6); then
+        echo "User not exits: ${user}" 1>&2
+        exit 1
+    fi
+
+    # Empty trash bin
+    sudo test -d "${homedir}/.local/share/Trash" && sudo find "${homedir}/.local/share/Trash" -mindepth 1 -delete
+    # General cache
+    sudo test -d "${homedir}/.cache" && sudo find "${homedir}/.cache" -mindepth 1 -delete
+    # Atom cache
+    sudo test -d "${homedir}/.atom/.apm/_cacache" && sudo find "${homedir}/.atom/.apm/_cacache" -mindepth 1 -delete
+    # Chrome cache
+    sudo test -d "${homedir}/.config/google-chrome" && sudo find "${homedir}/.config/google-chrome" -mindepth 1 -delete
+    # gdfuse (Google Drive FS) cache
+    sudo test -d "${homedir}/.gdfuse/${user}/cache" && sudo find "${homedir}/.gdfuse/${user}/cache" -mindepth 1 -delete
+    # Flush Spotify cache
+    sudo test -d "${homedir}/snap/spotify/common/.cache" && sudo find "${homedir}/snap/spotify/common/.cache" -mindepth 1 -delete
+done
 
 exit 0
