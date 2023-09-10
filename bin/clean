@@ -55,6 +55,7 @@ IFS=$'\n\t'
 journal_retention=2w
 users=()
 quiet=()
+redirection=/dev/stdout
 
 while :; do
     case "${1:-}" in
@@ -68,6 +69,7 @@ while :; do
             ;;
         -q | --quiet)
             quiet=(--quiet)
+            redirection=/dev/null
             ;;
         -h | --help)
             _version
@@ -89,17 +91,18 @@ while :; do
 done
 
 # apt
-sudo apt-get autoremove --purge --yes
-sudo apt-get clean --yes
+sudo apt-get autoremove --purge --yes "${quiet[@]}" "${quiet[@]}"
+sudo apt-get clean --yes "${quiet[@]}" "${quiet[@]}"
 
 # snap
 for line in $(snap list --all | awk '/disabled/{print $1, $3}'); do
     IFS=$' \t' read -r snapname revision <<< "${line}"
-    sudo snap remove "${snapname}" --purge --revision="${revision}"
+    # shellcheck disable=SC2024
+    sudo snap remove "${snapname}" --purge --revision="${revision}" > "${redirection}"
 done
 
 # Rotate journal
-sudo journalctl --flush --rotate --vacuum-time="${journal_retention}"
+sudo journalctl --flush --rotate --vacuum-time="${journal_retention}" "${quiet[@]}"
 
 # cache
 sudo find /var/cache -mindepth 1 -delete
