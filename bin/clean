@@ -8,12 +8,85 @@
 ## Delete caches            ##
 ##############################
 
-# Config
-journal_retention=2w
+###############
+## FUNCTIONS ##
+###############
+
+## Version
+##########
+_version() {
+    cat <<VERSION
+clean v1.0.0
+Written by Sandor Semsey, Copyright (C) 2023, License MIT
+VERSION
+}
+
+## Usage
+########
+_usage() {
+    cat <<HELP
+
+Usage: clean [OPTIONS]...
+
+Clean-up temporary and other unused files to free up disk space
+
+OPTIONS
+
+  -j, --journal [TIME]       Remove journal older than this time (specified with the usual "s", "m", "h", etc. suffixes).
+                             Defaults to 2 weeks (2w).
+  -u, --user [USER]          Clear temp files in user's HOME also.
+                             Can be specified multiple times to clean more user HOME.
+  -q, --quiet                Suppress non-error messages
+  -h, --help                 Display this help
+  -v, --version              Print version info
+HELP
+}
+
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -eufo pipefail
 IFS=$'\n\t'
+
+# Parse options
+###############
+journal_retention=2w
+users=()
+quiet=()
+
+while :; do
+    case "${1:-}" in
+        -j | --journal)
+            shift
+            journal_retention="${1}"
+            ;;
+        -u | --user)
+            shift
+            users+=("${1}")
+            ;;
+        -q | --quiet)
+            quiet=(--quiet)
+            ;;
+        -h | --help)
+            _version
+            _usage
+            exit 0
+            ;;
+        -v | --version)
+            _version
+            exit 0
+            ;;
+        "") break ;;
+        *)
+            echo "Not supported option: ${1}"
+            _usage
+            exit 1
+            ;;
+    esac
+    shift
+done
 
 # apt
 sudo apt-get autoremove --purge --yes
