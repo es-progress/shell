@@ -15,27 +15,21 @@ journal_retention=2w
 set -eufo pipefail
 IFS=$'\n\t'
 
-user_id=$(id -u)
-if [[ "${user_id}" -ne 0 ]]; then
-    echo "Run as root!"
-    exit 1
-fi
-
 # apt
-apt-get autoremove --purge --yes
-apt-get clean --yes
+sudo apt-get autoremove --purge --yes
+sudo apt-get clean --yes
 
 # snap
 for line in $(snap list --all | awk '/disabled/{print $1, $3}'); do
     IFS=$' \t' read -r snapname revision <<< "${line}"
-    snap remove "${snapname}" --revision="${revision}"
+    sudo snap remove "${snapname}" --revision="${revision}"
 done
 
 # Rotate journal
-journalctl --flush --rotate --vacuum-time="${journal_retention}"
+sudo journalctl --flush --rotate --vacuum-time="${journal_retention}"
 
 # cache
-find /var/cache -mindepth 1 -delete
-find /var/lib/snapd/cache -mindepth 1 -delete
+sudo find /var/cache -mindepth 1 -delete
+sudo find /var/lib/snapd/cache -mindepth 1 -delete
 
 exit 0
