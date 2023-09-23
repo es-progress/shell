@@ -74,7 +74,7 @@ ghub-issue REPO [EXTRA]...
 Params:
 REPO               GitHub repository, given as "owner/repo-name".
                    Default to repository in current working dir.
-EXTRA              Optional extra params to 'gh'
+EXTRA              Optional extra parameters to 'gh'
 ```
 
 ---
@@ -114,7 +114,7 @@ EXTRA              Optional extra params to 'gh'
 
 ## ghub-pr
 
-Create PR in browser for current repository (repo in working dir).
+Create PR (pull request) in browser for current repository (repo in working dir).
 
 **Usage**
 
@@ -163,7 +163,7 @@ EXTRA              Optional extra params to 'gh'
 
 ## ghub-repo-template
 
-Create new private repository from template repo.
+Create new private repository from GitHub template repository.
 
 **Usage**
 
@@ -231,7 +231,7 @@ EXTRA              Optional extra params to 'gh'
 
 ## ghub-sync-labels
 
-Sync labels from template repo to target repo.
+Sync labels from template repository to target repository.
 Non-existent labels will be created, extra ones deleted, different ones updated to match template.
 After this operation labels will the same as the template. Matching is based on label name.
 

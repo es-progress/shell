@@ -41,7 +41,7 @@ PORT               Local port
 ## ssh-create-key
 
 Generate a new ed25519 SSH key-pair.
-Key is saved in current directory and 96 rounds of hashing is done on the private key.
+The key is saved in the current directory, and the private key undergoes 96 rounds of hashing
 
 **Usage**
 

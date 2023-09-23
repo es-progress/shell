@@ -1,14 +1,14 @@
 # Bin
 
-Various shell scripts that can be used as "binaries".
+Various scripts that can be used as "binaries".
 
 ---
 
 ## backup
 
 A wrapper for `rsync`.
-Backups source directory to a different filesystem (drive) as backing up on the same drive sort of defies the goal of backup.
-In archive mode backups are compressed to save disk space.
+Backups source directory to a different file system (drive) as backing up on the same drive sort of defies the goal of backup.
+In archive mode, backups are compressed to save disk space.
 This compression is done by `pigz` which creates standard `gzip` files but spreads the work over multiple processors and cores when compressing so it can utilize modern hardware.
 
 Modes:

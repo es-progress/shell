@@ -1,7 +1,7 @@
 # Loader
 
-Helper to bootstrap libraries. This file sources all library files so functions will get defined and be available.
-Basically you need to source this file in any script where you want to use library functions.
+Helper to bootstrap libraries. This file sources all library files so functions will be defined and available.
+Basically, you need to source this file in any script where you want to use library functions.
 
 **Usage in scripts**
 
@@ -9,7 +9,7 @@ Basically you need to source this file in any script where you want to use libra
 # Source loader
 . /path/to/shell/lib/_loader.sh
 
-# Or use the envvar (recommended for maintainabilty & portability)
+# Or use the envvar (recommended for maintainability & portability)
 . "${ES_SHELL_LOADER}"
 
 # Now functions are defined

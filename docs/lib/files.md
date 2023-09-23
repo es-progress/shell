@@ -6,7 +6,7 @@ Functions for managing files and querying the filesystem.
 
 ## dir-file
 
-Get directory of a file.
+Get the directory of a file.
 
 **Usage**
 
@@ -21,7 +21,7 @@ FILE               File to check
 
 ## dir-parents
 
-Get all parent directory of a dir. By default return parents as a space separated string.
+Get all parent directory of a dir. By default, return parents as a space-separated string.
 The separator character can be specified if whitespace contained dirs are a concern.
 
 **Usage**
@@ -50,7 +50,7 @@ dir-script
 
 ## give
 
-Recursively set group ownership and remove all world permissions on directories.
+Recursively set group ownership and remove all world (public) permissions on directories.
 
 **Usage**
 

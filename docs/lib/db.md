@@ -1,13 +1,13 @@
-# DataBase
+# Database
 
-Functions for MySQL databases.
+Functions for managing MySQL databases, including data export, structure export, querying, and more.
 
 ---
 
 ## db-dump-data-db
 
 Dump full DB. Only data (each record on a separate row) is exported with no table structures.
-This could be useful for debugging as it allows a readable diff for changes in data.
+This can be valuable for debugging as it enables readable diffs for changes in data.
 
 **Usage**
 
@@ -15,7 +15,7 @@ This could be useful for debugging as it allows a readable diff for changes in d
 db-dump-data-db DB [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 EXTRA              Optional extra params to 'mysqldump'
 ```
 
@@ -32,7 +32,7 @@ This could be useful for debugging as it allows a readable diff for changes in d
 db-dump-data-tables DB TABLE...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Tables to export
 ```
 
@@ -48,7 +48,7 @@ Dump full DB (data in compact form + table structures). This could be used for b
 db-dump-full-db DB [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 EXTRA              Optional extra params to 'mysqldump'
 ```
 
@@ -56,7 +56,7 @@ EXTRA              Optional extra params to 'mysqldump'
 
 ## db-dump-full-tables
 
-Dump specific tables from DB. Data (in compact form) and table structure is exported also.
+Dump specific tables from DB. Data in compact form and table structure is exported also.
 
 **Usage**
 
@@ -64,7 +64,7 @@ Dump specific tables from DB. Data (in compact form) and table structure is expo
 db-dump-full-tables DB TABLE...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Tables to export
 ```
 
@@ -80,7 +80,7 @@ Dump full DB structure. No data exported.
 db-dump-structure-db DB [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 EXTRA              Optional extra params to 'mysqldump'
 ```
 
@@ -96,7 +96,7 @@ Dump specific table structures from DB. No data exported.
 db-dump-structure-tables DB TABLE...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Tables to export
 ```
 
@@ -112,14 +112,14 @@ Base wrapper for `mysqldump`. The other specific dumper functions add parameters
 db-dump-wrapper PARAMS...
 
 Params:
-PARAMS             Params to 'mysqldump'
+PARAMS             Parameters to 'mysqldump'
 ```
 
 ---
 
 ## db-list-tables
 
-List all tables in a DataBase, each table on a new line for easy further processing.
+List all tables in a Database, each table on a new line for easy further processing.
 Tables can be filtered by pattern where SQL style wildcards are allowed.
 
 **Usage**
@@ -128,7 +128,7 @@ Tables can be filtered by pattern where SQL style wildcards are allowed.
 db-list-tables DB PATTERN
 
 Params:
-DB                 DataBase name
+DB                 Database name
 PATTERN            Pattern to filter tables.
                    SQL wildcards are allowed, e.g. '%cache%'.
 ```
@@ -137,7 +137,7 @@ PATTERN            Pattern to filter tables.
 
 ## db-query
 
-Run single queries on a DataBase.
+Execute single queries on a database.
 
 **Usage**
 
@@ -145,7 +145,7 @@ Run single queries on a DataBase.
 db-query DB QUERY [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 QUERY              Query to execute
 EXTRA              Optional extra params to 'mysql'
 ```
@@ -155,7 +155,7 @@ EXTRA              Optional extra params to 'mysql'
 ## db-replace
 
 Replace all occurences of a string in a Database table. This is basically an ETL (extract-transform-load) operation.
-Table is dumped first, then `sed` substition and changed data imported finally. Import means dropping and recreating table with new data.
+Table is dumped first, then `sed` substitution and changed data imported finally. Import means dropping and recreating table with new data.
 
 Basic Regular Expressions (BRE; no `-r` switch) is used for `sed` so `+`, `?,` and `(`, `)` treated literal.
 Delimiter for `sed` substition command can be changed as well, it defaults to `@` so strings can't contain `@` character.
@@ -167,7 +167,7 @@ If your string contains that character you can select a different delimiter that
 db-replace DB TABLE SEARCH REPLACE [DELIMITER]
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Table name
 SEARCH             Search string
 REPLACE            Replace string

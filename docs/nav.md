@@ -5,7 +5,7 @@
     -   Lib
         -   [Analytics](lib/analytics.md)
         -   [Certificates](lib/certificate.md)
-        -   [DataBase](lib/db.md)
+        -   [Database](lib/db.md)
         -   [Dev Tools](lib/dev.md)
         -   [Error Handling](lib/error.md)
         -   [Files](lib/files.md)

@@ -18,7 +18,7 @@ check-not-root
 
 ## check-root
 
-Check if script is running as root. If not running as root print error and return with non-zero exit code.
+Determine if script is running as root. If not running as root print error and return with non-zero exit code.
 
 **Usage**
 
@@ -30,7 +30,7 @@ check-root
 
 ## command-exists
 
-Check if command is available on the system. Return non-zero exit code if not available.
+Verify if command is available on the system. Return non-zero exit code if the command is not available.
 
 **Usage**
 
@@ -62,7 +62,7 @@ COMMAND            Command to run
 ## foreach-subdir-pipe
 
 Run command in each sub directory of current working dir and pipe results to another command.
-Commands are executed in a subshell so it will continue on errors and has no effects on current shell.
+Commands are executed in a nested shell so it will continue on errors and has no effects on current shell.
 
 **Usage**
 
