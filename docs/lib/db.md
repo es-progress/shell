@@ -15,7 +15,7 @@ This can be valuable for debugging as it enables readable diffs for changes in d
 db-dump-data-db DB [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 EXTRA              Optional extra params to 'mysqldump'
 ```
 
@@ -32,7 +32,7 @@ This could be useful for debugging as it allows a readable diff for changes in d
 db-dump-data-tables DB TABLE...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Tables to export
 ```
 
@@ -48,7 +48,7 @@ Dump full DB (data in compact form + table structures). This could be used for b
 db-dump-full-db DB [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 EXTRA              Optional extra params to 'mysqldump'
 ```
 
@@ -64,7 +64,7 @@ Dump specific tables from DB. Data in compact form and table structure is export
 db-dump-full-tables DB TABLE...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Tables to export
 ```
 
@@ -80,7 +80,7 @@ Dump full DB structure. No data exported.
 db-dump-structure-db DB [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 EXTRA              Optional extra params to 'mysqldump'
 ```
 
@@ -96,7 +96,7 @@ Dump specific table structures from DB. No data exported.
 db-dump-structure-tables DB TABLE...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Tables to export
 ```
 
@@ -119,7 +119,7 @@ PARAMS             Parameters to 'mysqldump'
 
 ## db-list-tables
 
-List all tables in a DataBase, each table on a new line for easy further processing.
+List all tables in a Database, each table on a new line for easy further processing.
 Tables can be filtered by pattern where SQL style wildcards are allowed.
 
 **Usage**
@@ -128,7 +128,7 @@ Tables can be filtered by pattern where SQL style wildcards are allowed.
 db-list-tables DB PATTERN
 
 Params:
-DB                 DataBase name
+DB                 Database name
 PATTERN            Pattern to filter tables.
                    SQL wildcards are allowed, e.g. '%cache%'.
 ```
@@ -145,7 +145,7 @@ Execute single queries on a database.
 db-query DB QUERY [EXTRA]...
 
 Params:
-DB                 DataBase name
+DB                 Database name
 QUERY              Query to execute
 EXTRA              Optional extra params to 'mysql'
 ```
@@ -167,7 +167,7 @@ If your string contains that character you can select a different delimiter that
 db-replace DB TABLE SEARCH REPLACE [DELIMITER]
 
 Params:
-DB                 DataBase name
+DB                 Database name
 TABLE              Table name
 SEARCH             Search string
 REPLACE            Replace string
