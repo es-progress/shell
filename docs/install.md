@@ -4,14 +4,14 @@ Library functions are organized by category into smaller files (`lib/*.sh`) so t
 Usually functions use each other, so this makes using them a bit harder as several files need to be sourced in order to define all functions.
 
 Yet it's possible to include only the lib files you need in a script, it's generally easier to load them all.
-For this purpose there is a loader: (`lib/_loader.sh`). Just source this file and it will source all other libraries.
+For this purpose there is a loader (`lib/_loader.sh`). Simply source this file, and it will automatically source all other libraries.
 
 In supplied scripts (`bin/`) loader is referenced by an environment variable (`ES_SHELL_LOADER`).
 It's recommended to use this env var in your scripts also.
 
-For details on how to use loader check [Reference](lib/_loader.md).
+For detailed instructions on using the loader check [Reference](lib/_loader.md).
 
-## Installation steps
+**Installation steps**
 
 1. Clone this repo
     ```

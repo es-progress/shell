@@ -6,7 +6,7 @@ Functions for handling errors.
 
 ## Error codes
 
-The following variables holds error codes that are exported so they can be used in other scripts as environment vars to indicate error causes.
+The following variables contain error codes that are exported so they can be used in other scripts as environment vars to indicate error reasons.
 
 ```
 _E_ABORT           Program aborted

@@ -1,13 +1,13 @@
-# DataBase
+# Database
 
-Functions for MySQL databases.
+Functions for managing MySQL databases, including data export, structure export, querying, and more.
 
 ---
 
 ## db-dump-data-db
 
 Dump full DB. Only data (each record on a separate row) is exported with no table structures.
-This could be useful for debugging as it allows a readable diff for changes in data.
+This can be valuable for debugging as it enables readable diffs for changes in data.
 
 **Usage**
 
@@ -56,7 +56,7 @@ EXTRA              Optional extra params to 'mysqldump'
 
 ## db-dump-full-tables
 
-Dump specific tables from DB. Data (in compact form) and table structure is exported also.
+Dump specific tables from DB. Data in compact form and table structure is exported also.
 
 **Usage**
 
@@ -112,7 +112,7 @@ Base wrapper for `mysqldump`. The other specific dumper functions add parameters
 db-dump-wrapper PARAMS...
 
 Params:
-PARAMS             Params to 'mysqldump'
+PARAMS             Parameters to 'mysqldump'
 ```
 
 ---
@@ -137,7 +137,7 @@ PATTERN            Pattern to filter tables.
 
 ## db-query
 
-Run single queries on a DataBase.
+Execute single queries on a database.
 
 **Usage**
 
@@ -155,7 +155,7 @@ EXTRA              Optional extra params to 'mysql'
 ## db-replace
 
 Replace all occurences of a string in a Database table. This is basically an ETL (extract-transform-load) operation.
-Table is dumped first, then `sed` substition and changed data imported finally. Import means dropping and recreating table with new data.
+Table is dumped first, then `sed` substitution and changed data imported finally. Import means dropping and recreating table with new data.
 
 Basic Regular Expressions (BRE; no `-r` switch) is used for `sed` so `+`, `?,` and `(`, `)` treated literal.
 Delimiter for `sed` substition command can be changed as well, it defaults to `@` so strings can't contain `@` character.

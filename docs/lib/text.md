@@ -6,7 +6,7 @@ Bash functions for text processing & strings.
 
 ## implode
 
-Join arguments with a joining character as expected from other languages.
+Concatenate arguments using a specified joining character, similar to how it's done in other programming languages.
 This can be useful to create e.g. comma-delimited list from an array of names.
 
 **Usage**

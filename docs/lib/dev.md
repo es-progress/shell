@@ -1,13 +1,13 @@
 # Development Tools
 
-Tools and utilities for development.
+This section provides a range of utilities and functions to assist in the development process.
 
 ---
 
 ## build-mkdocs
 
-Build an `mkdocs` site (like this one :smiley:).
-Generated site's permission and group changed for serving through Apache (`www-data`).
+Build an MkDocs site (like this one :smiley:).
+The generated site's permissions and group are changed for serving through Apache (`www-data`).
 
 **Usage**
 
@@ -24,8 +24,8 @@ EXTRA              Optional extra params to 'mkdocs build'
 
 ## bump-version
 
-Function to bump (increase by one) the version-number if semantic versioning is used.
-If the major or minor version is bumped then the less important parts will be nulled as in common sense.
+Function to increment (increase by one) the version-number if semantic versioning is used.
+If the major or minor version is bumped then the less important parts will be reset.
 E.g. `1.2.3` becomes `2.0.0` after bumping major version.
 
 **Usage**
@@ -75,7 +75,7 @@ REMOTE             Remote host
 
 ## ppretty-php
 
-Pretty-prints a serialized PHP object/array. Can accept serial string from stdin also so it's great to use in a pipe.
+Pretty prints a serialized PHP object/array. Can accept serial string from stdin also so it's great to use in a pipe.
 
 **Usage**
 

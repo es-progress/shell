@@ -1,10 +1,10 @@
 # Certificate
 
-Functions for managing X509 certificates & keys. Basically a wrapper for `openssl`.
+Functions for managing X509 certificates & keys. Essentially, it serves as a wrapper for `openssl`.
 
-With these functions you can setup your own Certificate Authority (CA) and issue X509 certificates on your behalf which is useful for TLS.
+These functions offer a way to set up your own Certificate Authority (CA) and issue X509 certificates on your behalf which is useful for TLS (Transport Layer Security).
 Then only your Root CA certificate needs to be trusted by clients and all your issued certificates will be trusted too.
-Probably it won't be trusted by anybody except you so it can't be used for public sites, but it's great for internal use and Dev/CI environments.
+It may not be trusted by anyone except you. So it can't be used for public sites, but it's great for internal use and Dev/CI environments.
 
 ---
 

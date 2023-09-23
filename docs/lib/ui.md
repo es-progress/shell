@@ -55,7 +55,7 @@ cls
 ## confirm
 
 Ask for confirmation. If reply is `y` or `Y` return with exit code "0" otherwise non-zero.
-Prompt can be configured but I think the default "Are you sure?" covers most situations... :smiley:
+You can configure the prompt, but the default 'Are you sure?' should suffice for most situations. :smiley:
 
 **Usage**
 

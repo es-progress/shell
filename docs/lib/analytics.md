@@ -6,8 +6,8 @@ Functions for statistics and analysis.
 
 ## anal-disk-usage
 
-Analyze disk usage. Prints the disk space used by each sub-directory in any directory in ascending order.
-Also reports how many percent each sub-directory's size takes up in total size.
+Analyze disk usage. Displays the disk space used by each sub-directory in any directory in ascending order.
+Additionally, it reports the percentage of total size occupied by each sub-directory.
 
 **Usage**
 

@@ -18,7 +18,7 @@ ggit-adog
 
 ## ggit-base
 
-Rebase source onto target and force-push rebased branch to remote.
+Rebase source onto target and forcefully push rebased branch to the remote repository.
 
 **Usage**
 
@@ -35,7 +35,7 @@ REMOTE             Remote repository to pull and push. Defaults to 'origin'.
 
 ## ggit-diff
 
-Show only a summarized diff: list changed files and number of changed lines.
+Show a summarized difference: list changed files and the number of changed lines.
 
 **Usage**
 
@@ -67,7 +67,7 @@ COMMITS            Numer of commits to go back from HEAD
 
 ## ggit-merge
 
-Merge source branch into target branch. This includes several steps:
+Merge the source branch into the target branch (performs a fast-forward merge). This includes several steps:
 
 1. Checkout _source_ branch and pull remote changes from remote repo
 1. Checkout _target_ branch and pull remote changes from remote repo
@@ -105,7 +105,7 @@ SHA                Create patch from this commit specified by SHA
 
 ## ggit-pull
 
-Pull local branch from remote. Also update submodules.
+Pull the local branch from the remote repository, also updating any submodules.
 
 **Usage**
 
