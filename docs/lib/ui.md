@@ -129,7 +129,7 @@ print-run-time
 
 ## print-section
 
-Print section header: blue background and white letters followed by a line of `=` chars as wide as the header.
+Print section header: blue background and white letters followed by a line of `~` chars as wide as the header.
 
 **Usage**
 
@@ -153,4 +153,20 @@ print-status MESSAGE
 
 Params:
 MESSAGE            Status message
+```
+
+---
+
+## print-title
+
+Print title: blue background and white letters followed by a line of `~` chars.
+Title is centered add padded with whitespace to 80 characters wide so the whole title line is highlighted in blue.
+
+**Usage**
+
+```
+print-title TITLE
+
+Params:
+TITLE              Title text
 ```
