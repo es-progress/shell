@@ -129,7 +129,7 @@ print-run-time
 
 ## print-section
 
-Print section header: blue background and white letters followed by a line of `=` chars as wide as the header.
+Print section header: blue background and white letters followed by a line of `~` chars as wide as the header.
 
 **Usage**
 
