@@ -30,30 +30,30 @@ backup REQUIRED_OPTIONS... [OPTIONS]...
 OPTIONS
 
 REQUIRED
--s, --source [DIR]         source DIRECTORY to backup
--d, --destination [DIR]    destination DIRECTORY to put backup on
+-s, --source [DIR]         Source DIRECTORY to backup
+-d, --destination [DIR]    Destination DIRECTORY to put backup on
                            target filesystem (relative to mounting point)
--f, --filesystem [FS]      target FILESYSTEM to backup to (eg. /dev/sda3)
--m, --mount [DIR]          mounting point for given filesystem
+-f, --filesystem [FS]      Target FILESYSTEM to backup to (eg. /dev/sda3)
+-m, --mount [DIR]          Mounting point for given filesystem
 
 OPTIONAL
--a, --archive [DIR]        put archives in DIR, defaults to 'archive'
-    --expire [NUM]         deletes archives older than NUM days (NUM*24 hours)
-    --format [FORMAT]      appends current date to archive filename
-                           supported FORMATS:
-                               24H (HH:MM:SS eg. 17:26:14)
-                               YMD (YYYY-mm-dd eg. 2020-02-19)       <--default
+-a, --archive [DIR]        Put archives in DIR, defaults to 'archive'
+    --expire [NUM]         Deletes archives older than NUM days (NUM*24 hours)
+    --format [FORMAT]      Appends current date to archive filename
+                           Supported FORMATS:
+                               24H  (HH:MM:SS eg. 17:26:14)
+                               YMD  (YYYY-mm-dd eg. 2020-02-19)       <--default
                                FULL (YYYY-mm-dd_HH:MM:SS)
-    --mode [MODE]          select MODE:
+    --mode [MODE]          Select MODE:
                                ARCHIVE:  backup and create archives  <--default
                                SNAPSHOT: snapshot backup
                                QUICK:    backup only
-    --exclude [PATTERN]    exclude files matching PATTERN
-    --prefix [STRING]      optional prefix on archive files
--q, --quiet                suppress non-error messages
-    --debug                print commands as executed
--h, --help                 display this help
--v, --version              print version info
+    --exclude [PATTERN]    Exclude files matching PATTERN
+    --prefix [STRING]      Optional prefix on archive files
+-q, --quiet                Suppress non-error messages
+    --debug                Print commands as executed
+-h, --help                 Display this help
+-v, --version              Print version info
 ```
 
 ---
