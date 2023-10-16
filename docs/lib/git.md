@@ -138,7 +138,11 @@ Show commit statistics: number of commits grouped by hour of the day.
 **Usage**
 
 ```
-ggit-stat-daily
+ggit-stat-daily [AFTER] [BEFORE]
+
+Params:
+AFTER              Only count commits after this date
+BEFORE             Only count commits before this date
 ```
 
 ---
@@ -150,7 +154,11 @@ Show commit statistics: number of commits grouped by day of the month.
 **Usage**
 
 ```
-ggit-stat-monthly
+ggit-stat-monthly [AFTER] [BEFORE]
+
+Params:
+AFTER              Only count commits after this date
+BEFORE             Only count commits before this date
 ```
 
 ---
@@ -162,7 +170,11 @@ Show commit statistics: number of commits grouped by day of the week.
 **Usage**
 
 ```
-ggit-stat-weekly
+ggit-stat-weekly [AFTER] [BEFORE]
+
+Params:
+AFTER              Only count commits after this date
+BEFORE             Only count commits before this date
 ```
 
 ---

@@ -187,57 +187,87 @@ ggit-patch() {
 
 ## Statistics
 ## Daily commits
-################
+##
+## @param   $1  Count commits after this date
+## @param   $2  Count commits before this date
+##############################################
 ggit-stat-daily() {
+    local after="${1:-}"
+    local before="${2:-}"
+    local date_filter=()
     local user
+
     user=$(git config --get --global user.name)
 
-    echo "Commits | Hour of day"
-    echo "--------+------------"
+    [[ -n "${after}" ]] && date_filter=(--after="${after}")
+    [[ -n "${before}" ]] && date_filter=("${date_filter[@]}" --before="${before}")
+
+    echo "Hour of day | Commits"
+    echo "------------+--------"
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
         --format=%ad \
-        --date="format:%H" \
+        --date="format:%H" "${date_filter[@]}" \
         | sort \
         | uniq -c \
-        | awk '{printf("%7s | %-12s\n",$1,$2)}'
+        | awk '{printf("%11s | %6s\n",$2,$1)}'
 }
 
 ## Statistics
 ## Weekly commits
-#################
+##
+## @param   $1  Count commits after this date
+## @param   $2  Count commits before this date
+##############################################
 ggit-stat-weekly() {
+    local after="${1:-}"
+    local before="${2:-}"
+    local date_filter=()
     local user
+
     user=$(git config --get --global user.name)
 
-    echo "Commits | Weekday (1=Monday)"
-    echo "--------+-------------------"
+    [[ -n "${after}" ]] && date_filter=(--after="${after}")
+    [[ -n "${before}" ]] && date_filter=("${date_filter[@]}" --before="${before}")
+
+    echo "Weekday (1=Monday) | Commits"
+    echo "-------------------+--------"
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
         --format=%ad \
-        --date="format:%u" \
+        --date="format:%u" "${date_filter[@]}" \
         | sort \
         | uniq -c \
-        | awk '{printf("%7s | %-12s\n",$1,$2)}'
+        | awk '{printf("%18s | %6s\n",$2,$1)}'
 }
 
 ## Statistics
 ## Monthly commits
-##################
+##
+## @param   $1  Count commits after this date
+## @param   $2  Count commits before this date
+##############################################
 ggit-stat-monthly() {
+    local after="${1:-}"
+    local before="${2:-}"
+    local date_filter=()
     local user
+
     user=$(git config --get --global user.name)
 
-    echo "Commits | Day of month"
-    echo "--------+-------------"
+    [[ -n "${after}" ]] && date_filter=(--after="${after}")
+    [[ -n "${before}" ]] && date_filter=("${date_filter[@]}" --before="${before}")
+
+    echo "Day of month | Commits"
+    echo "-------------+--------"
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
         --format=%ad \
-        --date="format:%d" \
+        --date="format:%d" "${date_filter[@]}" \
         | sort \
         | uniq -c \
-        | awk '{printf("%7s | %-12s\n",$1,$2)}'
+        | awk '{printf("%12s | %6s\n",$2,$1)}'
 }
