@@ -192,8 +192,8 @@ ggit-stat-daily() {
     local user
     user=$(git config --get --global user.name)
 
-    echo "Commits | Hour of day"
-    echo "--------+------------"
+    echo "Hour of day | Commits"
+    echo "------------+--------"
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
@@ -201,7 +201,7 @@ ggit-stat-daily() {
         --date="format:%H" \
         | sort \
         | uniq -c \
-        | awk '{printf("%7s | %-12s\n",$1,$2)}'
+        | awk '{printf("%11s | %6s\n",$2,$1)}'
 }
 
 ## Statistics
@@ -211,8 +211,8 @@ ggit-stat-weekly() {
     local user
     user=$(git config --get --global user.name)
 
-    echo "Commits | Weekday (1=Monday)"
-    echo "--------+-------------------"
+    echo "Weekday (1=Monday) | Commits"
+    echo "-------------------+--------"
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
@@ -220,7 +220,7 @@ ggit-stat-weekly() {
         --date="format:%u" \
         | sort \
         | uniq -c \
-        | awk '{printf("%7s | %-12s\n",$1,$2)}'
+        | awk '{printf("%18s | %6s\n",$2,$1)}'
 }
 
 ## Statistics
@@ -230,8 +230,8 @@ ggit-stat-monthly() {
     local user
     user=$(git config --get --global user.name)
 
-    echo "Commits | Day of month"
-    echo "--------+-------------"
+    echo "Day of month | Commits"
+    echo "-------------+--------"
     # shellcheck disable=SC2312
     git --no-pager log \
         --author="${user}" \
@@ -239,5 +239,5 @@ ggit-stat-monthly() {
         --date="format:%d" \
         | sort \
         | uniq -c \
-        | awk '{printf("%7s | %-12s\n",$1,$2)}'
+        | awk '{printf("%12s | %6s\n",$2,$1)}'
 }
