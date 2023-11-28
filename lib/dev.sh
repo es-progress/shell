@@ -57,6 +57,18 @@ echo "\n";
 EOF
 }
 
+## Pretty print JSON
+##
+## @param   $1  JSON string
+###########################
+ppretty-json() {
+    local serial="${1:-}"
+    [[ -z "${serial}" ]] && read -r serial
+
+    echo
+    jq '.' <<<"${serial}"
+}
+
 ## Bump version (for semantic versioning)
 ##
 ## @param   $1  Current version
