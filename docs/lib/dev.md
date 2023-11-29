@@ -73,6 +73,21 @@ REMOTE             Remote host
 
 ---
 
+## ppretty-json
+
+Pretty prints JSON string. Can accept JSON from stdin also so it's great to use in a pipe.
+
+**Usage**
+
+```
+ppretty-json [JSON]
+
+Params:
+JSON               JSON string. If not supplied read from stdin.
+```
+
+---
+
 ## ppretty-php
 
 Pretty prints a serialized PHP object/array. Can accept serial string from stdin also so it's great to use in a pipe.
