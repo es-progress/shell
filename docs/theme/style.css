@@ -1,0 +1,14 @@
+/** Code blocks */
+code {
+    padding: 0.2em 0.4em !important;
+    border-radius: 6px !important;
+}
+/** Not inlined code blocks */
+pre > code {
+    padding: 0.8em 1.2em !important;
+}
+
+/** Make dark theme background darker */
+[data-md-color-scheme="slate"] {
+    --md-default-bg-color: #0d1117;
+}
