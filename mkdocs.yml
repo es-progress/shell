@@ -27,6 +27,7 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to light mode
+      primary: custom
   language: en
   favicon: terminal.png
   font:
@@ -38,6 +39,8 @@ theme:
     - navigation.instant
     - search.suggest
     - search.highlight
+extra_css:
+  - theme/style.css
 
 markdown_extensions:
   - toc:
