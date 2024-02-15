@@ -31,7 +31,7 @@ iplocation() {
     params="access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1"
 
     for arg in "${@}"; do
-        if ! result=$(curl --no-progress-meter -w"\n" "http://api.ipstack.com/${arg}?${params}"); then
+        if ! result=$(curl --disable --no-progress-meter -w"\n" "http://api.ipstack.com/${arg}?${params}"); then
             return 1
         fi
         jq '.' <<<"${result}"
