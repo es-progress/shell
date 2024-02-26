@@ -20,7 +20,7 @@
 ##########
 _version() {
     cat <<VERSION
-backup v2.4.1
+backup v2.5.0
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 VERSION
 }
@@ -179,19 +179,23 @@ check-root
 : "${source_dir:?Source missing}"
 : "${dest_dir:?Destination missing}"
 
+print-status Mount "${file_system}" to "${mount_point}"...
 if ! findmnt "${mount_point}" >/dev/null; then
-    print-status Mount backup filesystem...
     mount "${file_system}" "${mount_point}"
     print-finish
+else
+    print-finish Already mounted, skip.
 fi
 
 now=$(date "+${date_format}")
 destination="${mount_point}/${dest_dir}"
 
+print-status Create destination dir "${destination}..."
 if [[ ! -e "${destination}" ]]; then
-    print-status Create destination dir...
     mkdir -p "${destination}"
     print-finish
+else
+    print-finish Already created, skip.
 fi
 
 # Set rsync targets, options
@@ -224,10 +228,12 @@ case "${backup_mode}" in
         fi
         ;;
     archive)
+        print-status Create archive dir "${destination}/${archive_dir}..."
         if [[ ! -e "${destination}/${archive_dir}" ]]; then
-            print-status Create archive dir...
             mkdir -p "${destination}/${archive_dir}"
             print-finish
+        else
+            print-finish Already created, skip.
         fi
 
         print-status Compress files...
@@ -243,11 +249,12 @@ case "${backup_mode}" in
     *) ;;
 esac
 
-# Unmount filesystem
+print-status Unmounting "${mount_point}..."
 if findmnt "${mount_point}" >/dev/null; then
-    print-status Unmounting backup filesystem...
     umount "${mount_point}" || true
     print-finish
+else
+    print-finish Already unmounted, skip.
 fi
 
 print-finish Backup finished
