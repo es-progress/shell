@@ -11,7 +11,7 @@
 ## @param    $@  Extra args to gh
 #################################
 ghub-list() {
-    local owner="${1?:"Owner missing"}"
+    local owner="${1?:Owner missing}"
     shift
     gh repo list "${owner}" --limit 100 "${@}"
 }
@@ -22,7 +22,7 @@ ghub-list() {
 ## @param    $@  Extra args to gh
 #################################
 ghub-get() {
-    local owner="${1?:"Owner missing"}"
+    local owner="${1?:Owner missing}"
     shift
     # shellcheck disable=SC2312
     gh repo list "${owner}" --limit 100 --json nameWithOwner --jq ".[].nameWithOwner" "${@}" | LC_COLLATE=C sort
@@ -64,7 +64,7 @@ ghub-settings() {
 ## @param    $@  Extra args to gh
 #################################
 ghub-repo-clone() {
-    local repo="${1?:"Repo missing"}"
+    local repo="${1?:Repo missing}"
     shift
     gh repo clone "${repo}" "${@}"
 }
@@ -75,7 +75,7 @@ ghub-repo-clone() {
 ## @param    $@  Extra args to gh
 #################################
 ghub-repo-new() {
-    local repo="${1?:"Repo missing"}"
+    local repo="${1?:Repo missing}"
     shift
     gh repo create "${repo}" "${@}"
 }
@@ -86,7 +86,7 @@ ghub-repo-new() {
 ## @param    $@  Extra args to gh
 #################################
 ghub-sync-config() {
-    local repo="${1?:"Repo missing"}"
+    local repo="${1?:Repo missing}"
     shift
     gh repo edit "${repo}" \
         --delete-branch-on-merge \
@@ -103,8 +103,8 @@ ghub-sync-config() {
 ## @param    $2  Master repo
 ############################
 ghub-sync-labels() {
-    local repo="${1?:"Repo missing"}"
-    local template="${2?:"Template missing"}"
+    local repo="${1?:Repo missing}"
+    local template="${2?:Template missing}"
     local label labels_current labels_template exist_in_template
 
     # Sync labels
@@ -125,7 +125,7 @@ ghub-sync-labels() {
 ## @param    $@  Topics
 #######################
 ghub-topic() {
-    local repo="${1?:"Repo missing"}"
+    local repo="${1?:Repo missing}"
     local topics=()
     shift
 
@@ -145,8 +145,8 @@ ghub-topic() {
 ## @param    $@  Topics
 ################################
 ghub-repo-template() {
-    local repo="${1?:"Repo missing"}"
-    local template="${2?:"Template missing"}"
+    local repo="${1?:Repo missing}"
+    local template="${2?:Template missing}"
     shift 2
 
     ghub-repo-new "${repo}" --private --template "${template}"
@@ -163,8 +163,8 @@ ghub-repo-template() {
 ## @param    $@  Extra args to command
 ######################################
 ghub-foreach-owner() {
-    local owner="${1?:"Owner missing"}"
-    local command="${2?:"Command missing"}"
+    local owner="${1?:Owner missing}"
+    local command="${2?:Command missing}"
     local repo
     shift 2
 
@@ -182,9 +182,9 @@ ghub-foreach-owner() {
 ## @param    $@  Extra args to command
 ######################################
 ghub-foreach-topic() {
-    local owner="${1?:"Owner missing"}"
-    local topic="${2?:"Topic missing"}"
-    local command="${3?:"Command missing"}"
+    local owner="${1?:Owner missing}"
+    local topic="${2?:Topic missing}"
+    local command="${3?:Command missing}"
     local repo
     shift 3
 
@@ -216,9 +216,9 @@ ghub-issue() {
 ## @param    $@  Extra args to gh
 ####################################
 ghub-secret-set() {
-    local repo="${1?:"Repo missing"}"
-    local name="${2?:"Secret name missing"}"
-    local value="${3?:"Secret value missing"}"
+    local repo="${1?:Repo missing}"
+    local name="${2?:Secret name missing}"
+    local value="${3?:Secret value missing}"
     shift 3
     gh secret set "${name}" --body "${value}" --app actions --repo "${repo}" "${@}"
 }
@@ -230,8 +230,8 @@ ghub-secret-set() {
 ## @param    $@  Extra args to gh
 ################################################
 ghub-pr() {
-    local title="${1?:"Title missing"}"
-    local body="${2?:"PR body missing"}"
+    local title="${1?:Title missing}"
+    local body="${2?:PR body missing}"
     shift 2
 
     if [[ -r "${body}" ]]; then

@@ -11,7 +11,7 @@ check-root() {
     local uid
     uid=$(id -u)
     if [[ "${uid}" -ne 0 ]]; then
-        print-error "Run as root!"
+        print-error Run as root!
         return 1
     fi
     return 0
@@ -50,8 +50,8 @@ foreach-subdir() {
 ## @param    $2  Command to pipe to
 ####################################
 foreach-subdir-pipe() {
-    local command="${1?:"Command missing"}"
-    local pipe="${2?:"Pipe command missing"}"
+    local command="${1?:Command missing}"
+    local pipe="${2?:Pipe command missing}"
     # shellcheck disable=SC2312
     while IFS= read -r -d '' dir; do
         print-section "${dir}"
@@ -68,7 +68,7 @@ foreach-subdir-pipe() {
 ## @param    $1  Command name
 ################################
 proc-is-running() {
-    local command="${1?:"Command missing"}"
+    local command="${1?:Command missing}"
     shift
     pgrep -f "${@}" "${command}" >/dev/null 2>&1
 }
@@ -96,7 +96,7 @@ monitor-proc-memory() {
 
         # Print header
         if [[ "${counter}" -eq 1 ]]; then
-            printf "%20s %20s %20s\n" "Date" "RSS (KiB)" "MAX RSS (KiB)"
+            printf "%20s %20s %20s\n" Date "RSS (KiB)" "MAX RSS (KiB)"
             for ((i = 0 ; i < 62 ; i++)); do
                 echo -n "-"
             done
@@ -112,7 +112,7 @@ monitor-proc-memory() {
                     max_print=$(numfmt --grouping <<<"${max}")
                     printf "%20s %20s %20s\n" "${date}" "${rss_print}" "${max_print}"
                 else
-                    print-error "ps error (propably more than 1 process matched command)"
+                    print-error "ps error (probably more than 1 process matched command)"
                     return 1
                 fi
                 ;;

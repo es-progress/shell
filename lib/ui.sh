@@ -137,7 +137,7 @@ print-run-time() {
     min=$((sec / 60))
     sec=$((sec % 60))
 
-    echo "Running time:"
+    echo Running time:
     printf "%d hour(s) %02d min(s) %02d second(s)\n" "${hour}" "${min}" "${sec}"
 }
 
@@ -148,7 +148,7 @@ print-run-time() {
 ####################################
 confirm() {
     read -r -p "${*:-Are you sure? (y/n) }"
-    [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && return 0 || return 1
+    [[ ${REPLY} == y || ${REPLY} == Y ]]
 }
 
 ## Clear console screen

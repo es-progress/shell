@@ -16,8 +16,8 @@
 ## @param    $2  Output file path
 #########################################
 _generate-DH-primes() {
-    local bit="${1?:"Bit missing"}"
-    local output_file="${2?:"Output file name missing"}"
+    local bit="${1?:Bit missing}"
+    local output_file="${2?:Output file name missing}"
     local candidates
     candidates=$(mktemp --tmpdir DH_candidates.XXXXXXXX)
 
@@ -37,13 +37,13 @@ IFS=$'\n\t'
 source "${ES_SHELL_LOADER}"
 
 # Parse options
-IFS=$',' read -r -a bits <<<"${1:-4096,6144,7680,8192}"
+IFS=, read -r -a bits <<<"${1:-4096,6144,7680,8192}"
 results_file="${2:-DH_moduli}"
 
 # Validate bits
 for bit in "${bits[@]}"; do
     if [[ ! "${bit}" =~ ^[0-9]+$ ]]; then
-        echo "Only integers as BIT_SIZE."
+        echo Only integers as BIT_SIZE.
         exit 1
     fi
 done
@@ -66,7 +66,7 @@ done
 print-finish
 
 found=$(wc -l < "${results_file}")
-echo "Primes found: $((found - 1))"
+echo Primes found: $((found - 1))
 
 print-run-time
 

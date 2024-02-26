@@ -26,7 +26,7 @@ db-dump-wrapper() {
 ## @param    $*  Extra args to mysqldump
 ########################################
 db-dump-full-db() {
-    local db="${1:?"DB name missing"}"
+    local db="${1:?DB name missing}"
     shift
     db-dump-wrapper --routines "${@}" "${db}"
 }
@@ -38,7 +38,7 @@ db-dump-full-db() {
 ## @param    $*  Tables
 ########################
 db-dump-full-tables() {
-    local db="${1:?"DB name missing"}"
+    local db="${1:?DB name missing}"
     shift
     db-dump-wrapper "${db}" "${@}"
 }
@@ -50,7 +50,7 @@ db-dump-full-tables() {
 ## @param    $*  Extra args to mysqldump
 ########################################
 db-dump-structure-db() {
-    local db="${1:?"DB name missing"}"
+    local db="${1:?DB name missing}"
     shift
     db-dump-wrapper --no-data --routines "${@}" "${db}"
 }
@@ -62,7 +62,7 @@ db-dump-structure-db() {
 ## @param    $*  Tables
 ########################
 db-dump-structure-tables() {
-    local db="${1:?"DB name missing"}"
+    local db="${1:?DB name missing}"
     shift
     db-dump-wrapper --no-data "${db}" "${@}"
 }
@@ -74,7 +74,7 @@ db-dump-structure-tables() {
 ## @param    $*  Extra args to mysqldump
 ########################################
 db-dump-data-db() {
-    local db="${1:?"DB name missing"}"
+    local db="${1:?DB name missing}"
     shift
     db-dump-wrapper --no-create-info --skip-extended-insert --skip-triggers "${@}" "${db}"
 }
@@ -86,7 +86,7 @@ db-dump-data-db() {
 ## @param    $*  Tables
 ########################
 db-dump-data-tables() {
-    local db="${1:?"DB name missing"}"
+    local db="${1:?DB name missing}"
     shift
     db-dump-wrapper --no-create-info --skip-extended-insert --skip-triggers "${db}" "${@}"
 }
@@ -97,8 +97,8 @@ db-dump-data-tables() {
 ## @param    $2  Pattern
 ########################
 db-list-tables() {
-    local db="${1:?"DB name missing"}"
-    local pattern="${2:?"Pattern missing"}"
+    local db="${1:?DB name missing}"
+    local pattern="${2:?Pattern missing}"
     # shellcheck disable=SC2312
     db-query "${db}" "SHOW TABLES LIKE '${pattern}'" -B | sed '1d'
 }
@@ -110,8 +110,8 @@ db-list-tables() {
 ## @param    $*  Extra args to mysql
 ####################################
 db-query() {
-    local db="${1:?"DB name missing"}"
-    local query="${2:?"Query missing"}"
+    local db="${1:?DB name missing}"
+    local query="${2:?Query missing}"
     shift 2
     sudo mysql -D "${db}" -e "${query}" "${@}"
 }
@@ -125,10 +125,10 @@ db-query() {
 ## @param    $5  Delimiter
 ################################
 db-replace() {
-    local db="${1:?"DB name missing"}"
-    local table="${2:?"Table missing"}"
-    local search="${3:?"Search string missing"}"
-    local replace="${4:?"Replace string missing"}"
+    local db="${1:?DB name missing}"
+    local table="${2:?Table missing}"
+    local search="${3:?Search string missing}"
+    local replace="${4:?Replace string missing}"
     local delim="${5:-@}"
     local tmp
 
