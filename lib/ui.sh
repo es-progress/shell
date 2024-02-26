@@ -28,7 +28,8 @@ export BACK_BLUE="\e[44m"
 ########################
 print-error() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
+    # shellcheck disable=SC2086
+    echo -e ${TXT_RED}${TXT_BOLD}${*}${TXT_NORM} >&2
 }
 
 ## Print title
@@ -51,7 +52,8 @@ print-title() {
     for ((i = 0 ; i < padding_left ; i++)); do
         echo -n " "
     done
-    echo -n "${title}"
+    # shellcheck disable=SC2086
+    echo -n ${title}
     for ((i = 0 ; i < padding_right ; i++)); do
         echo -n " "
     done
@@ -71,7 +73,8 @@ print-section() {
     local header="${*}"
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
     echo
-    echo -e "${BACK_BLUE}${header}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${BACK_BLUE}${header}${TXT_NORM}
     echo -ne "${BACK_BLUE}"
     for ((i = 0 ; i < ${#header} ; i++)); do
         echo -n "~"
@@ -85,8 +88,8 @@ print-section() {
 #######################
 print-header() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo
-    echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print status message
@@ -95,7 +98,8 @@ print-header() {
 ########################
 print-status() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -ne ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print OK message
@@ -105,7 +109,8 @@ print-status() {
 ########################
 print-finish() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}
 }
 
 ## Script running time
