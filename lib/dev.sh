@@ -79,7 +79,7 @@ bump-version() {
     local part="${2?:Version part missing}"
     local major minor patch
 
-    IFS=$'.' read -r major minor patch <<< "${version}"
+    IFS=. read -r major minor patch <<< "${version}"
     if [[ ! "${major}" =~ ^[0-9]+$ ]]; then
         print-error Invalid version
         return 1
