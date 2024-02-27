@@ -15,20 +15,20 @@
 ## @default      origin
 ###############################################
 ggit-merge() {
-    local branch="${1?:"Source branch missing"}"
+    local branch="${1?:Source branch missing}"
     local into="${2:-main}"
     local remote="${3:-origin}"
 
-    print-header "Pull remote changes for ${branch} from ${remote}"
+    print-header Pull remote changes for "${branch}" from "${remote}"
     git checkout "${branch}" || return 1
     git pull --stat "${remote}" "${branch}" || return 1
-    print-header "Pull remote changes for ${into} from ${remote}"
+    print-header Pull remote changes for "${into}" from "${remote}"
     git checkout "${into}" || return 1
     git pull --stat "${remote}" "${into}" || return 1
-    print-header "Merge and push"
+    print-header Merge and push
     git merge --stat --no-ff "${branch}" -m "Merge branch '${branch}' into ${into}" || return 1
     git push "${remote}" "${into}" || return 1
-    print-header "Delete branches"
+    print-header Delete branches
     git branch -d "${branch}"
     git branch -d -r "${remote}/${branch}"
 }
@@ -36,7 +36,7 @@ ggit-merge() {
 ## Check git repo status
 ########################
 ggit-report() {
-    print-header "Git status"
+    print-header Git status
     git status || return 1
     print-header Branches
     git --no-pager branch -a -l -vv
@@ -49,7 +49,7 @@ ggit-report() {
 ## @param    $1  How many commits from HEAD
 ###########################################
 ggit-fix() {
-    local commits="${1?:"Commits missing"}"
+    local commits="${1?:Commits missing}"
     git rebase -i "HEAD~${commits}"
 }
 
@@ -64,9 +64,9 @@ ggit-pull() {
     local branch="${1:-main}"
     local remote="${2:-origin}"
 
-    print-header "Switch to ${branch}"
+    print-header Switch to "${branch}"
     git checkout "${branch}" || return 1
-    print-header "Pull remote changes for ${branch} from ${remote}"
+    print-header Pull remote changes for "${branch}" from "${remote}"
     git pull "${remote}" "${branch}" || return 1
     git submodule update --init
 }
@@ -78,15 +78,15 @@ ggit-pull() {
 ## @default      origin
 ##################################
 ggit-update() {
-    local branch="${1?:"Branch missing"}"
+    local branch="${1?:Branch missing}"
     local remote="${2:-origin}"
 
-    print-header "Fetch ${remote}"
+    print-header Fetch "${remote}"
     git fetch --prune "${remote}" || return 1
-    print-header "Delete old ${branch}"
+    print-header Delete old "${branch}"
     git checkout -b "${branch}-temp" "${branch}" || return 1
     git branch -D "${branch}" || return 1
-    print-header "Checkout new ${branch} from ${remote}"
+    print-header Checkout new "${branch}" from "${remote}"
     git checkout -b "${branch}" --recurse-submodules --track "${remote}/${branch}" || return 1
     git branch -D "${branch}-temp"
 }
@@ -97,8 +97,8 @@ ggit-update() {
 ## @param    $2  Branch B
 #########################
 ggit-diff() {
-    local branch_a="${1?:"Branch A missing"}"
-    local branch_b="${2?:"Branch B missing"}"
+    local branch_a="${1?:Branch A missing}"
+    local branch_b="${2?:Branch B missing}"
     git diff --stat "${branch_a}" "${branch_b}"
 }
 
@@ -111,17 +111,17 @@ ggit-diff() {
 ## @default      origin
 ########################################
 ggit-base() {
-    local branch_src="${1?:"Branch to rebase missing"}"
+    local branch_src="${1?:Branch to rebase missing}"
     local branch_onto="${2:-main}"
     local remote="${3:-origin}"
 
-    print-header "Switch to ${branch_src}"
+    print-header Switch to "${branch_src}"
     git switch "${branch_src}" || return 1
-    print-header "Rebase ${branch_src} onto ${branch_onto}"
+    print-header Rebase "${branch_src}" onto "${branch_onto}"
     git rebase "${branch_onto}" || return 1
-    print-header "Push ${branch_src}"
+    print-header Push "${branch_src}"
     git push "${remote}" "+${branch_src}" || return 1
-    print-header "Switch to ${branch_onto}"
+    print-header Switch to "${branch_onto}"
     git switch "${branch_onto}" || return 1
 }
 
@@ -136,7 +136,7 @@ ggit-base() {
 ## @default      origin
 #################################
 ggit-tag() {
-    local name="${1?:"Tag name missing"}"
+    local name="${1?:Tag name missing}"
     local commit="${2:-HEAD}"
     local message="${3:-${name}}"
     local remote="${4:-origin}"
@@ -154,7 +154,7 @@ ggit-tag() {
 ## @default      origin
 #########################################################
 ggit-version() {
-    local part="${1?:"Version part missing"}"
+    local part="${1?:Version part missing}"
     local commit="${2:-HEAD}"
     local remote="${3:-origin}"
     local version
@@ -208,7 +208,7 @@ ggit-stat-daily() {
     git --no-pager log \
         --author="${user}" \
         --format=%ad \
-        --date="format:%H" "${date_filter[@]}" \
+        --date=format:%H "${date_filter[@]}" \
         | sort \
         | uniq -c \
         | awk '{printf("%11s | %6s\n",$2,$1)}'
@@ -237,7 +237,7 @@ ggit-stat-weekly() {
     git --no-pager log \
         --author="${user}" \
         --format=%ad \
-        --date="format:%u" "${date_filter[@]}" \
+        --date=format:%u "${date_filter[@]}" \
         | sort \
         | uniq -c \
         | awk '{printf("%18s | %6s\n",$2,$1)}'
@@ -266,7 +266,7 @@ ggit-stat-monthly() {
     git --no-pager log \
         --author="${user}" \
         --format=%ad \
-        --date="format:%d" "${date_filter[@]}" \
+        --date=format:%d "${date_filter[@]}" \
         | sort \
         | uniq -c \
         | awk '{printf("%12s | %6s\n",$2,$1)}'

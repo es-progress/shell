@@ -11,10 +11,10 @@
 ## @param    $1  File
 ##########################
 dir-file() {
-    local file="${1:?"File missing"}"
+    local file="${1:?File missing}"
 
     if [[ ! -f "${file}" ]]; then
-        print-error "Not a file"
+        print-error Not a file
         return 1
     fi
 
@@ -42,7 +42,7 @@ dir-parents() {
     dir=$(realpath "${dir}")
 
     if [[ ! -d "${dir}" ]]; then
-        print-error "Not a directory"
+        print-error Not a directory
         return 1
     fi
 
@@ -62,8 +62,8 @@ dir-parents() {
 ## @param   $2  Directory
 #############################################
 give() {
-    local user="${1:?"User missing"}"
-    local dir="${2:?"Directory missing"}"
+    local user="${1:?User missing}"
+    local dir="${2:?Directory missing}"
     shift 2
     sudo chgrp -R "${user}" "${dir}" "${@}"
     sudo chmod -R o-rwx "${dir}" "${@}"

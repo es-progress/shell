@@ -9,14 +9,26 @@
 ## FORMAT CODES ##
 ##################
 
-export TXT_NORM="\e[0m"
-export TXT_BOLD="\e[1m"
-export TXT_RED="\e[31m"
-export TXT_GREEN="\e[32m"
-export TXT_YELLOW="\e[33m"
-export TXT_BLUE="\e[34m"
-export TXT_PURPLE="\e[35m"
-export BACK_BLUE="\e[44m"
+if [[ -z "${TERM:-}" ]]; then
+    export TERM=xterm-256color
+fi
+
+# shellcheck disable=SC2155
+export TXT_NORM=$(tput sgr0)
+# shellcheck disable=SC2155
+export TXT_BOLD=$(tput bold)
+# shellcheck disable=SC2155
+export TXT_RED=$(tput setaf 1)
+# shellcheck disable=SC2155
+export TXT_GREEN=$(tput setaf 2)
+# shellcheck disable=SC2155
+export TXT_YELLOW=$(tput setaf 3)
+# shellcheck disable=SC2155
+export TXT_BLUE=$(tput setaf 4)
+# shellcheck disable=SC2155
+export TXT_PURPLE=$(tput setaf 5)
+# shellcheck disable=SC2155
+export BACK_BLUE=$(tput setab 4)
 
 ###############
 ## FUNCTIONS ##
@@ -28,7 +40,8 @@ export BACK_BLUE="\e[44m"
 ########################
 print-error() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
+    # shellcheck disable=SC2086
+    echo -e ${TXT_RED}${TXT_BOLD}${*}${TXT_NORM} >&2
 }
 
 ## Print title
@@ -51,7 +64,8 @@ print-title() {
     for ((i = 0 ; i < padding_left ; i++)); do
         echo -n " "
     done
-    echo -n "${title}"
+    # shellcheck disable=SC2086
+    echo -n ${title}
     for ((i = 0 ; i < padding_right ; i++)); do
         echo -n " "
     done
@@ -71,7 +85,8 @@ print-section() {
     local header="${*}"
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
     echo
-    echo -e "${BACK_BLUE}${header}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${BACK_BLUE}${header}${TXT_NORM}
     echo -ne "${BACK_BLUE}"
     for ((i = 0 ; i < ${#header} ; i++)); do
         echo -n "~"
@@ -85,8 +100,8 @@ print-section() {
 #######################
 print-header() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo
-    echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print status message
@@ -95,7 +110,8 @@ print-header() {
 ########################
 print-status() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -ne ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print OK message
@@ -105,7 +121,8 @@ print-status() {
 ########################
 print-finish() {
     [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
-    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}
 }
 
 ## Script running time
@@ -120,7 +137,7 @@ print-run-time() {
     min=$((sec / 60))
     sec=$((sec % 60))
 
-    echo "Running time:"
+    echo Running time:
     printf "%d hour(s) %02d min(s) %02d second(s)\n" "${hour}" "${min}" "${sec}"
 }
 
@@ -131,7 +148,7 @@ print-run-time() {
 ####################################
 confirm() {
     read -r -p "${*:-Are you sure? (y/n) }"
-    [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && return 0 || return 1
+    [[ ${REPLY} == y || ${REPLY} == Y ]]
 }
 
 ## Clear console screen

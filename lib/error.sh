@@ -29,7 +29,7 @@ export _E_NO_CHANGE=32
 ## @default      1
 ###############################
 error-exit() {
-    print-error "${1:-"fatal error"}"
+    print-error "${1:-fatal error}"
     exit "${2:-1}"
 }
 

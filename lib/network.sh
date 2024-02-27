@@ -11,8 +11,8 @@
 ## @param    $2  DKIM selector
 #####################################
 dns-mail() {
-    local domain="${1?:"Domain missing"}"
-    local selector="${2?:"DKIM selector missing"}"
+    local domain="${1?:Domain missing}"
+    local selector="${2?:DKIM selector missing}"
 
     print-header SPF
     dig TXT "${domain}"

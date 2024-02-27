@@ -16,7 +16,7 @@
 ##########
 _version() {
     cat <<VERSION
-clean v1.2.0
+clean v1.2.1
 Written by Sandor Semsey, Copyright (C) 2023, License MIT
 VERSION
 }
@@ -92,7 +92,7 @@ while :; do
             ;;
         "") break ;;
         *)
-            echo "Not supported option: ${1}"
+            echo Not supported option: "${1}" >&2
             _usage
             exit 1
             ;;
@@ -125,11 +125,11 @@ print Done.
 # User caches
 for user in "${users[@]}"; do
     if ! homedir=$(getent passwd "${user}" | cut -d: -f6); then
-        echo "User not exits: ${user}" 1>&2
+        echo User not exits: "${user}" >&2
         exit 1
     fi
 
-    print "Clean-up for ${user}..."
+    print Clean-up for "${user}..."
 
     print -n Empty trash bin...
     sudo test -d "${homedir}/.local/share/Trash" && sudo find "${homedir}/.local/share/Trash" -mindepth 1 -delete
@@ -151,7 +151,7 @@ for user in "${users[@]}"; do
     sudo test -d "${homedir}/snap/spotify/common/.cache" && sudo find "${homedir}/snap/spotify/common/.cache" -mindepth 1 -delete
     print Done.
 
-    print "Cleanup finished for ${user}."
+    print Cleanup finished for "${user}."
 done
 
 exit 0

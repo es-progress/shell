@@ -20,7 +20,7 @@
 ##########
 _version() {
     cat <<VERSION
-backup v2.4.0
+backup v2.5.0
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 VERSION
 }
@@ -128,7 +128,7 @@ while :; do
                 SNAPSHOT) backup_mode=snapshot ;;
                 ARCHIVE) backup_mode=archive ;;
                 *)
-                    echo "Not supported mode: ${1}"
+                    echo Not supported mode: "${1}" >&2
                     _usage
                     exit 1
                     ;;
@@ -141,7 +141,7 @@ while :; do
                 24H) date_format=%T ;;
                 FULL) date_format=%F_%T ;;
                 *)
-                    echo "Not supported format: ${1}"
+                    echo Not supported format: "${1}" >&2
                     _usage
                     exit 1
                     ;;
@@ -163,7 +163,7 @@ while :; do
             ;;
         "") break ;;
         *)
-            echo "Not supported option: ${1}"
+            echo Not supported option: "${1}" >&2
             _usage
             exit 1
             ;;
@@ -174,28 +174,32 @@ done
 check-root
 
 # Check required options
-: "${file_system:?"Filesystem missing"}"
-: "${mount_point:?"Mounting point missing"}"
-: "${source_dir:?"Source missing"}"
-: "${dest_dir:?"Destination missing"}"
+: "${file_system:?Filesystem missing}"
+: "${mount_point:?Mounting point missing}"
+: "${source_dir:?Source missing}"
+: "${dest_dir:?Destination missing}"
 
+print-status Mount "${file_system}" to "${mount_point}"...
 if ! findmnt "${mount_point}" >/dev/null; then
-    print-status "Mount backup filesystem..."
     mount "${file_system}" "${mount_point}"
     print-finish
+else
+    print-finish Already mounted, skip.
 fi
 
 now=$(date "+${date_format}")
 destination="${mount_point}/${dest_dir}"
 
+print-status Create destination dir "${destination}..."
 if [[ ! -e "${destination}" ]]; then
-    print-status "Create destination dir..."
     mkdir -p "${destination}"
     print-finish
+else
+    print-finish Already created, skip.
 fi
 
 # Set rsync targets, options
-if [[ "${backup_mode}" == "archive" || "${backup_mode}" == "quick" ]]; then
+if [[ "${backup_mode}" == archive || "${backup_mode}" == quick ]]; then
     target="${destination}/actual"
     opt=(--delete --inplace)
 else
@@ -204,13 +208,13 @@ else
     opt=("--link-dest=${last}")
 fi
 
-print-header "Backup files..."
+print-header Backup files...
 rsync -aAXHEh --info=stats1 --info=progress2 "${opt[@]}" "${exclusion[@]}" "${quiet[@]}" "${source_dir}" "${target}"
 
 # Post backup steps
 case "${backup_mode}" in
     snapshot)
-        print-status "Manage links for snapshots..."
+        print-status Manage links for snapshots...
         # Remove symlink to previous snapshot
         rm -f "${last}"
         # Create new symlink to latest snapshot for the next backup to hardlink
@@ -218,24 +222,26 @@ case "${backup_mode}" in
         print-finish
 
         if [[ -n "${expire_date}" ]]; then
-            print-status "Delete expired snapshots..."
+            print-status Delete expired snapshots...
             find "${destination}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}" -exec rm -rf {} \;
             print-finish
         fi
         ;;
     archive)
+        print-status Create archive dir "${destination}/${archive_dir}..."
         if [[ ! -e "${destination}/${archive_dir}" ]]; then
-            print-status "Create archive dir..."
             mkdir -p "${destination}/${archive_dir}"
             print-finish
+        else
+            print-finish Already created, skip.
         fi
 
-        print-status "Compress files..."
+        print-status Compress files...
         tar -C "${destination}" -I "pigz --fast" --sort=name -cf "${destination}/${archive_dir}/${archive_prefix}${now}.tar.gz" actual/
         print-finish
 
         if [[ -n "${expire_date}" ]]; then
-            print-status "Delete expired archives..."
+            print-status Delete expired archives...
             find "${destination}/${archive_dir}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}" -exec rm -rf {} \;
             print-finish
         fi
@@ -243,13 +249,14 @@ case "${backup_mode}" in
     *) ;;
 esac
 
-# Unmount filesystem
+print-status Unmounting "${mount_point}..."
 if findmnt "${mount_point}" >/dev/null; then
-    print-status "Unmounting backup filesystem..."
     umount "${mount_point}" || true
     print-finish
+else
+    print-finish Already unmounted, skip.
 fi
 
-print-finish "Backup finished"
+print-finish Backup finished
 
 exit 0

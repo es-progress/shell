@@ -11,7 +11,7 @@
 ## @param    $*  Items to join
 ##################################
 implode() {
-    local IFS="${1:?"Field separator missing"}"
+    local IFS="${1:?Field separator missing}"
     shift
     echo "${*}"
 }
@@ -22,7 +22,7 @@ implode() {
 ## @param    $2  Section (read only this section)
 #################################################
 read-file-cfg() {
-    local file="${1:?"File missing"}"
+    local file="${1:?File missing}"
     local section="${2:-}"
     local contents
 
@@ -41,7 +41,7 @@ read-file-cfg() {
 ## @param   $1  String to encode
 ################################
 urlencode() {
-    local string="${1:?"String missing"}"
+    local string="${1:?String missing}"
     local encoded=
     local pos char enc_char
 
@@ -79,7 +79,7 @@ urldecode() {
 ## @param   $@  Extra args to 'find'
 ####################################
 lines-dir() {
-    local dir="${1:?"Directory missing"}"
+    local dir="${1:?Directory missing}"
     shift
 
     # shellcheck disable=SC2312

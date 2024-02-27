@@ -15,10 +15,10 @@ anal-disk-usage() {
     local dir="${1:-.}"
     local total size dir
 
-    total=$(du --summarize --block-size=1 "${dir}" 2>/dev/null | cut -f1)
+    total=$(sudo du --summarize --block-size=1 "${dir}" 2>/dev/null | cut -f1)
 
     while IFS= read -r -d '' line; do
         read -r size dir <<<"${line}"
         printf "%3d%% %8s   %s\n" "$((size * 100 / total))" "$(numfmt --to=iec "${size}")" "${dir}"
-    done < <(du --null --block-size=1 -d1 "${dir}" 2>/dev/null | sort -nz)
+    done < <(sudo du --null --block-size=1 -d1 "${dir}" 2>/dev/null | sort -nz)
 }

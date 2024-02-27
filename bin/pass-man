@@ -21,7 +21,7 @@ timer=6h
 _usage() {
     cat <<HELP
 
-pass-man v1.3.0
+pass-man v1.3.2
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 
 Usage: pass-man ACTION [TARGET] [EXTRA]...
@@ -79,7 +79,7 @@ _vault-generate() {
 ## @param    $@  Extra arguments to 'pass'
 ##########################################
 _vault-retrieve() {
-    local path="${1?:"Path to password missing"}"
+    local path="${1?:Path to password missing}"
     shift
     _vault-open
     pass "${@}" "${path}"
@@ -110,13 +110,13 @@ case "${action}" in
         if [[ -n "${pass_path}" ]]; then
             shift
         else
-            print-error "Path to password missing"
+            print-error Path to password missing
             _usage
         fi
         _vault-retrieve "${pass_path}" "${@}"
         ;;
-    "") print-error "Action missing" && _usage ;;
-    *) print-error "Invalid action" && _usage ;;
+    "") print-error Action missing && _usage ;;
+    *) print-error Invalid action && _usage ;;
 esac
 
 exit 0
