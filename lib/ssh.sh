@@ -43,7 +43,7 @@ ssh-tunnel-open() {
 
     # Check if successful
     if ! proc-is-running "ssh ${*}"; then
-        echo Failed to open tunnel
+        echo Failed to open tunnel >&2
         return 1
     fi
 }
@@ -63,7 +63,7 @@ ssh-tunnel-close() {
 
     # Check if successful
     if proc-is-running "ssh ${*}"; then
-        echo Failed to close tunnel
+        echo Failed to close tunnel >&2
         return 1
     fi
 }

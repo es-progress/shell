@@ -92,7 +92,7 @@ while :; do
             ;;
         "") break ;;
         *)
-            echo Not supported option: "${1}"
+            echo Not supported option: "${1}" >&2
             _usage
             exit 1
             ;;
@@ -125,7 +125,7 @@ print Done.
 # User caches
 for user in "${users[@]}"; do
     if ! homedir=$(getent passwd "${user}" | cut -d: -f6); then
-        echo User not exits: "${user}" 1>&2
+        echo User not exits: "${user}" >&2
         exit 1
     fi
 
