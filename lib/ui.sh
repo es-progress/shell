@@ -9,15 +9,26 @@
 ## FORMAT CODES ##
 ##################
 
-# shellcheck disable=SC2155
-export TXT_NORM=$(tput sgr0)
-export TXT_BOLD=$(tput bold)
-export TXT_RED=$(tput setaf 1)
-export TXT_GREEN=$(tput setaf 2)
-export TXT_YELLOW=$(tput setaf 3)
-export TXT_BLUE=$(tput setaf 4)
-export TXT_PURPLE=$(tput setaf 5)
-export BACK_BLUE=$(tput setab 4)
+TXT_NORM=
+TXT_BOLD=
+TXT_RED=
+TXT_GREEN=
+TXT_YELLOW=
+TXT_BLUE=
+TXT_PURPLE=
+BACK_BLUE=
+if [[ -n "${TERM:-}" ]]; then
+    TXT_NORM=$(tput sgr0)
+    TXT_BOLD=$(tput bold)
+    TXT_RED=$(tput setaf 1)
+    TXT_GREEN=$(tput setaf 2)
+    TXT_YELLOW=$(tput setaf 3)
+    TXT_BLUE=$(tput setaf 4)
+    TXT_PURPLE=$(tput setaf 5)
+    BACK_BLUE=$(tput setab 4)
+fi
+
+export TXT_NORM TXT_BOLD TXT_RED TXT_GREEN TXT_YELLOW TXT_BLUE TXT_PURPLE BACK_BLUE
 
 ###############
 ## FUNCTIONS ##
