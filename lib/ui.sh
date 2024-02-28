@@ -9,25 +9,14 @@
 ## FORMAT CODES ##
 ##################
 
-if [[ -z "${TERM:-}" ]]; then
-    export TERM=xterm-256color
-fi
-
 # shellcheck disable=SC2155
 export TXT_NORM=$(tput sgr0)
-# shellcheck disable=SC2155
 export TXT_BOLD=$(tput bold)
-# shellcheck disable=SC2155
 export TXT_RED=$(tput setaf 1)
-# shellcheck disable=SC2155
 export TXT_GREEN=$(tput setaf 2)
-# shellcheck disable=SC2155
 export TXT_YELLOW=$(tput setaf 3)
-# shellcheck disable=SC2155
 export TXT_BLUE=$(tput setaf 4)
-# shellcheck disable=SC2155
 export TXT_PURPLE=$(tput setaf 5)
-# shellcheck disable=SC2155
 export BACK_BLUE=$(tput setab 4)
 
 ###############
