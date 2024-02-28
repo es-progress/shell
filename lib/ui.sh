@@ -17,7 +17,7 @@ TXT_YELLOW=
 TXT_BLUE=
 TXT_PURPLE=
 BACK_BLUE=
-if [[ -n "${TERM:-}" ]]; then
+if tput longname >/dev/null; then
     TXT_NORM=$(tput sgr0)
     TXT_BOLD=$(tput bold)
     TXT_RED=$(tput setaf 1)
