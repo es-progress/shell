@@ -34,7 +34,7 @@ TXT_NORM           Clear all formatting.
 
 **Usage**
 
-```
+```bash
 echo -e "${TXT_BOLD}${TXT_YELLOW}I'm in bold yellow${TXT_NORM} This is unformatted text"
 ```
 
@@ -100,7 +100,7 @@ MESSAGE            Message to print, default: "Done."
 
 ## print-header
 
-Print header: text with yellow font-color after a new-line.
+Print header: text with yellow font-color on its own line.
 
 **Usage**
 

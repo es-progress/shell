@@ -5,7 +5,7 @@ Basically, you need to source this file in any script where you want to use libr
 
 **Usage in scripts**
 
-```
+```bash
 # Source loader
 . /path/to/shell/lib/_loader.sh
 
@@ -20,7 +20,7 @@ error-exit "Nothing to do"
 If you do the envvar way, you need to set `/path/to/shell/lib/_loader.sh` in `ES_SHELL_LOADER`.
 You can do this in `.bashrc` or just when running a script:
 
-```
+```bash
 ES_SHELL_LOADER=/path/to/lib/_loader.sh backup
 ```
 

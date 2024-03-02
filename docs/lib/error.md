@@ -16,7 +16,7 @@ _E_NO_CHANGE       Report no change. This can be used for idempotent scripts.
 
 **Usage**
 
-```
+```bash
 exit "${_E_ABORT}"
 ```
 
