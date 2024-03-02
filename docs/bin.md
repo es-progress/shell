@@ -76,7 +76,7 @@ For parameter formats check said section in the script (Bash syntax).
 
 An example params file:
 
-```
+```bash
 # Let's have bit longer tests
 test_run_time_quick=20
 # Run only one deep memory benchmark
@@ -203,15 +203,15 @@ After signing they can be loaded with `modprobe`.
 For this you need a MOK key and certificate and it needs to be enrolled in EFI:
 
 1. Generate MOK key
-    ```
+    ```bash
     openssl genpkey -algorithm rsa -out MOK_KEY
     ```
 1. Create MOK certificate
-    ```
+    ```bash
     openssl req -new -x509 -key MOK_KEY -outform DER -out MOK_CERT
     ```
 1. Enroll MOK certificate
-    ```
+    ```bash
     mokutil --import MOK_CERT
     ```
 1. Reboot and perform enrolling
@@ -248,7 +248,7 @@ Useful if you need to send a string to some application, but it can receive that
 
 Example:
 
-```
+```bash
 export ECHO_WRAP=password
 export SSH_ASKPASS=/path/to/wrecho
 ssh-add SSH_KEY </dev/null

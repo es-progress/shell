@@ -14,15 +14,15 @@ For detailed instructions on using the loader check [Reference](lib/_loader.md).
 **Installation steps**
 
 1. Clone Git repository
-    ```
+    ```bash
     git clone https://github.com/es-progress/shell.git SHELL_DIR
     ```
 1. Set `ES_SHELL_LOADER` to point to `lib/_loader.sh`. Best to put this in your `.bashrc`.
-    ```
+    ```bash
     export ES_SHELL_LOADER="SHELL_DIR/lib/_loader.sh"
     ```
 1. (Optional) Add `bin` to your `PATH` so you can run scripts just by name
-    ```
+    ```bash
     PATH="SHELL_DIR/bin:${PATH}"
     ```
 

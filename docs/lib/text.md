@@ -46,7 +46,7 @@ Content inside sections are returned unparsed, so format is up to you (square br
 
 Config file example:
 
-```
+```ini
 # This is a comment
 
   # Whitespace allowed before comments
