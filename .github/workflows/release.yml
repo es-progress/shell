@@ -1,0 +1,9 @@
+name: Release
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+jobs:
+  github-release:
+    name: Create GitHub release
+    uses: es-progress/.github/.github/workflows/github-release.yml@main
