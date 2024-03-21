@@ -16,7 +16,7 @@
 ##########
 _version() {
     cat <<VERSION
-clean v1.2.1
+clean v1.3.0
 Written by Sandor Semsey, Copyright (C) 2023, License MIT
 VERSION
 }
@@ -133,10 +133,6 @@ for user in "${users[@]}"; do
 
     print -n Empty trash bin...
     sudo test -d "${homedir}/.local/share/Trash" && sudo find "${homedir}/.local/share/Trash" -mindepth 1 -delete
-    print Done.
-
-    print -n Flush Atom cache...
-    sudo test -d "${homedir}/.atom/.apm/_cacache" && sudo find "${homedir}/.atom/.apm/_cacache" -mindepth 1 -delete
     print Done.
 
     print -n Flush Chrome cache...
