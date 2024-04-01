@@ -43,7 +43,7 @@ results_file="${2:-DH_moduli}"
 # Validate bits
 for bit in "${bits[@]}"; do
     if [[ ! "${bit}" =~ ^[0-9]+$ ]]; then
-        echo Only integers as BIT_SIZE.
+        echo Only integers as BIT_SIZE. >&2
         exit 1
     fi
 done
