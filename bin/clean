@@ -16,7 +16,7 @@
 ##########
 _version() {
     cat <<VERSION
-clean v1.3.0
+clean v2.0.0
 Written by Sandor Semsey, Copyright (C) 2023, License MIT
 VERSION
 }
@@ -34,8 +34,6 @@ OPTIONS
 
   -j, --journal [TIME]       Remove journal older than this time (specified with the usual "s", "m", "h", etc. suffixes).
                              Defaults to 2 weeks (2w).
-  -u, --user [USER]          Clear temp files in user's HOME also.
-                             Can be specified multiple times to clean more user HOME.
   -q, --quiet                Suppress non-error messages
   -h, --help                 Display this help
   -v, --version              Print version info
@@ -63,7 +61,6 @@ IFS=$'\n\t'
 # Parse options
 ###############
 journal_retention=2w
-users=()
 quiet=()
 redirection=/dev/stdout
 
@@ -72,10 +69,6 @@ while :; do
         -j | --journal)
             shift
             journal_retention="${1}"
-            ;;
-        -u | --user)
-            shift
-            users+=("${1}")
             ;;
         -q | --quiet)
             quiet=(--quiet)
@@ -121,33 +114,5 @@ print -n Flush system caches...
 [[ -d /var/cache ]] && sudo find /var/cache -mindepth 1 -delete
 [[ -d /var/lib/snapd/cache ]] && sudo find /var/lib/snapd/cache -mindepth 1 -delete
 print Done.
-
-# User caches
-for user in "${users[@]}"; do
-    if ! homedir=$(getent passwd "${user}" | cut -d: -f6); then
-        echo User not exits: "${user}" >&2
-        exit 1
-    fi
-
-    print Clean-up for "${user}..."
-
-    print -n Empty trash bin...
-    sudo test -d "${homedir}/.local/share/Trash" && sudo find "${homedir}/.local/share/Trash" -mindepth 1 -delete
-    print Done.
-
-    print -n Flush Chrome cache...
-    sudo test -d "${homedir}/.config/google-chrome" && sudo find "${homedir}/.config/google-chrome" -mindepth 1 -delete
-    print Done.
-
-    print -n "Flush gdfuse (Google Drive FS) cache..."
-    sudo test -d "${homedir}/.gdfuse/${user}/cache" && sudo find "${homedir}/.gdfuse/${user}/cache" -mindepth 1 -delete
-    print Done.
-
-    print -n Flush Spotify cache...
-    sudo test -d "${homedir}/snap/spotify/common/.cache" && sudo find "${homedir}/snap/spotify/common/.cache" -mindepth 1 -delete
-    print Done.
-
-    print Cleanup finished for "${user}."
-done
 
 exit 0

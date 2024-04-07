@@ -121,7 +121,7 @@ Clean-up temporary and other not needed files to free up disk space:
 -   Remove unused `apt` packages
 -   Remove old snaps
 -   Rotate system journal (keep 2 weeks of logs)
--   Delete caches (various system & user caches)
+-   Flush system caches
 
 !!! info
 
@@ -138,8 +138,6 @@ OPTIONS
 -j, --journal [TIME]       Remove journal older than this time
                            specified with the usual "s", "m", "h", etc. suffixes.
                            Defaults to 2 weeks (2w).
--u, --user [USER]          Clear temp files in user's HOME also.
-                           Can be specified multiple times to clean more user HOME.
 -q, --quiet                Suppress non-error messages
 -h, --help                 Display this help
 -v, --version              Print version info
