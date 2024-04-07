@@ -16,7 +16,7 @@
 ##########
 _version() {
     cat <<VERSION
-clean v2.0.0
+clean v2.0.1
 Written by Sandor Semsey, Copyright (C) 2023, License MIT
 VERSION
 }
@@ -28,7 +28,7 @@ _usage() {
 
 Usage: clean [OPTIONS]...
 
-Clean-up temporary and other unused files to free up disk space
+Clean-up temporary and other unused files to free up disk space. Need root permissions.
 
 OPTIONS
 
@@ -93,26 +93,32 @@ while :; do
     shift
 done
 
+uid=$(id -u)
+if [[ "${uid}" -ne 0 ]]; then
+    echo Run as root! >&2
+    exit 1
+fi
+
 print Clean APT...
-sudo apt-get "${quiet[@]}" "${quiet[@]}" autoremove --purge --yes
-sudo apt-get "${quiet[@]}" "${quiet[@]}" clean --yes
+apt-get "${quiet[@]}" "${quiet[@]}" autoremove --purge --yes
+apt-get "${quiet[@]}" "${quiet[@]}" clean --yes
 print APT cleaned.
 
 print Clean snap...
 for line in $(snap list --all | awk '/disabled/{print $1, $3}'); do
     IFS=$' \t' read -r snapname revision <<< "${line}"
     # shellcheck disable=SC2024
-    sudo snap remove "${snapname}" --purge --revision="${revision}" > "${redirection}"
+    snap remove "${snapname}" --purge --revision="${revision}" > "${redirection}"
 done
 print Snaps cleaned.
 
 print Rotate journal...
-sudo journalctl --flush --rotate --vacuum-time="${journal_retention}" "${quiet[@]}"
+journalctl --flush --rotate --vacuum-time="${journal_retention}" "${quiet[@]}"
 print Journal rotated.
 
 print -n Flush system caches...
-[[ -d /var/cache ]] && sudo find /var/cache -mindepth 1 -delete
-[[ -d /var/lib/snapd/cache ]] && sudo find /var/lib/snapd/cache -mindepth 1 -delete
+[[ -d /var/cache ]] && find /var/cache -mindepth 1 -delete
+[[ -d /var/lib/snapd/cache ]] && find /var/lib/snapd/cache -mindepth 1 -delete
 print Done.
 
 exit 0

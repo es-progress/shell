@@ -128,6 +128,8 @@ Clean-up temporary and other not needed files to free up disk space:
     This script is completely standalone, no bootstrapping is required!
     Perfect to run weekly by cron.
 
+    Needs root permissions.
+
 **Usage**
 
 ```
