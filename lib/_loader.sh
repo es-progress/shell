@@ -22,3 +22,8 @@ base_dir=$(cd "$(dirname "${path_self}")" >/dev/null 2>&1 && pwd)
 . "${base_dir}/ssh.sh"
 . "${base_dir}/text.sh"
 . "${base_dir}/ui.sh"
+
+if [[ -r "${ES_SHELL_LOADER_LOCAL:-}" ]]; then
+    # shellcheck disable=SC1090
+    . "${ES_SHELL_LOADER_LOCAL}"
+fi
