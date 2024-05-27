@@ -3,6 +3,9 @@
 Helper to bootstrap libraries. This file sources all library files so functions will be defined and available.
 Basically, you need to source this file in any script where you want to use library functions.
 
+Also, you can extend this loader to load your local library files too!
+Create your loader script that sources the local libraries and just point `ES_SHELL_LOADER_LOCAL` environment variable to it (e.g. `ES_SHELL_LOADER_LOCAL=$HOME/.local/lib/myloader.sh`), and they will be sourced.
+
 **Usage in scripts**
 
 ```bash
