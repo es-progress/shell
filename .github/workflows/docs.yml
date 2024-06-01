@@ -4,8 +4,9 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/docs.yml
       - "docs/**"
-      - "mkdocs.yml"
+      - mkdocs.yml
 jobs:
   format:
     name: Check format
