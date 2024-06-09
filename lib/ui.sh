@@ -118,6 +118,16 @@ print-status() {
     echo -ne ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
+## Print warning message
+##
+## @param    $*  Message
+########################
+print-warning() {
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
+    # shellcheck disable=SC2086
+    echo -e ${BACK_YELLOW}${TXT_BLACK}${TXT_BOLD}${*}${TXT_NORM} >&2
+}
+
 ## Print OK message
 ##
 ## @param    $*  Message

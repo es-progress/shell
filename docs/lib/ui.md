@@ -172,3 +172,18 @@ print-title TITLE
 Params:
 TITLE              Title text
 ```
+
+---
+
+## print-warning
+
+Print warning message to stderr with yellow background.
+
+**Usage**
+
+```
+print-warning [MESSAGE]
+
+Params:
+MESSAGE            Warning message
+```
