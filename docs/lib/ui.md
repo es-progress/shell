@@ -17,6 +17,7 @@ Codes can be combined.
 
 ```
 Font colors:
+TXT_BLACK          Black
 TXT_RED            Red
 TXT_GREEN          Green
 TXT_YELLOW         Yellow
@@ -24,6 +25,7 @@ TXT_BLUE           Blue
 TXT_PURPLE         Magenta
 
 Background colors:
+BACK_YELLOW        Yellow
 BACK_BLUE          Blue
 
 Other:
@@ -169,4 +171,19 @@ print-title TITLE
 
 Params:
 TITLE              Title text
+```
+
+---
+
+## print-warning
+
+Print warning message to stderr with yellow background.
+
+**Usage**
+
+```
+print-warning [MESSAGE]
+
+Params:
+MESSAGE            Warning message
 ```
