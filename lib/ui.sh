@@ -11,24 +11,28 @@
 
 TXT_NORM=
 TXT_BOLD=
+TXT_BLACK=
 TXT_RED=
 TXT_GREEN=
 TXT_YELLOW=
 TXT_BLUE=
 TXT_PURPLE=
+BACK_YELLOW=
 BACK_BLUE=
 if tput longname >/dev/null 2>&1; then
     TXT_NORM=$(tput sgr0)
     TXT_BOLD=$(tput bold)
+    TXT_BLACK=$(tput setaf 0)
     TXT_RED=$(tput setaf 1)
     TXT_GREEN=$(tput setaf 2)
     TXT_YELLOW=$(tput setaf 3)
     TXT_BLUE=$(tput setaf 4)
     TXT_PURPLE=$(tput setaf 5)
+    BACK_YELLOW=$(tput setab 3)
     BACK_BLUE=$(tput setab 4)
 fi
 
-export TXT_NORM TXT_BOLD TXT_RED TXT_GREEN TXT_YELLOW TXT_BLUE TXT_PURPLE BACK_BLUE
+export TXT_NORM TXT_BOLD TXT_BLACK TXT_RED TXT_GREEN TXT_YELLOW TXT_BLUE TXT_PURPLE BACK_YELLOW BACK_BLUE
 
 ###############
 ## FUNCTIONS ##
