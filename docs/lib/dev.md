@@ -6,7 +6,7 @@ This section provides a range of utilities and functions to assist in the develo
 
 ## build-mkdocs
 
-Build an MkDocs site (like this one :smiley:).
+Build an [MkDocs](https://www.mkdocs.org){target=\_blank} site (like this one :smiley:).
 The generated site's permissions and group are changed for serving through Apache (`www-data`).
 
 **Usage**
@@ -24,7 +24,7 @@ EXTRA              Optional extra params to 'mkdocs build'
 
 ## bump-version
 
-Function to increment (increase by one) the version number if semantic versioning is used.
+Function to increment (increase by one) the version number if [Semantic Versioning](https://semver.org){target=\_blank} is used.
 If the major or minor version is bumped, the less important parts will be reset.
 E.g. `1.2.3` becomes `2.0.0` after bumping major version.
 
@@ -43,7 +43,7 @@ PART               Which part of the version to increase (major, minor, patch)
 
 ## debug-tunnel-open
 
-Open an SSH tunnel to a remote XDebug host, allowing you to debug remote PHP applications.
+Open an SSH tunnel to a remote [XDebug](https://xdebug.org){target=\_blank} host, allowing you to debug remote PHP applications.
 This can be very handy to track down nasty bugs on production servers.
 Though it's generally advised to never debug in production environment, in some cases - if used correctly - this can save so much time...
 

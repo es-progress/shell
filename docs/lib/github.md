@@ -1,6 +1,6 @@
 # GitHub
 
-Wrapper for GitHub CLI tool: `gh`.
+Wrapper for [GitHub CLI](https://cli.github.com){target=\_blank} tool: `gh`.
 
 ---
 
