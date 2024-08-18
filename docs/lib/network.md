@@ -23,9 +23,9 @@ SELECTOR           DKIM selector
 ## iplocation
 
 Query [Ipstack](https://ipstack.com/){target=\_blank} for GeoIP data.
-You need an Ipstack account and an access key to query info.
+You need an Ipstack account and an access key to query information.
 This function looks for this token in an environment variable: `IPSTACK_TOKEN`.
-You can configure this in your `.bashrc` or if you're generally not happy by providing credentials in env vars, you can give token just for this command: `IPSTACK_TOKEN=yourtoken iplocation 8.8.8.8`.
+You can configure this in your `.bashrc` or if you prefer not to provide credentials in env vars, you can give token just for this command: `IPSTACK_TOKEN=yourtoken iplocation 8.8.8.8`.
 
 **Usage**
 

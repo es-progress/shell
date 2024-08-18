@@ -1,18 +1,18 @@
 # User Interface
 
-Bash functions to interact with user on the command line.
+Bash functions for interacting with users on the command line.
 
 !!! info
 
     You can hush the print functions (`print-*`) through the `ES_PRINT_HUSH` environment variable.
-    If this variable is set (any value other than the empty string) nothing will be echoed on terminal.
-    This is useful to create quiet/verbose scripts as printing can be switched on/off easily.
+    If this variable is set (to any value other than an empty string) nothing will be echoed on terminal.
+    This is useful for creating quiet/verbose scripts as printing can be easily switched on or off.
 
 ---
 
 ## Format codes
 
-Color and format codes used by `echo`. They are exporter as env vars, so are available for any other script or function.
+Color and format codes used by `echo`. These codes are exported as environment variables, making them available for any other script or function.
 Codes can be combined.
 
 ```

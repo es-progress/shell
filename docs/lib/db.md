@@ -1,13 +1,13 @@
 # Database
 
-Functions for managing MySQL databases, including data export, structure export, querying, and more.
+Functions for managing MySQL databases (DB), including data export, structure export, querying, and more.
 
 ---
 
 ## db-dump-data-db
 
-Dump full DB. Only data (each record on a separate row) is exported with no table structures.
-This can be valuable for debugging as it enables readable diffs for changes in data.
+Dump the full DB. Only data (each record on a separate row) are exported with no table structures.
+This can be valuable for debugging, as it enables readable diffs for changes in data.
 
 **Usage**
 
@@ -23,7 +23,7 @@ EXTRA              Optional extra params to 'mysqldump'
 
 ## db-dump-data-tables
 
-Dump specific tables from DB. Only data (each record on a separate row) is exported with no table structures.
+Dump specific tables from the DB. Only data (each record on a separate row) are exported with no table structures.
 This could be useful for debugging as it allows a readable diff for changes in data. Also for export-change-import operations.
 
 **Usage**
@@ -40,7 +40,7 @@ TABLE              Tables to export
 
 ## db-dump-full-db
 
-Dump full DB (data in compact form + table structures). This could be used for backups and migrations.
+Dump the full DB (data in compact form + table structures). This could be used for backups and migrations.
 
 **Usage**
 

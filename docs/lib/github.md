@@ -6,8 +6,8 @@ Wrapper for GitHub CLI tool: `gh`.
 
 ## ghub-foreach-owner
 
-Run `gh` command for each repository of user. Useful to run any other function in this category for each repo.
-E.g. Open all repository in browser: `ghub-foreach-owner OWNER ghub-open`.
+Run a `gh` command for each repository of a user. Useful to run any other function in this category for each repo.
+E.g. Open all repository in the browser: `ghub-foreach-owner OWNER ghub-open`.
 
 **Usage**
 
@@ -25,7 +25,7 @@ ARGS               Optional extra params to COMMAND.
 
 ## ghub-foreach-topic
 
-Run `gh` command for each repository of user, filtered by topic.
+Run a `gh` command for each repository of a user, filtered by topic.
 Useful to run any other function in this category for each repo.
 E.g. Sync labels from master repo: `ghub-foreach-topic OWNER TOPIC ghub-sync-labels TEMPLATE`.
 

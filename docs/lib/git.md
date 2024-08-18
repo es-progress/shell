@@ -18,7 +18,7 @@ ggit-adog
 
 ## ggit-base
 
-Rebase source onto target and forcefully push rebased branch to the remote repository.
+Rebase source branch onto target branch and forcefully push the rebased branch to the remote repository.
 
 **Usage**
 
@@ -26,7 +26,7 @@ Rebase source onto target and forcefully push rebased branch to the remote repos
 ggit-base SOURCE [TARGET] [REMOTE]
 
 Params:
-SOURCE             Branch to rebase
+SOURCE             Branch to be rebased
 TARGET             Rebase onto this branch. Defaults to 'main'.
 REMOTE             Remote repository to pull and push. Defaults to 'origin'.
 ```
@@ -43,7 +43,7 @@ Show a summarized difference: list changed files and the number of changed lines
 ggit-diff BRANCH_A BRANCH_B
 
 Params:
-BRANCH_A           Branch to compare to
+BRANCH_A           Branch to compare against
 BRANCH_B           Branch to compare with
 ```
 

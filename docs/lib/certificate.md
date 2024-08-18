@@ -1,17 +1,17 @@
 # Certificate
 
-Functions for managing X509 certificates & keys. Essentially, it serves as a wrapper for `openssl`.
+Functions for managing X509 certificates & keys. It essentially serves as a wrapper for `openssl`.
 
-These functions offer a way to set up your own Certificate Authority (CA) and issue X509 certificates on your behalf which is useful for TLS (Transport Layer Security).
-Then only your Root CA certificate needs to be trusted by clients and all your issued certificates will be trusted too.
-It may not be trusted by anyone except you. So it can't be used for public sites, but it's great for internal use and Dev/CI environments.
+These functions offer a way to set up your own Certificate Authority (CA) and issue X509 certificates on your behalf which are useful for TLS (Transport Layer Security).
+Only your Root CA certificate needs to be trusted by clients, and all your issued certificates will be trusted too.
+It may not be trusted by anyone except you. So it can't be used for public sites. However, it's great for internal use and Dev/CI environments.
 
 ---
 
 ## cert-create
 
-Create an X509 certificate. This combines `csr-create` and `csr-sign`.
-Use subject to insert any details about the site.
+Create an X509 certificate by combining `csr-create` and `csr-sign`.
+Use the subject to insert any details about the site.
 
 Subject example: `/C=CountryCode/ST=State/L=City/O=Your Company/CN=Your site URL`.
 
@@ -33,7 +33,7 @@ VALIDITY           Certificate validity in days
 
 ## cert-key
 
-Create a 4096 bit RSA private key.
+Create a 4096-bit RSA private key.
 
 **Usage**
 
@@ -50,7 +50,7 @@ EXTRA              Optional extra params to 'openssl-genpkey'
 ## cert-selfsigned
 
 Create self-signed certificate. This could be used as a Root CA certificate.
-Use subject to insert any details about the certificate.
+Use the subject to insert any details about the certificate.
 
 Subject example: `/C=CountryCode/ST=State/L=City/O=ACME Company/CN=ACME Root CA`.
 
@@ -88,7 +88,7 @@ EXTRA              Optional extra params to 'openssl-x509'
 ## csr-create
 
 Create a Certificate Signing Request (CSR).
-Use subject to insert any details about the site.
+Use the subject to insert any details about the site.
 
 Subject example: `/C=CountryCode/ST=State/L=City/O=Your Company/CN=Your site URL`.
 

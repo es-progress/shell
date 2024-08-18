@@ -6,7 +6,7 @@ Functions for managing processes.
 
 ## check-not-root
 
-Check if script is not running as root. If running as root print error and return with non-zero exit code.
+Check if script is not running as root. If running as root, print an error and return with non-zero exit code.
 
 **Usage**
 
@@ -18,7 +18,7 @@ check-not-root
 
 ## check-root
 
-Determine if script is running as root. If not running as root print error and return with non-zero exit code.
+Determine if script is running as root. If not running as root, print an error and return with non-zero exit code.
 
 **Usage**
 
@@ -45,8 +45,8 @@ COMMAND            Command to check
 
 ## foreach-subdir
 
-Run command in each sub directory of current working dir.
-Commands are executed in a subshell so it will continue on errors and has no effects on current shell.
+Run a command in each subdirectory of current working dir.
+Commands are executed in a subshell, so they will continue on errors and have no effect on the current shell.
 
 **Usage**
 
@@ -62,7 +62,7 @@ COMMAND            Command to run
 ## foreach-subdir-pipe
 
 Run command in each sub directory of current working dir and pipe results to another command.
-Commands are executed in a nested shell so it will continue on errors and has no effects on current shell.
+Commands are executed in a nested shell so they will continue on errors and have no effect on the current shell.
 
 **Usage**
 

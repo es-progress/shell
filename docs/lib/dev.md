@@ -24,8 +24,8 @@ EXTRA              Optional extra params to 'mkdocs build'
 
 ## bump-version
 
-Function to increment (increase by one) the version-number if semantic versioning is used.
-If the major or minor version is bumped then the less important parts will be reset.
+Function to increment (increase by one) the version number if semantic versioning is used.
+If the major or minor version is bumped, the less important parts will be reset.
 E.g. `1.2.3` becomes `2.0.0` after bumping major version.
 
 **Usage**
@@ -43,9 +43,9 @@ PART               Which part of the version to increase (major, minor, patch)
 
 ## debug-tunnel-open
 
-Open an SSH tunnel to a remote XDebug host. This way you can debug remote PHP applications.
+Open an SSH tunnel to a remote XDebug host, allowing you to debug remote PHP applications.
 This can be very handy to track down nasty bugs on production servers.
-Though it's generally true that never debug in production environment, in some cases - if used correctly - this can save so much time...
+Though it's generally advised to never debug in production environment, in some cases - if used correctly - this can save so much time...
 
 **Usage**
 
