@@ -6,7 +6,7 @@ Utilities for networking.
 
 ## dns-mail
 
-Retrieve email related DNS records: SPF, DMARC and DKIM.
+Retrieve email related DNS records: [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework){target=\_blank} (Sender Policy Framework: a method to detect forged sender addresses), [DMARC](https://dmarc.org/){target=\_blank} (Domain-based Message Authentication, Reporting & Conformance: an email policy, and reporting protocol) and [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail){target=\_blank} (DomainKeys Identified Mail: an authentication method to digitally sign emails).
 
 **Usage**
 
@@ -23,9 +23,9 @@ SELECTOR           DKIM selector
 ## iplocation
 
 Query [Ipstack](https://ipstack.com/){target=\_blank} for GeoIP data.
-You need an Ipstack account and an access key to query info.
+You need an Ipstack account and an access key to query information.
 This function looks for this token in an environment variable: `IPSTACK_TOKEN`.
-You can configure this in your `.bashrc` or if you're generally not happy by providing credentials in env vars, you can give token just for this command: `IPSTACK_TOKEN=yourtoken iplocation 8.8.8.8`.
+You can configure this in your `.bashrc` or if you prefer not to provide credentials in env vars, you can give token just for this command: `IPSTACK_TOKEN=yourtoken iplocation 8.8.8.8`.
 
 **Usage**
 

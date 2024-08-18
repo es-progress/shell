@@ -7,7 +7,7 @@ Helper functions for SSH.
 ## socks5-tunnel-close
 
 Close a previously opened SOCKS5 tunnel.
-You can open a tunnel with `socks5-tunnel-open` and you need to give the same params to close that tunnel.
+Open a tunnel with `socks5-tunnel-open` and use the same parameters to close it.
 
 **Usage**
 
@@ -23,8 +23,8 @@ PORT               Local port
 
 ## socks5-tunnel-open
 
-Open a SOCKS5 tunnel to a remote host. You can use IP address or hostname also.
-With this tunnel you can route your HTTP traffic through the secure (SSH) tunnel and use the remote host as your proxy.
+Open a SOCKS5 tunnel to a remote host. An IP address or hostname can also be used.
+With this tunnel, you can route your HTTP traffic through the secure (SSH) tunnel and use the remote host as your proxy.
 
 **Usage**
 
@@ -41,7 +41,7 @@ PORT               Local port
 ## ssh-create-key
 
 Generate a new ed25519 SSH key-pair.
-The key is saved in the current directory, and the private key undergoes 96 rounds of hashing
+The key is saved in the current directory, and the private key undergoes 96 rounds of hashing.
 
 **Usage**
 

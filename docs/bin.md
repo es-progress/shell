@@ -172,13 +172,13 @@ OUTPUT             Output generated primes to this file.
 
 ## pass-man
 
-Manages a `pass` password store which is inside a `tomb`.
+Manages a `pass` password store located inside a `tomb`.
 
 Available actions:
 
 -   open: open password store in tomb
 -   close: close password store
--   generate: generate a password but not save as a pass. Useful if you just need a strong key.
+-   generate: generate a password but not save it as a pass. Useful if you just need a strong key.
 -   retrieve: get password from store
 
 **Usage**
@@ -188,7 +188,7 @@ Usage: pass-man ACTION [TARGET] [EXTRA]...
 
 Params:
 ACTION             Action to perform (open, close, generate, retrieve)
-TARGET             Path to password in password store (mandatory for 'retrieve' action)
+TARGET             Path to password in the password store (mandatory for the 'retrieve' action)
 EXTRA              Extra arguments to 'pass'
 ```
 
@@ -197,10 +197,10 @@ EXTRA              Extra arguments to 'pass'
 ## sign-kernel-modules
 
 Sign kernel modules with a Machine Owner Key (MOK).
-Some modules are not signed by Ubuntu so kernel won't load them.
+Some modules are not signed by Ubuntu, so kernel won't load them.
 After signing they can be loaded with `modprobe`.
 
-For this you need a MOK key and certificate and it needs to be enrolled in EFI:
+You need a MOK key and certificate, which must be enrolled in EFI:
 
 1. Generate MOK key
     ```bash
@@ -214,7 +214,7 @@ For this you need a MOK key and certificate and it needs to be enrolled in EFI:
     ```bash
     mokutil --import MOK_CERT
     ```
-1. Reboot and perform enrolling
+1. :red_circle: Reboot and complete the enrollment
 
 **Usage**
 

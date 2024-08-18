@@ -21,8 +21,8 @@ FILE               File to check
 
 ## dir-parents
 
-Get all parent directory of a dir. By default, return parents as a space-separated string.
-The separator character can be specified if whitespace contained dirs are a concern.
+Retrieve all parent directories of a dir. By default, return parents as a space-separated string.
+The separator character can be specified if directories containing whitespace are a concern.
 
 **Usage**
 

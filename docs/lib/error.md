@@ -6,7 +6,7 @@ Functions for handling errors.
 
 ## Error codes
 
-The following variables contain error codes that are exported so they can be used in other scripts as environment vars to indicate error reasons.
+The following variables contain error codes that are exported so they can be used in other scripts as environment variables to indicate error reasons.
 
 ```
 _E_ABORT           Program aborted
@@ -25,7 +25,7 @@ exit "${_E_ABORT}"
 ## abort
 
 Print error message ("aborted") and exit program with `_E_ABORT` exit code.
-Use this in standalone scripts. If used on the commandline it exits your shell.
+Use this in standalone scripts. If used on the command line it exits your shell.
 
 **Usage**
 
