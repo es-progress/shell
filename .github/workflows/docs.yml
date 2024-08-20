@@ -12,7 +12,7 @@ jobs:
     name: Check format
     uses: es-progress/.github/.github/workflows/prettier.yml@main
     with:
-      pattern: "**/*.{md,yml}"
+      pattern: "**/*.{md,yml,css}"
   deploy:
     name: Deploy docs
     uses: es-progress/.github/.github/workflows/mkdocs.yml@main
