@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - .github/workflows/main.yml
+      - .shellcheckrc
       - "bin/**"
       - "lib/**"
 jobs:
