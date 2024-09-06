@@ -6,7 +6,7 @@ Utilities for networking.
 
 ## dns-mail
 
-Retrieve email related DNS records: [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework){target=\_blank} (Sender Policy Framework: a method to detect forged sender addresses), [DMARC](https://dmarc.org/){target=\_blank} (Domain-based Message Authentication, Reporting & Conformance: an email policy, and reporting protocol) and [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail){target=\_blank} (DomainKeys Identified Mail: an authentication method to digitally sign emails).
+Retrieve email related DNS records: MX, [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework){target=\_blank} (Sender Policy Framework: a method to detect forged sender addresses), [DMARC](https://dmarc.org/){target=\_blank} (Domain-based Message Authentication, Reporting & Conformance: an email policy, and reporting protocol) and [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail){target=\_blank} (DomainKeys Identified Mail: an authentication method to digitally sign emails).
 
 **Usage**
 

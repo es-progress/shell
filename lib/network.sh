@@ -14,6 +14,8 @@ dns-mail() {
     local domain="${1?:Domain missing}"
     local selector="${2?:DKIM selector missing}"
 
+    print-header MX
+    dig MX "${domain}"
     print-header SPF
     dig TXT "${domain}"
     print-header DMARC
