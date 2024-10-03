@@ -24,11 +24,12 @@ Rebase source branch onto target branch and forcefully push the rebased branch t
 
 ```
 ggit-base SOURCE [TARGET] [REMOTE]
+ggit-base SOURCE... TARGET REMOTE
 
 Params:
 SOURCE             Branch to be rebased
-TARGET             Rebase onto this branch. Defaults to 'main'.
-REMOTE             Remote repository to pull and push. Defaults to 'origin'.
+TARGET             Rebase onto this branch. Defaults to 'main' in the first form.
+REMOTE             Remote repository to pull and push. Defaults to 'origin' in the first form.
 ```
 
 ---
