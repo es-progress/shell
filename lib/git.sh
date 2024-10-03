@@ -111,18 +111,29 @@ ggit-diff() {
 ## @default      origin
 ########################################
 ggit-base() {
-    local branch_src="${1?:Branch to rebase missing}"
+    local branch_src=("${1?:Branch to rebase missing}")
     local branch_onto="${2:-main}"
     local remote="${3:-origin}"
+    local branch
 
-    print-header Switch to "${branch_src}"
-    git switch "${branch_src}" || return 1
-    print-header Rebase "${branch_src}" onto "${branch_onto}"
-    git rebase "${branch_onto}" || return 1
-    print-header Push "${branch_src}"
-    git push "${remote}" "+${branch_src}" || return 1
+    # If more than 3 arguments supplied
+    # last 2 arguments are branch_onto and remote the rest are branch_src
+    if [[ $# -gt 3 ]]; then
+        branch_onto="${*: -2:1}"
+        remote="${*: -1}"
+        branch_src=("${@:1:$#-2}")
+    fi
+
+    for branch in "${branch_src[@]}"; do
+        print-header Switch to "${branch}"
+        git checkout "${branch}" || return 1
+        print-header Rebase "${branch}" onto "${branch_onto}"
+        git rebase "${branch_onto}" || return 1
+        print-header Push "${branch}"
+        git push "${remote}" "+${branch}" || return 1
+    done
     print-header Switch to "${branch_onto}"
-    git switch "${branch_onto}" || return 1
+    git checkout "${branch_onto}" || return 1
 }
 
 ## Create tag & push
