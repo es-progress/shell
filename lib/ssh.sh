@@ -23,7 +23,7 @@ unlock-key() {
     current_identities=$(ssh-add -L || true)
 
     # Add key to ssh-agent
-    if ! grep -qs "${public_key}" <<<"${current_identities}"; then
+    if ! grep -qsx "${public_key}" <<<"${current_identities}"; then
         ECHO_WRAP="${password}" DISPLAY=1 SSH_ASKPASS=wrecho ssh-add -t "${cache_time}" "${key}" </dev/null
     fi
 }
