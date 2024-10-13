@@ -104,7 +104,8 @@ monitor-proc-memory() {
         fi
 
         pid=$(pgrep -f "${*}")
-        case "${?}" in
+        rc=$?
+        case "${rc}" in
             0)
                 if rss=$(ps -p"${pid}" -orss=); then
                     [[ "${rss}" -gt "${max}" ]] && max="${rss}"
@@ -113,7 +114,7 @@ monitor-proc-memory() {
                     printf "%20s %20s %20s\n" "${date}" "${rss_print}" "${max_print}"
                 else
                     print-error "ps error (probably more than 1 process matched command)"
-                    return 1
+                    return "${rc}"
                 fi
                 ;;
             1)
@@ -122,7 +123,7 @@ monitor-proc-memory() {
                 ;;
             *)
                 print-error pgrep error
-                return 1
+                return "${rc}"
                 ;;
         esac
 
