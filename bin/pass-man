@@ -21,7 +21,7 @@ timer=6h
 _usage() {
     cat <<HELP
 
-pass-man v1.3.2
+pass-man v1.3.3
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 
 Usage: pass-man ACTION [TARGET] [EXTRA]...
@@ -37,7 +37,9 @@ HELP
 ## Check if tomb is opened
 ##########################
 _check-tomb-open() {
-    tomb list >/dev/null 2>&1
+    local tomb
+    tomb=$(basename "${PASSWORD_STORE_TOMB_FILE:-~/.password.tomb}" .tomb)
+    tomb list "${tomb}" >/dev/null 2>&1
 }
 
 ## Open vault
