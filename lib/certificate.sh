@@ -129,7 +129,10 @@ cert-selfsigned() {
 ## @param    $4  CA cert path
 ## @param    $5  Certificate path
 ## @param    $6  Validity in days
-####################################
+## @param    $7  Private key options, comma-separated
+##               first item is algorithm, then any number of options
+##               default: RSA,rsa_keygen_bits:4096
+####################################################################
 cert-create() {
     local priv_key="${1?:Private key path missing}"
     local subject="${2?:CSR subject missing}"
@@ -137,10 +140,20 @@ cert-create() {
     local ca_cert="${4?:CA cert path missing}"
     local cert="${5?:Certificate path missing}"
     local validity="${6?:Valid days missing}"
-    local csr
+    local priv_key_type="${7:-RSA,rsa_keygen_bits:4096}"
+    local csr key_opts option
+    local priv_key_options=()
+
+    # Parse comma-separated private key options
+    IFS=',' read -ra key_opts <<< "${priv_key_type}"
+    priv_key_options=(-newkey "${key_opts[0]}")
+    unset 'key_opts[0]'
+    for option in "${key_opts[@]}"; do
+        priv_key_options+=(-pkeyopt "${option}")
+    done
 
     csr=$(mktemp)
-    csr-create "${priv_key}" "${csr}" "${subject}"
+    csr-create "${priv_key}" "${csr}" "${subject}" "${priv_key_options[@]}"
     csr-sign "${ca_priv_key}" "${ca_cert}" "${csr}" "${cert}" "${validity}"
 }
 
