@@ -18,7 +18,7 @@ Subject example: `/C=CountryCode/ST=State/L=City/O=Your Company/CN=Your site URL
 **Usage**
 
 ```
-cert-create KEY SUBJECT CA_KEY CA_CERT CERT VALIDITY
+cert-create KEY SUBJECT CA_KEY CA_CERT CERT VALIDITY [KEY_TYPE]
 
 Params:
 KEY                Filename of private key
@@ -27,6 +27,8 @@ CA_KEY             Filename of CA private key to sign a certificate with
 CA_CERT            Filename of CA certificate to be used for signing
 CERT               Filename for newly created certificate
 VALIDITY           Certificate validity in days
+KEY_TYPE           Comma-separated list of private key algorithm and options.
+                   Default: RSA,rsa_keygen_bits:4096
 ```
 
 ---

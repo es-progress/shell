@@ -13,14 +13,14 @@ This compression is done by `pigz` which creates standard `gzip` files but sprea
 
 Modes:
 
--   Archive
+- Archive
     1. Copy files to destination dir (`rsync`)
     1. Create single archive file from backed up files (`tar` & `pigz`)
     1. Rotate (delete) old archives (`find`)
--   Quick: only copy files to destination.
--   Snapshot: backup only changed files from last backup.
-    Not changed files get hard-linked from previous run so you can access them normally & restore easily but using way less disk space.
-    This is a quick and efficient way to create many backups.
+- Quick: only copy files to destination.
+- Snapshot: backup only changed files from last backup.
+  Not changed files get hard-linked from previous run so you can access them normally & restore easily but using way less disk space.
+  This is a quick and efficient way to create many backups.
 
 **Usage**
 
@@ -63,10 +63,10 @@ OPTIONAL
 A wrapper and runner for `sysbench`.
 You can design multiple test runs with different test parameters, so you can benchmark the system for:
 
--   CPU
--   Memory
--   Disks
--   Download speed
+- CPU
+- Memory
+- Disks
+- Download speed
 
 in a single script.
 
@@ -118,10 +118,10 @@ OPTIONS
 
 Clean-up temporary and other not needed files to free up disk space:
 
--   Remove unused `apt` packages
--   Remove old snaps
--   Rotate system journal (keep 2 weeks of logs)
--   Flush system caches
+- Remove unused `apt` packages
+- Remove old snaps
+- Rotate system journal (keep 2 weeks of logs)
+- Flush system caches
 
 !!! info
 
@@ -176,10 +176,10 @@ Manages a `pass` password store located inside a `tomb`.
 
 Available actions:
 
--   open: open password store in tomb
--   close: close password store
--   generate: generate a password but not save it as a pass. Useful if you just need a strong key.
--   retrieve: get password from store
+- open: open password store in tomb
+- close: close password store
+- generate: generate a password but not save it as a pass. Useful if you just need a strong key.
+- retrieve: get password from store
 
 **Usage**
 
