@@ -20,7 +20,7 @@
 ##########
 _version() {
     cat <<VERSION
-backup v2.5.0
+backup v2.5.1
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 VERSION
 }
@@ -208,7 +208,7 @@ else
     opt=("--link-dest=${last}")
 fi
 
-print-header Backup files...
+print-header Backup "${source_dir} to ${target}..."
 rsync -aAXHEh --info=stats1 --info=progress2 "${opt[@]}" "${exclusion[@]}" "${quiet[@]}" "${source_dir}" "${target}"
 
 # Post backup steps
@@ -223,7 +223,7 @@ case "${backup_mode}" in
 
         if [[ -n "${expire_date}" ]]; then
             print-status Delete expired snapshots...
-            find "${destination}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}" -exec rm -rf {} \;
+            find "${destination}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}" -exec rm -rf {} +
             print-finish
         fi
         ;;
@@ -242,7 +242,7 @@ case "${backup_mode}" in
 
         if [[ -n "${expire_date}" ]]; then
             print-status Delete expired archives...
-            find "${destination}/${archive_dir}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}" -exec rm -rf {} \;
+            find "${destination}/${archive_dir}" -mindepth 1 -maxdepth 1 -mtime "+${expire_date}" -exec rm -rf {} +
             print-finish
         fi
         ;;
