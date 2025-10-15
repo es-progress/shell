@@ -16,6 +16,20 @@ ghub-list() {
     gh repo list "${owner}" --limit 100 "${@}"
 }
 
+## List repos with license info
+##
+## @param    $1  Owner (account)
+## @param    $@  Extra args to gh
+#################################
+ghub-list-license() {
+    local owner="${1?:Owner missing}"
+    shift
+    # shellcheck disable=SC2016
+    ghub-list "${owner}" "${@}" \
+        --json nameWithOwner,description,licenseInfo,visibility \
+        --template '{{ tablerow ("NAME" | color "yellow+du") ("DESCRIPTION" | color "yellow+du") ("LICENSE" | color "yellow+du") ("VISIBILITY" | color "yellow+du") }}{{ range . }}{{ $lic := "---" }}{{ with .licenseInfo }}{{ $lic = .name }}{{ end }}{{ tablerow .nameWithOwner .description $lic .visibility }}{{ end }}'
+}
+
 ## Get repo names
 ##
 ## @param    $1  Owner (account)
