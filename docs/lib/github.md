@@ -95,6 +95,22 @@ EXTRA              Optional extra params to 'gh'
 
 ---
 
+## ghub-list-license
+
+List repositories for a GitHub account with license info.
+
+**Usage**
+
+```
+ghub-list-license OWNER [EXTRA]...
+
+Params:
+OWNER              Owner, GitHub user or organization
+EXTRA              Optional extra params to 'gh'
+```
+
+---
+
 ## ghub-open
 
 Open GitHub repository page in web browser.
