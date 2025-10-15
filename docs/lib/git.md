@@ -23,11 +23,11 @@ Rebase source branch onto target branch and forcefully push the rebased branch t
 **Usage**
 
 ```
-ggit-base SOURCE [TARGET] [REMOTE]
+ggit-base [SOURCE] [TARGET] [REMOTE]
 ggit-base SOURCE... TARGET REMOTE
 
 Params:
-SOURCE             Branch to be rebased
+SOURCE             Branch to be rebased. Defaults to current branch in the first form.
 TARGET             Rebase onto this branch. Defaults to 'main' in the first form.
 REMOTE             Remote repository to pull and push. Defaults to 'origin' in the first form.
 ```
@@ -79,10 +79,10 @@ Merge the source branch into the target branch (performs a fast-forward merge). 
 **Usage**
 
 ```
-ggit-merge SOURCE [TARGET] [REMOTE]
+ggit-merge [SOURCE] [TARGET] [REMOTE]
 
 Params:
-SOURCE             Branch to be merged
+SOURCE             Branch to be merged. Defaults to current branch.
 TARGET             Branch to merge into. Defaults to 'main'.
 REMOTE             Remote repository to pull and push. Defaults to 'origin'.
 ```
@@ -210,10 +210,10 @@ This way you can have the same commits (and history) as remote.
 **Usage**
 
 ```
-ggit-update BRANCH [REMOTE]
+ggit-update [BRANCH] [REMOTE]
 
 Params:
-BRANCH             Branch to update
+BRANCH             Branch to update. Defaults to current branch.
 REMOTE             Remote repository, defaults to 'origin'.
 ```
 
