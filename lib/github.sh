@@ -25,7 +25,9 @@ ghub-get() {
     local owner="${1?:Owner missing}"
     shift
     # shellcheck disable=SC2312
-    gh repo list "${owner}" --limit 100 --json nameWithOwner --jq ".[].nameWithOwner" "${@}" | LC_COLLATE=C sort
+    ghub-list "${owner}" "${@}" \
+        --json nameWithOwner \
+        --jq '.[].nameWithOwner' | LC_COLLATE=C sort -f
 }
 
 ## Open repo in browser
