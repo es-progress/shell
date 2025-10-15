@@ -9,15 +9,18 @@
 ## then delete local and remote tracking branch
 ##
 ## @param    $1  Branch to be merged
+## @default      current branch
 ## @param    $2  Branch to merge into
 ## @default      main
 ## @param    $3  Remote
 ## @default      origin
 ###############################################
 ggit-merge() {
-    local branch="${1?:Source branch missing}"
+    local branch="${1:-}"
     local into="${2:-main}"
     local remote="${3:-origin}"
+
+    [[ -z "${branch}" ]] && branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
     print-header Pull remote changes for "${branch}" from "${remote}"
     git checkout "${branch}" || return 1
@@ -74,19 +77,22 @@ ggit-pull() {
 ## Update local branch from remote
 ##
 ## @param    $1  Branch
+## @default      current branch
 ## @param    $2  Remote
 ## @default      origin
 ##################################
 ggit-update() {
-    local branch="${1?:Branch missing}"
+    local branch="${1:-}"
     local remote="${2:-origin}"
+
+    [[ -z "${branch}" ]] && branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
     print-header Fetch "${remote}"
     git fetch --prune "${remote}" || return 1
-    print-header Delete old "${branch}"
+    print-header Delete old branch: "${branch}"
     git checkout -b "${branch}-temp" "${branch}" || return 1
     git branch -D "${branch}" || return 1
-    print-header Checkout new "${branch}" from "${remote}"
+    print-header Checkout new branch: "${branch}" from "${remote}"
     git checkout -b "${branch}" --recurse-submodules --track "${remote}/${branch}" || return 1
     git branch -D "${branch}-temp"
 }
@@ -105,16 +111,19 @@ ggit-diff() {
 ## Rebase branch
 ##
 ## @param    $1  Branch to rebase
+## @default      current branch
 ## @param    $2  Rebase onto this branch
 ## @default      main
 ## @param    $3  Remote
 ## @default      origin
 ########################################
 ggit-base() {
-    local branch_src=("${1?:Branch to rebase missing}")
+    local branch_src=("${1:-}")
     local branch_onto="${2:-main}"
     local remote="${3:-origin}"
     local branch
+
+    [[ -z "${branch_src[*]}" ]] && branch_src=("$(git rev-parse --abbrev-ref HEAD 2>/dev/null)")
 
     # If more than 3 arguments supplied
     # last 2 arguments are branch_onto and remote the rest are branch_src
