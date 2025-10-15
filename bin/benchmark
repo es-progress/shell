@@ -135,7 +135,7 @@ EOF
 
 ## Clean up after tests
 #######################
-# shellcheck disable=SC2317
+# shellcheck disable=SC2317,SC2329
 _clean-up() {
     find . -name "test_file.*" -delete
     exit

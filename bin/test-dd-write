@@ -23,7 +23,7 @@ block_count_large=1024
 
 ## Clean up after tests
 #######################
-# shellcheck disable=SC2317
+# shellcheck disable=SC2317,SC2329
 _clean-up() {
     rm -f "${test_file_name}"
     exit
