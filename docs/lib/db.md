@@ -137,7 +137,7 @@ PATTERN            Pattern to filter tables.
 
 ## db-query
 
-Execute single queries on a database.
+Execute single queries on a database, or multiple databases if DB name contains SQL style wildcard `%`.
 
 **Usage**
 
@@ -145,7 +145,7 @@ Execute single queries on a database.
 db-query DB QUERY [EXTRA]...
 
 Params:
-DB                 Database name
+DB                 Database name or pattern (with % as wildcard - SQL style)
 QUERY              Query to execute
 EXTRA              Optional extra params to 'mysql'
 ```
