@@ -105,15 +105,23 @@ db-list-tables() {
 
 ## Run single query
 ##
-## @param    $1  DB name
+## @param    $1  DB name or pattern
 ## @param    $2  Query
 ## @param    $*  Extra args to mysql
 ####################################
 db-query() {
-    local db="${1:?DB name missing}"
+    local db="${1:?DB name or pattern missing}"
     local query="${2:?Query missing}"
     shift 2
-    sudo mysql -D "${db}" -e "${query}" "${@}"
+
+    if [[ "${db}" == *%* ]]; then
+        while read -r database; do
+            print-header "DB: ${database}"
+            db-query "${database}" "${query}" "${@}"
+        done < <(sudo mysql -Bse "SHOW DATABASES LIKE '${db}'" || true)
+    else
+        sudo mysql -D "${db}" -e "${query}" "${@}"
+    fi
 }
 
 ## Replace string in table
