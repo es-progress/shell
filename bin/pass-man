@@ -21,7 +21,7 @@ timer=6h
 _usage() {
     cat <<HELP
 
-pass-man v1.3.3
+pass-man v1.4.0
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 
 Usage: pass-man ACTION [TARGET] [EXTRA]...
@@ -47,7 +47,7 @@ _check-tomb-open() {
 _vault-open() {
     # shellcheck disable=SC2310
     if ! _check-tomb-open; then
-        pass open -f --timer="${timer}"
+        pass open -f --timer="${timer}" "${@}"
 
         if ! _check-tomb-open; then
             error-exit "Failed to open tomb."
@@ -60,7 +60,7 @@ _vault-open() {
 _vault-close() {
     # shellcheck disable=SC2310
     if _check-tomb-open; then
-        pass close
+        pass close "${@}"
 
         if _check-tomb-open; then
             error-exit "Failed to close tomb."
@@ -104,8 +104,8 @@ action="${1:-}"
 
 # Switch action
 case "${action}" in
-    open) _vault-open ;;
-    close) _vault-close ;;
+    open) _vault-open "${@}" ;;
+    close) _vault-close "${@}" ;;
     generate) _vault-generate "${@}" ;;
     retrieve)
         pass_path="${1:-}"
