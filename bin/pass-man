@@ -6,12 +6,6 @@
 ## which is inside a tomb.         ##
 #####################################
 
-############
-## CONFIG ##
-############
-# Timer to close tomb automatically
-timer=6h
-
 ###############
 ## FUNCTIONS ##
 ###############
@@ -47,7 +41,7 @@ _check-tomb-open() {
 _vault-open() {
     # shellcheck disable=SC2310
     if ! _check-tomb-open; then
-        pass open -f --timer="${timer}" "${@}"
+        pass open "${@}"
 
         if ! _check-tomb-open; then
             error-exit "Failed to open tomb."
