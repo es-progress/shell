@@ -50,8 +50,8 @@ foreach-subdir() {
 ## @param    $2  Command to pipe to
 ####################################
 foreach-subdir-pipe() {
-    local command="${1?:Command missing}"
-    local pipe="${2?:Pipe command missing}"
+    local command="${1:?Command missing}"
+    local pipe="${2:?Pipe command missing}"
     # shellcheck disable=SC2312
     while IFS= read -r -d '' dir; do
         print-section "${dir}"
@@ -68,7 +68,7 @@ foreach-subdir-pipe() {
 ## @param    $1  Command name
 ################################
 proc-is-running() {
-    local command="${1?:Command missing}"
+    local command="${1:?Command missing}"
     shift
     pgrep -f "${@}" "${command}" >/dev/null 2>&1
 }

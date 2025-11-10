@@ -35,8 +35,8 @@ _clean-up() {
 ## @param    $2  Number of blocks to write
 ##########################################
 _test-block-size() {
-    local bs="${1?:Block size missing}"
-    local count="${2?:Number of blocks missing}"
+    local bs="${1:?Block size missing}"
+    local count="${2:?Number of blocks missing}"
 
     echo Testing block size  = "${bs}"
     dd if=/dev/urandom of="${test_file_name}" bs="${bs}" count="${count}" iflag=fullblock

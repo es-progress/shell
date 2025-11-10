@@ -13,8 +13,8 @@
 ## @default      12 hours
 #################################
 unlock-key() {
-    local key="${1?:Path to SSH key missing}"
-    local pass_path="${2?:Path to password missing}"
+    local key="${1:?Path to SSH key missing}"
+    local pass_path="${2:?Path to password missing}"
     local cache_time="${3:-12h}"
     local password public_key current_identities
 
@@ -74,8 +74,8 @@ ssh-tunnel-close() {
 ## @param    $2  Local port
 ############################
 socks5-tunnel-open() {
-    local remote="${1?:Remote missing}"
-    local port="${2?:Local port missing}"
+    local remote="${1:?Remote missing}"
+    local port="${2:?Local port missing}"
     ssh-tunnel-open -fqN -D "${port}" "${remote}"
 }
 
@@ -85,8 +85,8 @@ socks5-tunnel-open() {
 ## @param    $2  Local port
 ############################
 socks5-tunnel-close() {
-    local remote="${1?:Remote missing}"
-    local port="${2?:Local port missing}"
+    local remote="${1:?Remote missing}"
+    local port="${2:?Local port missing}"
     ssh-tunnel-close -fqN -D "${port}" "${remote}"
 }
 
@@ -96,8 +96,8 @@ socks5-tunnel-close() {
 ## @param    $2  Comment for key
 ################################
 ssh-create-key() {
-    local key_name="${1?:Key name missing}"
-    local comment="${2?:Key comment missing}"
+    local key_name="${1:?Key name missing}"
+    local comment="${2:?Key comment missing}"
     shift 2
     ssh-keygen \
         -t ed25519 \
@@ -117,12 +117,12 @@ ssh-create-key() {
 ## @param    $6  Path to user public key - this will be signed
 ##############################################################
 ssh-sign-user() {
-    local validity="${1?:Validity interval missing}"
-    local ca_key_path="${2?:Path to CA key missing}"
-    local identity="${3?:Key identity missing}"
-    local principals="${4?:Principals missing}"
-    local serial="${5?:Serial number missing}"
-    local pubkey_path="${6?:User public key path missing}"
+    local validity="${1:?Validity interval missing}"
+    local ca_key_path="${2:?Path to CA key missing}"
+    local identity="${3:?Key identity missing}"
+    local principals="${4:?Principals missing}"
+    local serial="${5:?Serial number missing}"
+    local pubkey_path="${6:?User public key path missing}"
     shift 6
     ssh-keygen \
         -V "${validity}" \
@@ -138,7 +138,7 @@ ssh-sign-user() {
 ## @param    $1  Path to certificate
 ####################################
 ssh-view-cert() {
-    local cert="${1?:Certificate path missing}"
+    local cert="${1:?Certificate path missing}"
     shift
     ssh-keygen -L -f "${cert}" "${@}"
 }
