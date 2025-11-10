@@ -15,7 +15,7 @@
 _usage() {
     cat <<HELP
 
-pass-man v1.4.0
+pass-man v1.4.1
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 
 Usage: pass-man ACTION [TARGET] [EXTRA]...
