@@ -10,7 +10,7 @@
 ## @param    $1  Remote host
 ###################################
 debug-tunnel-open() {
-    local remote="${1?:Remote missing}"
+    local remote="${1:?Remote missing}"
     ssh-tunnel-open -fqN -R 9003:localhost:9003 "${remote}"
 }
 
@@ -19,7 +19,7 @@ debug-tunnel-open() {
 ## @param    $1  Remote host
 ####################################
 debug-tunnel-close() {
-    local remote="${1?:Remote missing}"
+    local remote="${1:?Remote missing}"
     ssh-tunnel-close -fqN -R 9003:localhost:9003 "${remote}"
 }
 
@@ -30,8 +30,8 @@ debug-tunnel-close() {
 ## @param    $@  Extra args to mkdocs build
 ###########################################
 build-mkdocs() {
-    local config_file="${1?:mkdocs config file missing}"
-    local destination="${2?:Build destination missing}"
+    local config_file="${1:?mkdocs config file missing}"
+    local destination="${2:?Build destination missing}"
     shift 2
 
     mkdocs build -f "${config_file}" -d "${destination}" "${@}"
@@ -75,8 +75,8 @@ ppretty-json() {
 ## @param   $2  Which part to bump (major, minor, patch)
 ########################################################
 bump-version() {
-    local version="${1?:Version missing}"
-    local part="${2?:Version part missing}"
+    local version="${1:?Version missing}"
+    local part="${2:?Version part missing}"
     local major minor patch
 
     IFS=. read -r major minor patch <<< "${version}"

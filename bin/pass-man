@@ -75,7 +75,7 @@ _vault-generate() {
 ## @param    $@  Extra arguments to 'pass'
 ##########################################
 _vault-retrieve() {
-    local path="${1?:Path to password missing}"
+    local path="${1:?Path to password missing}"
     shift
     _vault-open
     pass "${@}" "${path}"
