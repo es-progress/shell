@@ -52,7 +52,7 @@ ggit-report() {
 ## @param    $1  How many commits from HEAD
 ###########################################
 ggit-fix() {
-    local commits="${1?:Commits missing}"
+    local commits="${1:?Commits missing}"
     git rebase -i "HEAD~${commits}"
 }
 
@@ -103,8 +103,8 @@ ggit-update() {
 ## @param    $2  Branch B
 #########################
 ggit-diff() {
-    local branch_a="${1?:Branch A missing}"
-    local branch_b="${2?:Branch B missing}"
+    local branch_a="${1:?Branch A missing}"
+    local branch_b="${2:?Branch B missing}"
     git diff --stat "${branch_a}" "${branch_b}"
 }
 
@@ -156,7 +156,7 @@ ggit-base() {
 ## @default      origin
 #################################
 ggit-tag() {
-    local name="${1?:Tag name missing}"
+    local name="${1:?Tag name missing}"
     local commit="${2:-HEAD}"
     local message="${3:-${name}}"
     local remote="${4:-origin}"
@@ -174,7 +174,7 @@ ggit-tag() {
 ## @default      origin
 #########################################################
 ggit-version() {
-    local part="${1?:Version part missing}"
+    local part="${1:?Version part missing}"
     local commit="${2:-HEAD}"
     local remote="${3:-origin}"
     local version

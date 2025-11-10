@@ -18,9 +18,9 @@ IFS=$'\n\t'
 source "${ES_SHELL_LOADER}"
 check-root
 
-module="${1?:Kernel module missing}"
-key="${2?:MOK private key missing}"
-cert="${3?:MOK certificate missing}"
+module="${1:?Kernel module missing}"
+key="${2:?MOK private key missing}"
+cert="${3:?MOK certificate missing}"
 
 module_file=$(modinfo -n "${module}")
 module_dir=$(dirname "${module_file}")
