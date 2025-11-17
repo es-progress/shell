@@ -97,6 +97,8 @@ action="${1:-}"
 [[ -n "${action}" ]] && shift
 
 # Switch action
+# @formatter:off
+# TEMP: remove when https://github.com/lovesegfault/beautysh/issues/265 is fixed
 case "${action}" in
     open) _vault-open "${@}" ;;
     close) _vault-close "${@}" ;;
@@ -114,5 +116,6 @@ case "${action}" in
     "") print-error Action missing && _usage ;;
     *) print-error Invalid action && _usage ;;
 esac
+# @formatter:on
 
 exit 0
