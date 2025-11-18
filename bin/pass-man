@@ -15,7 +15,7 @@
 _usage() {
     cat <<HELP
 
-pass-man v1.4.0
+pass-man v1.4.1
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 
 Usage: pass-man ACTION [TARGET] [EXTRA]...
@@ -75,7 +75,7 @@ _vault-generate() {
 ## @param    $@  Extra arguments to 'pass'
 ##########################################
 _vault-retrieve() {
-    local path="${1?:Path to password missing}"
+    local path="${1:?Path to password missing}"
     shift
     _vault-open
     pass "${@}" "${path}"
@@ -97,6 +97,8 @@ action="${1:-}"
 [[ -n "${action}" ]] && shift
 
 # Switch action
+# @formatter:off
+# TEMP: remove when https://github.com/lovesegfault/beautysh/issues/265 is fixed
 case "${action}" in
     open) _vault-open "${@}" ;;
     close) _vault-close "${@}" ;;
@@ -114,5 +116,6 @@ case "${action}" in
     "") print-error Action missing && _usage ;;
     *) print-error Invalid action && _usage ;;
 esac
+# @formatter:on
 
 exit 0

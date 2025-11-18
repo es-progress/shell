@@ -63,7 +63,7 @@ urlencode() {
 ## @param   $1  String to decode
 ################################
 urldecode() {
-    local encoded="${1:?"URL-encoded string missing"}"
+    local encoded="${1:?URL-encoded string missing}"
 
     # Change + to space
     encoded="${encoded//+/ }"

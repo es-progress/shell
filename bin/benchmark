@@ -18,7 +18,7 @@
 ############
 
 # Version
-version=1.2.4
+version=1.2.5
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -168,7 +168,7 @@ _cpu-app-test() {
 ## @param    $@  Params for benchmark
 #####################################
 _run-benchmark() {
-    local type="${1?:Benchmark type missing}"
+    local type="${1:?Benchmark type missing}"
     local params=("--time=${test_run_time}")
 
     # Compile params
@@ -200,8 +200,8 @@ _run-benchmark() {
 ## @param    $2  Raw results
 #######################################
 _filter-results() {
-    local type="${1?:Benchmark type missing}"
-    local raw="${2?:Raw results missing}"
+    local type="${1:?Benchmark type missing}"
+    local raw="${2:?Raw results missing}"
     local filter
 
     case "${type}" in
@@ -362,6 +362,8 @@ report_file_prefix=
 sys_check=
 benchmark_depth=
 params_file=
+# @formatter:off
+# TEMP: remove when https://github.com/lovesegfault/beautysh/issues/265 is fixed
 while :; do
     case "${1:-}" in
         -r | --report) create_report=1 ;;
@@ -399,6 +401,7 @@ while :; do
     esac
     shift
 done
+# @formatter:on
 
 if [[ -z "${sys_check}" && -z "${benchmark_depth}" ]]; then
     echo "Benchmark depth missing (quick or full)" >&2
