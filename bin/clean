@@ -64,8 +64,6 @@ journal_retention=2w
 quiet=()
 redirection=/dev/stdout
 
-# @formatter:off
-# TEMP: remove when https://github.com/lovesegfault/beautysh/issues/265 is fixed
 while :; do
     case "${1:-}" in
         -j | --journal)
@@ -94,7 +92,6 @@ while :; do
     esac
     shift
 done
-# @formatter:on
 
 uid=$(id -u)
 if [[ "${uid}" -ne 0 ]]; then
