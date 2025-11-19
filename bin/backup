@@ -20,7 +20,7 @@
 ##########
 _version() {
     cat <<VERSION
-backup v2.5.1
+backup v2.5.2
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 VERSION
 }
@@ -128,7 +128,7 @@ while :; do
                 SNAPSHOT) backup_mode=snapshot ;;
                 ARCHIVE) backup_mode=archive ;;
                 *)
-                    echo Not supported mode: "${1}" >&2
+                    echo backup: Not supported mode "'${1}'" >&2
                     _usage
                     exit 1
                     ;;
@@ -141,7 +141,7 @@ while :; do
                 24H) date_format=%T ;;
                 FULL) date_format=%F_%T ;;
                 *)
-                    echo Not supported format: "${1}" >&2
+                    echo backup: Not supported format "'${1}'" >&2
                     _usage
                     exit 1
                     ;;
@@ -163,7 +163,7 @@ while :; do
             ;;
         "") break ;;
         *)
-            echo Not supported option: "${1}" >&2
+            echo backup: Not supported option "'${1}'" >&2
             _usage
             exit 1
             ;;

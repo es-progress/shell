@@ -18,7 +18,7 @@
 ############
 
 # Version
-version=1.2.5
+version=1.2.6
 # Individual benchmark time limit (seconds)
 # Quick benchmark
 test_run_time_quick=6
@@ -181,7 +181,7 @@ _run-benchmark() {
             return 0
             ;;
         *)
-            echo Not supported type >&2
+            echo benchmark: Not supported type "'${type}'" >&2
             return 1
             ;;
     esac
@@ -214,7 +214,7 @@ _filter-results() {
             return 0
             ;;
         *)
-            echo Not supported type >&2
+            echo benchmark: Not supported type "'${type}'" >&2
             return 1
             ;;
     esac
@@ -327,7 +327,7 @@ _print-summary() {
                 printf "%-15s [%-10s]  : " "${params[1]}" "${params[0]}"
                 ;;
             *)
-                echo Not supported testname: "${testname}" >&2
+                echo benchmark: Not supported testname "'${testname}'" >&2
                 exit 1
                 ;;
         esac
@@ -392,7 +392,7 @@ while :; do
             ;;
         "") break ;;
         *)
-            echo Not supported option: "${1}" >&2
+            echo benchmark: Not supported option "'${1}'" >&2
             _usage
             exit 1
             ;;
@@ -401,7 +401,7 @@ while :; do
 done
 
 if [[ -z "${sys_check}" && -z "${benchmark_depth}" ]]; then
-    echo "Benchmark depth missing (quick or full)" >&2
+    echo "benchmark: Benchmark depth missing (quick or full)" >&2
     exit 1
 fi
 
@@ -429,7 +429,7 @@ case "${benchmark_depth}" in
         ;;
     *)
         if [[ -z "${sys_check}" ]]; then
-            echo Not supported depth: "${benchmark_depth}" >&2
+            echo benchmark: Not supported depth "'${benchmark_depth}'" >&2
             _usage
             exit 1
         fi
@@ -444,7 +444,7 @@ if [[ -z "${sys_check}" ]]; then
     required_commands=(dd sha256sum bzip2 openssl lsblk sysbench curl)
     for cmd in "${required_commands[@]}"; do
         if ! command -v "${cmd}" >/dev/null 2>&1; then
-            echo Missing dependency: "${cmd}" >&2
+            echo benchmark: Missing dependency "'${cmd}'" >&2
             exit 1
         fi
     done
