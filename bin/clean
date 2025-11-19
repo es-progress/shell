@@ -16,7 +16,7 @@
 ##########
 _version() {
     cat <<VERSION
-clean v2.0.1
+clean v2.0.2
 Written by Sandor Semsey, Copyright (C) 2023, License MIT
 VERSION
 }
@@ -85,7 +85,7 @@ while :; do
             ;;
         "") break ;;
         *)
-            echo Not supported option: "${1}" >&2
+            echo clean: Not supported option "'${1}'" >&2
             _usage
             exit 1
             ;;
@@ -95,7 +95,7 @@ done
 
 uid=$(id -u)
 if [[ "${uid}" -ne 0 ]]; then
-    echo Run as root! >&2
+    echo clean: Run as root! >&2
     exit 1
 fi
 
