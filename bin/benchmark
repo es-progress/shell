@@ -362,8 +362,6 @@ report_file_prefix=
 sys_check=
 benchmark_depth=
 params_file=
-# @formatter:off
-# TEMP: remove when https://github.com/lovesegfault/beautysh/issues/265 is fixed
 while :; do
     case "${1:-}" in
         -r | --report) create_report=1 ;;
@@ -401,7 +399,6 @@ while :; do
     esac
     shift
 done
-# @formatter:on
 
 if [[ -z "${sys_check}" && -z "${benchmark_depth}" ]]; then
     echo "Benchmark depth missing (quick or full)" >&2
