@@ -8,6 +8,7 @@
         - [Database](lib/db.md)
         - [Dev Tools](lib/dev.md)
         - [Error Handling](lib/error.md)
+        - [FFmpeg](lib/ffmpeg.md)
         - [Files](lib/files.md)
         - [Git](lib/git.md)
         - [GitHub CLI](lib/github.md)

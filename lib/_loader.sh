@@ -14,6 +14,7 @@ base_dir=$(cd "$(dirname "${path_self}")" >/dev/null 2>&1 && pwd)
 . "${base_dir}/db.sh"
 . "${base_dir}/dev.sh"
 . "${base_dir}/error.sh"
+. "${base_dir}/ffmpeg.sh"
 . "${base_dir}/files.sh"
 . "${base_dir}/git.sh"
 . "${base_dir}/github.sh"
