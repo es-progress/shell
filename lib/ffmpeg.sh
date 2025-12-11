@@ -5,6 +5,15 @@
 ## Wrapper for 'ffmpeg' ##
 ##########################
 
+## Add standard params to 'ffmpeg'
+##
+## @private
+## @param    $@  Params to pass
+##################################
+_fffmpeg() {
+    ffmpeg -hide_banner "${@}"
+}
+
 ## Cut a video file
 ##
 ## @param    $1  Input file
@@ -16,7 +25,7 @@ fffmpeg-cut() {
     local input_file="${1:?Input file missing}"
     local output_file="${2:?Output file missing}"
     shift 2
-    ffmpeg -i "${input_file}" "${@}" -preset veryfast "${output_file}"
+    _fffmpeg -i "${input_file}" "${@}" -preset veryfast "${output_file}"
 }
 
 ## Join multiple video files
@@ -35,5 +44,5 @@ fffmpeg-join() {
         echo "file '${input_file}'" >> "${temp_file}"
     done
 
-    ffmpeg -f concat -safe 0 -i "${temp_file}" -c copy "${output_file}"
+    _fffmpeg -f concat -safe 0 -i "${temp_file}" -c copy "${output_file}"
 }
