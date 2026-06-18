@@ -6,7 +6,7 @@
 ## Modes:                                    ##
 ##   A) archive                              ##
 ##      1. Backup (rsync)                    ##
-##      2. Archive (tar & gzip)              ##
+##      2. Archive (tar & zstd)              ##
 ##      3. Delete old archives (find)        ##
 ##   B) quick (rsync)                        ##
 ##   C) snapshot (rsync snapshot style)      ##
@@ -20,7 +20,7 @@
 ##########
 _version() {
     cat <<VERSION
-backup v2.5.2
+backup v3.0.0
 Written by Sandor Semsey, Copyright (C) 2020, License MIT
 VERSION
 }
@@ -237,7 +237,7 @@ case "${backup_mode}" in
         fi
 
         print-status Compress files...
-        tar -C "${destination}" -I "pigz --fast" --sort=name -cf "${destination}/${archive_dir}/${archive_prefix}${now}.tar.gz" actual/
+        tar -C "${destination}" -I "zstd -3 --threads=0" --sort=name -cf "${destination}/${archive_dir}/${archive_prefix}${now}.tar.zst" actual/
         print-finish
 
         if [[ -n "${expire_date}" ]]; then
