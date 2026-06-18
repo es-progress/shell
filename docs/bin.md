@@ -8,14 +8,13 @@ Various scripts that can be used as "binaries".
 
 A wrapper for `rsync`.
 Backups source directory to a different file system (drive) as backing up on the same drive sort of defies the goal of backup.
-In archive mode, backups are compressed to save disk space.
-This compression is done by `pigz` which creates standard `gzip` files but spreads the work over multiple processors and cores when compressing so it can utilize modern hardware.
+In archive mode, backups are compressed to save disk space. This compression is done by multi-threaded `zstd`.
 
 Modes:
 
 - Archive
     1. Copy files to destination dir (`rsync`)
-    1. Create single archive file from backed up files (`tar` & `pigz`)
+    1. Create single archive file from backed up files (`tar` & `zstd`)
     1. Rotate (delete) old archives (`find`)
 - Quick: only copy files to destination.
 - Snapshot: backup only changed files from last backup.
