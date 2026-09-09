@@ -70,6 +70,22 @@ PROMPT             Question prompt. Defaults to "Are you sure? (y/n) "
 
 ---
 
+## pause
+
+Pause script execution and wait for user. Useful in debugging or when you want to give the user a chance to read the output before continuing.
+If there is no terminal (e.g. invoked in a cron job), it will return immediately.
+
+**Usage**
+
+```
+pause [PROMPT]
+
+Params:
+PROMPT             Prompt to display. Defaults to "Press enter to continue..."
+```
+
+---
+
 ## print-error
 
 Print error message to stderr. Red, bold.

@@ -153,6 +153,17 @@ confirm() {
     [[ ${REPLY} == y || ${REPLY} == Y ]]
 }
 
+## Pause script execution
+##
+## @param    $*  Prompt
+## @default      Press enter to continue...
+###########################################
+pause() {
+    # If stdin is not a terminal, don't wait for user
+    [[ ! -t 0 ]] && return 0
+    read -r -p "${*:-Press enter to continue...}"
+}
+
 ## Clear console screen
 #######################
 cls() {
