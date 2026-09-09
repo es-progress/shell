@@ -33,9 +33,7 @@ iplocation() {
     params="access_key=${IPSTACK_TOKEN}&fields=city,region_name,country_name,continent_name,hostname,ip&hostname=1"
 
     for arg in "${@}"; do
-        if ! result=$(curl --disable --no-progress-meter -w"\n" "http://api.ipstack.com/${arg}?${params}"); then
-            return 1
-        fi
+        result=$(curl-get "https://api.ipstack.com/${arg}?${params}" /dev/stdout)
         jq '.' <<<"${result}"
     done
 }
@@ -52,4 +50,17 @@ whatsmyip4() {
 whatsmyip6() {
     # shellcheck disable=SC2312
     dig -r6 +short @ns1.google.com. o-o.myaddr.l.google.com. TXT | tr -d '"'
+}
+
+## Download a file using curl
+##
+## @param    $1  URL
+## @param    $2  Output file
+## @param    $*  Additional curl options
+########################################
+curl-get() {
+    local url="${1:?URL missing}"
+    local output="${2:?Output file missing}"
+    shift 2
+    curl --disable --fail --no-progress-meter --location --output "${output}" --url "${url}" "${@}"
 }

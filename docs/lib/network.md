@@ -4,6 +4,24 @@ Utilities for networking.
 
 ---
 
+## curl-get
+
+Download a file from a URL using `curl`.
+Primarily designed to download files in scripts, but can be used interactively as well (you may want to add the `--progress-meter` and `--progress-bar` options).
+
+**Usage**
+
+```
+curl-get URL OUTPUT [EXTRA...]
+
+Params:
+URL                URL of the file to download
+OUTPUT             Path to the output file
+EXTRA              Optional extra params to 'curl'
+```
+
+---
+
 ## dns-mail
 
 Retrieve email related DNS records: MX, [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework){target=\_blank} (Sender Policy Framework: a method to detect forged sender addresses), [DMARC](https://dmarc.org/){target=\_blank} (Domain-based Message Authentication, Reporting & Conformance: an email policy, and reporting protocol) and [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail){target=\_blank} (DomainKeys Identified Mail: an authentication method to digitally sign emails).
