@@ -34,6 +34,25 @@ REMOTE             Remote repository to pull and push. Defaults to 'origin' in t
 
 ---
 
+## ggit-check
+
+Check local repository state, and report if there are:
+
+- uncommitted changes in the worktree
+- stashed changes
+- the checked-out branch is not `main`
+- local branches are not in sync with their upstreams or not tracking a remote.
+
+Basically, this command checks if all local work is pushed to the remote repository and the local is in a clean state, and returns with a non-zero exit code if not.
+
+**Usage**
+
+```
+ggit-check
+```
+
+---
+
 ## ggit-diff
 
 Show a summarized difference: list changed files and the number of changed lines.

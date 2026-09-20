@@ -36,8 +36,8 @@ ggit-merge() {
     git branch -d -r "${remote}/${branch}"
 }
 
-## Check git repo status
-########################
+## Report git repo status
+#########################
 ggit-report() {
     print-header Git status
     git status || return 1
@@ -45,6 +45,52 @@ ggit-report() {
     git --no-pager branch -a -l -vv
     print-header Remotes
     git --no-pager remote -v
+}
+
+## Check local repo is in sync with remote
+##########################################
+ggit-check() {
+    local worktree stash current_branch branch upstream track track_details
+    local issues=
+
+    # Check worktree
+    worktree=$(git status --short --untracked-files)
+    if [[ -n "${worktree}" ]]; then
+        print-error Worktree dirty!
+        echo "${worktree}" >&2
+        issues=1
+    fi
+
+    # Check stash
+    stash=$(git stash list)
+    if [[ -n "${stash}" ]]; then
+        print-error Stash not empty!
+        echo "${stash}" >&2
+        issues=1
+    fi
+
+    # Check current branch
+    current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    if [[ "${current_branch}" != main ]]; then
+        print-error "Not on main branch: ${current_branch}"
+        issues=1
+    fi
+
+    # Check local branches against their upstreams
+    while IFS=';' read -r branch upstream track track_details; do
+        if [[ -z "${upstream}" ]]; then
+            print-error "Upstream not tracking: ${branch}"
+            issues=1
+            continue
+        fi
+
+        if [[ "${track}" != = ]]; then
+            print-error "Upstream not in sync: ${upstream}: ${track_details}"
+            issues=1
+        fi
+    done < <(git for-each-ref --format='%(refname:short);%(upstream:short);%(upstream:trackshort);%(upstream:track)' refs/heads/ || true)
+
+    [[ -z "${issues}" ]]
 }
 
 ## Interactive rebase (change history)
