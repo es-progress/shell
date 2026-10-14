@@ -21,13 +21,39 @@ ghub-list() {
 ## @param    $1  Owner (account)
 ## @param    $@  Extra args to gh
 #################################
+# shellcheck disable=SC2016
 ghub-list-license() {
     local owner="${1:?Owner missing}"
     shift
-    # shellcheck disable=SC2016
+
+    local header='{{ tablerow ("NAME" | color "yellow+du") ("DESCRIPTION" | color "yellow+du") ("LICENSE" | color "yellow+du") ("VISIBILITY" | color "yellow+du") }}'
+    local license='{{ $license := "---" }}{{ with .licenseInfo }}{{ $license = .name | color "white+b" }}{{ end }}'
+    local visibility='{{ $visibility := "public" | color "240" }}{{ if .isPrivate }}{{ $visibility = "private" | color "yellow" }}{{ end }}'
+    local row='{{ tablerow (.nameWithOwner | hyperlink .url | color "white+b") .description $license $visibility }}'
+
     ghub-list "${owner}" "${@}" \
-        --json nameWithOwner,description,licenseInfo,visibility \
-        --template '{{ tablerow ("NAME" | color "yellow+du") ("DESCRIPTION" | color "yellow+du") ("LICENSE" | color "yellow+du") ("VISIBILITY" | color "yellow+du") }}{{ range . }}{{ $lic := "---" }}{{ with .licenseInfo }}{{ $lic = .name }}{{ end }}{{ tablerow .nameWithOwner .description $lic .visibility }}{{ end }}'
+        --json nameWithOwner,url,description,licenseInfo,isPrivate \
+        --template "${header}{{ range . }}${license}${visibility}${row}{{ end }}"
+}
+
+## List repos with topics
+##
+## @param    $1  Owner (account)
+## @param    $@  Extra args to gh
+#################################
+# shellcheck disable=SC2016
+ghub-list-topics() {
+    local owner="${1:?Owner missing}"
+    shift
+
+    local header='{{ tablerow ("NAME" | color "yellow+du") ("DESCRIPTION" | color "yellow+du") ("TOPICS" | color "yellow+du") ("VISIBILITY" | color "yellow+du") }}'
+    local topics='{{ $topics := "" }}{{ with .repositoryTopics }}{{ $topics = pluck "name" . | join ", " | color "white+b" }}{{ end }}'
+    local visibility='{{ $visibility := "public" | color "240" }}{{ if .isPrivate }}{{ $visibility = "private" | color "yellow" }}{{ end }}'
+    local row='{{ tablerow (.nameWithOwner | hyperlink .url | color "white+b") .description $topics $visibility }}'
+
+    ghub-list "${owner}" "${@}" \
+        --json nameWithOwner,url,description,repositoryTopics,isPrivate \
+        --template "${header}{{ range . }}${topics}${visibility}${row}{{ end }}"
 }
 
 ## Get repo names
