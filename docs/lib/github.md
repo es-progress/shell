@@ -111,6 +111,22 @@ EXTRA              Optional extra params to 'gh'
 
 ---
 
+## ghub-list-topics
+
+List repositories for a GitHub account with topics.
+
+**Usage**
+
+```
+ghub-list-topics OWNER [EXTRA]...
+
+Params:
+OWNER              Owner, GitHub user or organization
+EXTRA              Optional extra params to 'gh'
+```
+
+---
+
 ## ghub-open
 
 Open GitHub repository page in web browser.
